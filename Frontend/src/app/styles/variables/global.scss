@@ -1,0 +1,58 @@
+:root {
+  --font-family_main: InterTight, "Times New Roman", serif;
+  --font-size-h1: 64px;
+  --font-line-h1: 96px;
+  --font-size-h1-mobile: 48px;
+  --font-line-h1-mobile: 64px;
+  --font-size-h2: 48px;
+  --font-line-h2: 64px;
+  --font-size-h2-mobile: 32px;
+  --font-line-h2-mobile: 48px;
+  --font-size-h3: 32px;
+  --font-line-h3: 48px;
+  --font-size-h3-mobile: 28px;
+  --font-line-h3-mobile: 40px;
+  --font-size-h4: 28px;
+  --font-line-h4: 40px;
+  --font-size-h4-mobile: 20px;
+  --font-line-h4-mobile: 28px;
+  --font-size-h5: 16px;
+  --font-line-h5: 24px;
+  --font-size-h5-mobile: 16px;
+  --font-line-h5-mobile: 24px;
+  --font-size-l: 16px;
+  --font-line-l: 24px;
+  --font-size-m: 14px;
+  --font-line-m: 20px;
+  --font-size-s: 12px;
+  --font-line-s: 26px;
+  --font-weight-400: 400;
+  --font-weight-500: 500;
+  --font-weight-600: 600;
+
+  --bg-color: #FFFFFF;
+  --text-color-primary: #2D3239;
+  --text-color-inverted: #FFFFFF;
+  --text-color-secondary: #737373;
+  --input-color: #464B53;
+  --border-color: #E3E5E8;
+}
+
+@font-face {
+  font-family: InterTight;
+  font-weight: 400;
+  src: url("/src/assets/fonts/InterTight-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: InterTight;
+  font-weight: 500;
+  src: url("/src/assets/fonts/InterTight-Medium.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: InterTight;
+  font-weight: 600;
+  src: url("/src/assets/fonts/InterTight-SemiBold.ttf") format("truetype");
+}
+

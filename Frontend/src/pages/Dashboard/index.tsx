@@ -1,0 +1,1 @@
+export {DashboardPageAsync as DashboardPage} from './ui/DashboadPage.async.tsx'
