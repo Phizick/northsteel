@@ -3,24 +3,37 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import Message
 from aiogram import F
-from contains_cyrillic import contains_cyrillic
+# from contains_cyrillic import contains_cyrillic
 from aiogram.enums.parse_mode import ParseMode
 from aiogram.filters import Command
-from ..Core.search_func import search
-from ..Core.neural_deep_search_func import neural_deep_search
-from states import Gen
-from telegram import ParseMode
-from input_filter import check_phrase
-from user_profile_request import display_user_profile
+from Algorithms.Core.search_func import search
+from Algorithms.Core.neural_deep_search_func import neural_deep_search
+from Algorithms.Bot.states import Gen
+from pymongo import MongoClient
+# from telegram import ParseMode
+
+# from input_filter import check_phrase
 from asyncio.exceptions import TimeoutError
 
 import datetime
 import html
-import kb
-import text
-import config
+from Algorithms.Bot import kb
+from Algorithms.Bot import text
+from Algorithms.Bot import config
 import asyncio
 
+
+
+import sys
+sys.path.append('C:/Users/KDFX Modes/Documents/GitHub/northsteel')
+
+
+client = MongoClient('localhost', 27017)
+db = client['Kevin']
+collection = db['Requests']
+error_collection = db['Errors']
+users = db['Users']
+survey_collection = db['Survey']
 active_requests = {}
 bot = Bot(token=config.BOT_TOKEN)
 storage = MemoryStorage()
@@ -33,10 +46,40 @@ async def start_handler(msg: Message):
     user_id = msg.from_user.id
     user_name = msg.from_user.first_name
     greet_with_name = text.mock_text.format(name=user_name)
+
+    user = users.find_one({"user_id": user_id})
+
+    if not user:
+        users.insert_one({
+            "user_id": user_id,
+            "first_name": user_name,
+            "SSTokens": 6,
+            "ASTokens": 3
+        })
+    else:
+        users.update_one(
+            {"user_id": user_id},
+            {"$set": {"first_name": user_name}}
+        )
+
     await bot.send_photo(chat_id=msg.chat.id,
                          caption=greet_with_name,
-                         reply_markup=kb.menu,
-                         parse_mode='Markdown')
+                         reply_markup=kb.menu)
+
+
+@router.message(Command("about_kevin"))
+async def enter_about_kevin(message: types.Message):
+    await message.answer_photo(caption=text.mock_text,
+
+                               reply_markup=kb.menu)
+
+
+@router.callback_query(F.data == "about_kevin")
+async def about_kevin_data(callback_query: types.CallbackQuery):
+    await callback_query.message.answer_photo(caption=text.mock_text,
+
+                                              reply_markup=kb.menu)
+    await callback_query.answer()
 
 
 @router.message(Command("bug_report"))
@@ -55,26 +98,15 @@ async def error_report_data(callback_query: types.CallbackQuery, state: FSMConte
 @router.message(Command("help"))
 async def enter_kevin_help(message: types.Message):
     await message.answer_photo(caption=text.mock_text,
-                               parse_mode='Markdown',
+
                                reply_markup=kb.menu)
 
 
 @router.callback_query(F.data == "help")
 async def kevin_help_data(callback_query: types.CallbackQuery):
     await callback_query.message.answer_photo(caption=text.mock_text,
-                                              parse_mode='Markdown',
+
                                               reply_markup=kb.menu)
-    await callback_query.answer()
-
-
-@router.message(Command("user_profile"))
-async def enter_user_profile(message: types.Message):
-    await display_user_profile(message.from_user.id, message.answer)
-
-
-@router.callback_query(F.data == "user_profile")
-async def user_profile_data(callback_query: types.CallbackQuery):
-    await display_user_profile(callback_query.from_user.id, callback_query.message.answer)
     await callback_query.answer()
 
 
@@ -133,13 +165,13 @@ async def process_search_query(message: types.Message, state: FSMContext):
         del active_requests[user_id]
         return
 
-    if not check_phrase(
-            search_query):
-        await message.reply(
-            text.mock_text)
-        del active_requests[user_id]
-        await state.clear()
-        return
+    # if not check_phrase(
+    #         search_query):
+    #     await message.reply(
+    #         text.mock_text)
+    #     del active_requests[user_id]
+    #     await state.clear()
+    #     return
 
     user_collection_name = f"user_{user_id}"
     user_collection = db[user_collection_name]
@@ -154,10 +186,10 @@ async def process_search_query(message: types.Message, state: FSMContext):
 
     search_query_str = str(search_query)
 
-    if not contains_cyrillic(search_query_str):
-        await message.reply("Пожалуйста, отправь сообщение на русском языке.")
-        del active_requests[user_id]
-        return
+    # if not contains_cyrillic(search_query_str):
+    #     await message.reply("Пожалуйста, отправь сообщение на русском языке.")
+    #     del active_requests[user_id]
+    #     return
 
     search_functions = {
         Gen.waiting_for_simple_search_query.state: search,
@@ -172,7 +204,7 @@ async def process_search_query(message: types.Message, state: FSMContext):
 
     token_field = "SSTokens" if current_state == Gen.waiting_for_simple_search_query.state else "ASTokens"
     if user_doc.get(token_field, 0) <= 0:
-        await message.reply("")
+        await message.reply("К сожалению, твои токены были истрачены.")
         await state.clear()
         del active_requests[user_id]
         return

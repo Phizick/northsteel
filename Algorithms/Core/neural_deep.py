@@ -2,7 +2,7 @@
 
 import aiohttp
 import json
-import config
+from Algorithms.Core import config
 
 
 async def send_message_to_neural_deep_tech(message):

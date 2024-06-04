@@ -1,42 +1,49 @@
 import asyncio
 import logging
-
-from fastapi import FastAPI
 from aiogram import Bot, Dispatcher
 from aiogram.enums.parse_mode import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.utils.chat_action import ChatActionMiddleware
 from Algorithms.Bot import config
-from handlers import router
+from Algorithms.Bot.handlers import router
+from Algorithms.Core.search_func import search
+from fastapi import FastAPI
+import uvicorn
+
+
+logging.basicConfig(level=logging.INFO)
+
 
 app = FastAPI()
-bot = Bot(token=config.BOT_TOKEN, parse_mode=ParseMode.HTML)
-dp = Dispatcher(bot, storage=MemoryStorage())
-dp.include_router(router)
-dp.message.middleware(ChatActionMiddleware())
 
 
-# dp.message.middleware.setup(ThrottlingMiddleware())
+@app.get("/")
+async def root(query: str):
+    reply = await search(query)
+    return {"message": reply}
 
-async def on_startup(dispatcher: Dispatcher):
+
+async def main_loop():
+    bot = Bot(token=config.BOT_TOKEN, parse_mode=ParseMode.HTML)
+    dp = Dispatcher(storage=MemoryStorage())
+    dp.include_router(router)
     await bot.delete_webhook(drop_pending_updates=True)
+    await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
 
 
-@app.on_event("startup")
-async def startup_event():
-    asyncio.create_task(dp.start_polling(reset_webhook=True))
-    logging.info("Bot has started")
+async def run_bot():
+    while True:
+        try:
+            await main_loop()
+        except Exception as e:
+            logging.error(f"Бот упал с ошибкой: {e}")
+            await asyncio.sleep(3)
 
 
-@app.on_event("shutdown")
-async def shutdown_event():
-    await dp.storage.close()
-    await dp.storage.wait_closed()
-    await bot.session.close()
+async def start():
+    config = uvicorn.Config(app=app, host="0.0.0.0", port=8000, log_level="info")
+    server = uvicorn.Server(config)
+    await asyncio.gather(server.serve())
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-    import uvicorn
-
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    asyncio.run(start())

@@ -1,5 +1,5 @@
 import string
-import input_filter_words
+# import input_filter_words
 
 d = {
     'а': ['а', 'a', '@'],
@@ -56,16 +56,16 @@ def distance(a, b):
     return current_row[n]
 
 
-def check_phrase(phrase):
-    phrase = phrase.lower().translate(str.maketrans('', '', string.punctuation)).replace(" ", "")
-
-    for key, value in d.items():
-        for letter in value:
-            phrase = phrase.replace(letter, key)
-
-    for word in input_filter_words.words:
-        for part in range(len(phrase) - len(word) + 1):
-            fragment = phrase[part: part + len(word)]
-            if distance(fragment, word) <= len(word) * 0.25:
-                return False
-    return True
+# def check_phrase(phrase):
+#     phrase = phrase.lower().translate(str.maketrans('', '', string.punctuation)).replace(" ", "")
+#
+#     for key, value in d.items():
+#         for letter in value:
+#             phrase = phrase.replace(letter, key)
+#
+#     for word in input_filter_words.words:
+#         for part in range(len(phrase) - len(word) + 1):
+#             fragment = phrase[part: part + len(word)]
+#             if distance(fragment, word) <= len(word) * 0.25:
+#                 return False
+#     return True

@@ -1,7 +1,7 @@
 import aiohttp
 from bs4 import BeautifulSoup
 import re
-from extract_sentences import extract_sentences
+from Algorithms.Core.extract_sentences import extract_sentences
 
 
 async def my_parser(url, keywords):

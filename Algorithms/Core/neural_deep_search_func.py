@@ -1,9 +1,9 @@
 import aiohttp
 from urllib.parse import unquote
 import xml.etree.ElementTree as ET
-from neural_parser import neural_parser
-import config
-from neural_deep import send_message_to_neural_deep_tech
+from Algorithms.Core.neural_parser import neural_parser
+from Algorithms.Core import config
+from Algorithms.Core.neural_deep import send_message_to_neural_deep_tech
 
 
 async def neural_deep_search(query: str) -> str:
