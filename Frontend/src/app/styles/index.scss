@@ -1,0 +1,16 @@
+@import "normalize/normalize/import-now";
+@import "variables/global";
+@import "mixins";
+
+.app {
+  font-family: var(--font-family_main);
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  font-weight: var(--font-weight-400);
+  background: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  min-width: 100vw;
+  align-items: center;
+  box-sizing: border-box;
+}

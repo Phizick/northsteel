@@ -1,0 +1,12 @@
+@import "../../../app/styles/mixins";
+
+.page {
+  display: grid;
+  grid-template-areas: "logo header"
+                       "navigation main";
+  grid-template-columns: 1fr 5fr;
+
+  @include tablet {
+    grid-template-columns: 1fr 4fr;
+  }
+}
