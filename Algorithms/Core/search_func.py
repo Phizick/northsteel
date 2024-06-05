@@ -15,6 +15,9 @@ async def search(query: str) -> str:
         async with session.get(url, params=params) as r:
             print(f"API response status: {r.status}")
             text = await r.text()
+            print(f"Request URL: {url}")
+            print(f"Request Parameters: {params}")
+            print(f"Client Response': {r}")
             print(f"API response text: {text[:2000]}...")
 
             if r.status != 200:
@@ -29,7 +32,7 @@ async def search(query: str) -> str:
             results = root.findall(".//results/grouping/group/doc")
             print(f"Found results.")
             for result in results:
-                if len(reply) >= 2200:
+                if len(reply) >= 5000:
                     reply += '... [Message truncated due to length.]'
                     break
 
