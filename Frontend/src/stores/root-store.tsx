@@ -1,7 +1,7 @@
 import userStore from "./user-store.tsx";
 
 class RootStore {
-    user = userStore;
+  userStore = userStore;
 }
 
 export default RootStore;

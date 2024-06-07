@@ -2,12 +2,35 @@
   object-fit: cover;
 }
 
-.normal {
-  width: 144px;
-  height: 45px;
+.main {
+  &_normal {
+    width: 96px;
+    height: 32px;
+  }
+  &_small {
+    width: 96px;
+    height: 32px;
+  }
 }
 
-.small {
-  width: 120px;
-  height: 40px;
+.secondary {
+  &_normal {
+    width: 144px;
+    height: 45px;
+  }
+  &_small {
+    width: 120px;
+    height: 40px;
+  }
+}
+
+.mobile {
+  &_normal {
+    width: 32px;
+    height: 32px;
+  }
+  &_small {
+    width: 32px;
+    height: 32px;
+  }
 }

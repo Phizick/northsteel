@@ -1,29 +1,39 @@
-import styles from './Dashboard.module.scss';
+import styles from "./Dashboard.module.scss";
 import Navigation from "../../../components/Navigation/Navigation.tsx";
-import {Outlet, useLocation, useNavigate} from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import LayoutWrapper from "../LayoutWrapper/LayoutWrapper.tsx";
-import {useEffect} from "react";
+import { useEffect } from "react";
+import { useStores } from "../../../stores/root-store-context.ts";
 
 const DashboardPage = () => {
-    const location = useLocation();
-    const navigate = useNavigate();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        if (location.pathname === '/') {
-            navigate('/reports');
-        }
-    }, [])
+  const { userStore } = useStores();
 
-    return (
-        <main className={styles.page}>
-            <LayoutWrapper layout='navigation'>
-                <Navigation/>
-            </LayoutWrapper>
-            <LayoutWrapper layout='main'>
-                <Outlet/>
-            </LayoutWrapper>
-        </main>
-    );
+  console.log(userStore);
+
+  useEffect(() => {
+    // if (!userStore.user?.isOnboarded) {
+    //     navigate('/onboarding')
+    // } else if (location.pathname === '/') {
+    //     navigate('/reports');
+    // }
+    if (location.pathname === "/") {
+      navigate("/reports");
+    }
+  }, []);
+
+  return (
+    <main className={styles.page}>
+      <LayoutWrapper layout="navigation">
+        <Navigation />
+      </LayoutWrapper>
+      <LayoutWrapper layout="main">
+        <Outlet />
+      </LayoutWrapper>
+    </main>
+  );
 };
 
 export default DashboardPage;

@@ -1,0 +1,54 @@
+@import "../../../app/styles/mixins";
+
+.form {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.mainContainer {
+  width: 100%;
+  display: flex;
+  gap: 16px;
+
+  @include mobile {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+.secondaryContainer {
+  width: 100%;
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+
+  @include mobile {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+.linkIcon {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+}
+
+.buttonContainer {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.cancelButton {
+  color: var(--text-color-primary)
+}
+
+.addButton {
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  height: 40px;
+}

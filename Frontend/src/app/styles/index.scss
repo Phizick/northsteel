@@ -11,10 +11,12 @@
   color: var(--text-color);
   height: 100vh;
   width: 100vw;
+  display: flex;
+  justify-content: center;
   align-items: center;
   box-sizing: border-box;
 }
 
-p {
+p, h1 {
   margin: 0;
 }

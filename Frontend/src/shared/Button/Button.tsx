@@ -4,30 +4,34 @@ import styles from "./Button.module.scss";
 import Spinner from "../Spinner/Spinner.tsx";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    className?: string;
-    isLoading?: boolean;
-    disabled?: boolean;
+  className?: string;
+  isLoading?: boolean;
+  disabled?: boolean;
+  color?: "blue" | "transparent";
 }
 
 const Button: FC<ButtonProps> = (props) => {
-    const { className = "", children, isLoading = false, disabled = false, ...rest } = props;
+  const {
+    className = "",
+    children,
+    isLoading = false,
+    disabled = false,
+    color = "blue",
+    ...rest
+  } = props;
 
-    const buttonClass = classnames({
-        [className]: true,
-        [styles.button]: true,
-        [styles.disabled]: disabled,
-    });
+  const buttonClass = classnames({
+    [className]: true,
+    [styles.button]: true,
+    [styles.disabled]: disabled,
+    [styles[color]]: true,
+  });
 
-    return (
-        <button
-            type="button"
-            className={buttonClass}
-            disabled={disabled}
-            {...rest}
-        >
-            {isLoading ? <Spinner /> : children}
-        </button>
-    );
+  return (
+    <button type="button" className={buttonClass} disabled={disabled} {...rest}>
+      {isLoading ? <Spinner /> : children}
+    </button>
+  );
 };
 
 export default Button;

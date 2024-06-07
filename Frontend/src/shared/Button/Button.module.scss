@@ -1,22 +1,32 @@
 .button {
   cursor: pointer;
   border-radius: 30px;
-  padding: 12px 24px;
+  padding: 10px 16px;
   height: 48px;
   font-size: var(--font-size-l);
   line-height: var(--font-line-l);
-  font-weight: var(--font-weight-500);
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
   width: 100%;
-  color: var(--text-color-inverted);
-  background: var(--blue-color);
   gap: 4px;
+  box-sizing: border-box;
 }
 
 .disabled {
   opacity: 0.7;
   cursor: none;
+}
+
+.blue {
+  color: var(--text-color-inverted);
+  background: var(--blue-color);
+  border: none;
+}
+
+.transparent {
+  color: var(--text-color-primary);
+  background: transparent;
+  border: 1px solid var(--border-color);
 }

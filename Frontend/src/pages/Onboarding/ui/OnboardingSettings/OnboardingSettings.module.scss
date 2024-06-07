@@ -1,0 +1,70 @@
+@import '../../../../app/styles/mixins';
+
+.page {
+  display: flex;
+  justify-content: center;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 32px 16px 0;
+}
+
+.container {
+  width: 100%;
+}
+
+.title {
+  font-size: var(--font-size-h4);
+  line-height: var(--font-line-h4);
+  font-weight: var(--font-weight-600);
+
+  @include mobile {
+    font-size: var(--font-size-h4-mobile);
+    line-height: var(--font-line-h4-mobile);
+  }
+}
+
+.subtitle {
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  font-weight: var(--font-weight-400);
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.forms {
+  width: 100%;
+  padding-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.sources {
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  font-weight: var(--font-weight-500);
+  margin-bottom: 8px;
+}
+
+.notification {
+  width: 100%;
+  padding: 8px 16px;
+  background-color: var(--notification-bg-color);
+  color: var(--notification-text-color);
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  font-weight: var(--font-weight-400);
+  border-left: 1px solid var(--notification-text-color);
+  box-sizing: border-box;
+}
+
+.button {
+  max-width: 209px;
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  font-weight: var(--font-weight-500);
+
+  @include mobile {
+    max-width: 100%;
+  }
+}

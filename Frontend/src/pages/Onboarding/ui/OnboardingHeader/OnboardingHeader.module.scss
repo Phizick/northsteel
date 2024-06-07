@@ -1,0 +1,39 @@
+@import '../../../../app/styles/mixins';
+
+.header {
+  width: 100%;
+  padding: 12px 32px;
+  border-bottom: 1px solid var(--border-color);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  box-sizing: border-box;
+
+  @include mobile {
+    padding: 12px 16px;
+  }
+}
+
+.button {
+  height: 40px;
+  width: 100px;
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  font-weight: var(--font-weight-400);
+}
+
+.buttonMobile {
+  height: 40px;
+  width: 40px;
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  font-weight: var(--font-weight-400);
+  padding: 0;
+}
+
+.logo {
+  justify-self: center;
+}
+
+.avatar {
+  justify-self: end;
+}

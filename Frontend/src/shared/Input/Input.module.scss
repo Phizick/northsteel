@@ -37,7 +37,7 @@
   display: inline-block;
   font-size: 14px;
   line-height: 22px;
-  color: red;
+  color: var(--notification-text-color);
 }
 
 .disabled {

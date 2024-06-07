@@ -1,5 +1,5 @@
 import {createContext, useContext} from "react";
-import RootStore from "./stores/root-store.tsx";
+import RootStore from "./root-store.tsx";
 
 export const RootStoreContext = createContext<RootStore | null>(null)
 
