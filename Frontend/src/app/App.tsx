@@ -4,6 +4,7 @@ import AppRouter from "./providers/RouterProvider/AppRouter.tsx";
 import { useCookies } from "react-cookie";
 import { Suspense, useEffect } from "react";
 import { useStores } from "../stores/root-store-context.ts";
+import Spinner, { SpinnerTypes } from "../shared/Spinner/Spinner.tsx";
 
 function App() {
   const [cookies] = useCookies(["user_id"]);
@@ -15,12 +16,13 @@ function App() {
       if (cookies.user_id) {
         await userStore.getUser(cookies.user_id);
       }
+      userStore.isReady = true;
     })();
-  }, [cookies.user_id]);
+  }, []);
 
   return (
     <div className="app">
-      <Suspense fallback={<div>Загрузка...</div>}>
+      <Suspense fallback={<Spinner type={SpinnerTypes.APP} />}>
         <AppRouter />
       </Suspense>
     </div>

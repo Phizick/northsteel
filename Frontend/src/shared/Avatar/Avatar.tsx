@@ -1,6 +1,7 @@
 import styles from "./Avatar.module.scss";
 import { useStores } from "../../stores/root-store-context.ts";
 import classnames from "classnames";
+import { observer } from "mobx-react-lite";
 
 interface AvatarProps {
   className?: string;
@@ -29,4 +30,4 @@ const Avatar = ({ className = "" }: AvatarProps) => {
   return <div className={avatarClass}>{setInitials()}</div>;
 };
 
-export default Avatar;
+export default observer(Avatar);

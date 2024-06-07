@@ -10,6 +10,7 @@ class UserStore {
   user: User | null = null;
   isLoading = false;
   error: string | null = null;
+  isReady = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -27,7 +28,9 @@ class UserStore {
       console.log(error);
       this.error = "Ошибка при получении информации о пользователе";
     } finally {
-      this.isLoading = false;
+      runInAction(() => {
+        this.isLoading = false;
+      });
     }
   };
 

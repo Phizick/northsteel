@@ -4,14 +4,13 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import LayoutWrapper from "../LayoutWrapper/LayoutWrapper.tsx";
 import { useEffect } from "react";
 import { useStores } from "../../../stores/root-store-context.ts";
+import { observer } from "mobx-react-lite";
 
 const DashboardPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
   const { userStore } = useStores();
-
-  console.log(userStore);
 
   useEffect(() => {
     // if (!userStore.user?.isOnboarded) {
@@ -36,4 +35,4 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage;
+export default observer(DashboardPage);

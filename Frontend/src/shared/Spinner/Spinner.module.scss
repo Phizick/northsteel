@@ -12,6 +12,14 @@
   height: 35px;
 }
 
+.app {
+  border: 3px solid var(--blue-color);
+  border-bottom-color: transparent;
+  width: 15vw;
+  height: 15vw;
+  margin: auto;
+}
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);

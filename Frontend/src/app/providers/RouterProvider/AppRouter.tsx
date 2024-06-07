@@ -1,51 +1,37 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { LoginPage } from "../../../pages/Login";
-import { DashboardPage } from "../../../pages/Dashboard";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
 import Reports from "../../../components/Reports/Reports.tsx";
 import Templates from "../../../components/Templates/Templates.tsx";
-import { OnboardingPage } from "../../../pages/Onboarding";
 import ProtectedRoute from "../../../components/ProtectedRoute/ProtectedRoute.tsx";
-import { observer } from "mobx-react-lite";
+import LoginPage from "../../../pages/Login/ui/LoginPage.tsx";
+import OnboardingPage from "../../../pages/Onboarding/ui/OnboardingPage.tsx";
+import DashboardPage from "../../../pages/Dashboard/ui/DashboardPage.tsx";
 
-const router = createBrowserRouter([
-  {
-    path: "/login",
-    element: (
-      <ProtectedRoute onlyForAuth={false}>
-        <LoginPage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/onboarding",
-    element: (
-      <ProtectedRoute onlyForAuth>
-        <OnboardingPage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/",
-    element: (
-      <ProtectedRoute onlyForAuth>
-        <DashboardPage />
-      </ProtectedRoute>
-    ),
-    children: [
-      {
-        path: "reports",
-        element: <Reports />,
-      },
-      {
-        path: "templates",
-        element: <Templates />,
-      },
-    ],
-  },
-]);
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <>
+      <Route element={<ProtectedRoute onlyForAuth={false} />}>
+        <Route path="/login" element={<LoginPage />} />
+      </Route>
+      <Route element={<ProtectedRoute onlyForAuth />}>
+        <Route path="/onboarding" element={<OnboardingPage />} />
+      </Route>
+      <Route element={<ProtectedRoute onlyForAuth />}>
+        <Route path="/" element={<DashboardPage />}>
+          <Route path="/reports" element={<Reports />} />
+          <Route path="/templates" element={<Templates />} />
+        </Route>
+      </Route>
+    </>,
+  ),
+);
 
 const AppRouter = () => {
   return <RouterProvider router={router} />;
 };
 
-export default observer(AppRouter);
+export default AppRouter;
