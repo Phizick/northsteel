@@ -1,0 +1,27 @@
+.logo {
+  grid-area: logo;
+  padding: 12px 16px;
+  box-shadow: 0 0 0 1px var(--border-color);
+}
+
+.header {
+  grid-area: header;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 12px 16px;
+}
+
+.navigation {
+  grid-area: navigation;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 60px;
+  box-sizing: border-box;
+}
+
+.screens {
+  grid-area: screens;
+  box-shadow: 0 0 0 1px var(--border-color);
+}

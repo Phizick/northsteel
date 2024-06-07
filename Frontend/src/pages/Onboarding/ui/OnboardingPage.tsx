@@ -10,11 +10,11 @@ const OnboardingPage = () => {
   const navigate = useNavigate();
   const { userStore } = useStores();
 
-  // useEffect(() => {
-  //   if (userStore.user?.verification) {
-  //     navigate("/");
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (userStore.user?.verification) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <div className={styles.page}>

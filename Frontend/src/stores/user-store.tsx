@@ -57,6 +57,11 @@ class UserStore {
       await this.getUser(userId);
     }
   };
+
+  logout = () => {
+    this.user = null;
+    cookies.remove("user_id");
+  };
 }
 
 export default new UserStore();

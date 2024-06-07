@@ -6,9 +6,13 @@ import LeftIcon from "../../../../assets/images/icons/chevron-left.svg?react";
 import Avatar from "../../../../shared/Avatar/Avatar.tsx";
 import { useResize } from "../../../../hooks/useResize.tsx";
 import classnames from "classnames";
+import { observer } from "mobx-react-lite";
+import { useStores } from "../../../../stores/root-store-context.ts";
 
 const OnboardingHeader = () => {
   const { isMobileScreen } = useResize();
+
+  const { userStore } = useStores();
 
   const buttonClass = classnames({
     [styles.button]: !isMobileScreen,
@@ -17,7 +21,11 @@ const OnboardingHeader = () => {
 
   return (
     <header className={styles.header}>
-      <Button className={buttonClass} color="transparent">
+      <Button
+        onClick={userStore.logout}
+        className={buttonClass}
+        color="transparent"
+      >
         <LeftIcon />
         {!isMobileScreen && "Выйти"}
       </Button>
@@ -31,4 +39,4 @@ const OnboardingHeader = () => {
   );
 };
 
-export default OnboardingHeader;
+export default observer(OnboardingHeader);

@@ -4,12 +4,15 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import Reports from "../../../components/Reports/Reports.tsx";
-import Templates from "../../../components/Templates/Templates.tsx";
+import YourReports from "../../../pages/YourReports/YourReports.tsx";
+import Templates from "../../../pages/Templates/Templates.tsx";
 import ProtectedRoute from "../../../components/ProtectedRoute/ProtectedRoute.tsx";
 import LoginPage from "../../../pages/Login/ui/LoginPage.tsx";
 import OnboardingPage from "../../../pages/Onboarding/ui/OnboardingPage.tsx";
 import DashboardPage from "../../../pages/Dashboard/ui/DashboardPage.tsx";
+import CompanyReports from "../../../pages/CompanyReports/CompanyReports.tsx";
+import Settings from "../../../pages/Settings/Settings.tsx";
+import FAQ from "../../../pages/FAQ/FAQ.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,8 +25,11 @@ const router = createBrowserRouter(
       </Route>
       <Route element={<ProtectedRoute onlyForAuth />}>
         <Route path="/" element={<DashboardPage />}>
-          <Route path="/reports" element={<Reports />} />
+          <Route path="/your-reports" element={<YourReports />} />
+          <Route path="/company-reports" element={<CompanyReports />} />
           <Route path="/templates" element={<Templates />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/faq" element={<FAQ />} />
         </Route>
       </Route>
     </>,
