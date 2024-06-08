@@ -2,7 +2,7 @@ import aiohttp
 from bs4 import BeautifulSoup
 import re
 from Algorithms.Core.extract_sentences import extract_sentences
-from Algorithms.Core.filter_array import key_for_competitive_analysis
+from Algorithms.Core.filter_array import key_for_test
 
 
 async def my_parser(url, keywords):
@@ -18,7 +18,7 @@ async def my_parser(url, keywords):
                     print(f"Couldn't find the body content for url: {url}")
                     return sentences_matched
 
-                body_content = soup.body.find_all(['p'])
+                body_content = soup.body.find_all(['p', 'span', 'h1', 'h2'])
 
                 for p in body_content:
                     text = p.get_text().strip()
@@ -32,7 +32,7 @@ async def my_parser(url, keywords):
                     return sentences_matched
 
                 text_content = ' '.join(sentences_matched)
-                sentences_matched = await extract_sentences(text_content, 50, key_for_competitive_analysis)
+                sentences_matched = await extract_sentences(text_content, 50, key_for_test)
     print('parser')
     # print(sentences_matched)
     return sentences_matched

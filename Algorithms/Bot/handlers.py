@@ -46,39 +46,17 @@ async def start_handler(msg: Message):
     user_id = msg.from_user.id
     user_name = msg.from_user.first_name
     greet_with_name = text.mock_text.format(name=user_name)
-
-    user = users.find_one({"user_id": user_id})
-
-    if not user:
-        users.insert_one({
-            "user_id": user_id,
-            "first_name": user_name,
-            "SSTokens": 6,
-            "ASTokens": 3
-        })
-    else:
-        users.update_one(
-            {"user_id": user_id},
-            {"$set": {"first_name": user_name}}
-        )
-
-    await bot.send_photo(chat_id=msg.chat.id,
-                         caption=greet_with_name,
-                         reply_markup=kb.menu)
+    await bot.send_message(chat_id=msg.chat.id, text=greet_with_name)
 
 
 @router.message(Command("about_kevin"))
 async def enter_about_kevin(message: types.Message):
-    await message.answer_photo(caption=text.mock_text,
-
-                               reply_markup=kb.menu)
+    await message.answer_photo(caption=text.mock_text, reply_markup=kb.menu)
 
 
 @router.callback_query(F.data == "about_kevin")
 async def about_kevin_data(callback_query: types.CallbackQuery):
-    await callback_query.message.answer_photo(caption=text.mock_text,
-
-                                              reply_markup=kb.menu)
+    await callback_query.message.answer_photo(caption=text.mock_text, reply_markup=kb.menu)
     await callback_query.answer()
 
 
