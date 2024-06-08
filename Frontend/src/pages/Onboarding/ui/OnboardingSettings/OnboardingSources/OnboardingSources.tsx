@@ -6,7 +6,7 @@ import Source from "../../../../../components/Source/Source.tsx";
 import Plus from "../../../../../assets/images/icons/plus.svg?react";
 import PlusWhite from "../../../../../assets/images/icons/plus-white.svg?react";
 import ButtonSimple from "../../../../../shared/ButtonSimple/ButtonSimple.tsx";
-import SourceForm from "../../../../../components/Forms/SourceForm/SourceForm.tsx";
+import SourceForm from "../../../../../components/SourceForm/SourceForm.tsx";
 import { EditStatus } from "../OnboardingSettings.tsx";
 import { useResize } from "../../../../../hooks/useResize.tsx";
 import Button from "../../../../../shared/Button/Button.tsx";

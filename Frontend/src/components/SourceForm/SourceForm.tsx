@@ -1,21 +1,21 @@
 /// <reference types="vite-plugin-svgr/client" />
 import styles from "./SourceForm.module.scss";
-import Form from "../../../shared/Form/Form.tsx";
+import Form from "../../shared/Form/Form.tsx";
 import { SubmitHandler, useForm } from "react-hook-form";
-import Input from "../../../shared/Input/Input.tsx";
-import { TrustedSource } from "../../../api/models/User.ts";
-import InputPassword from "../../../shared/InputPassword/InputPassword.tsx";
-import LinkIcon from "../../../assets/images/icons/link.svg?react";
-import PlusIcon from "../../../assets/images/icons/plus.svg?react";
-import PlusIconWhite from "../../../assets/images/icons/plus-white.svg?react";
-import Checkbox from "../../../shared/Checkbox/Checkbox.tsx";
-import ButtonSimple from "../../../shared/ButtonSimple/ButtonSimple.tsx";
-import { EditStatus } from "../../../pages/Onboarding/ui/OnboardingSettings/OnboardingSettings.tsx";
+import Input from "../../shared/Input/Input.tsx";
+import { TrustedSource } from "../../api/models/User.ts";
+import InputPassword from "../../shared/InputPassword/InputPassword.tsx";
+import LinkIcon from "../../assets/images/icons/link.svg?react";
+import PlusIcon from "../../assets/images/icons/plus.svg?react";
+import PlusIconWhite from "../../assets/images/icons/plus-white.svg?react";
+import Checkbox from "../../shared/Checkbox/Checkbox.tsx";
+import ButtonSimple from "../../shared/ButtonSimple/ButtonSimple.tsx";
+import { EditStatus } from "../../pages/Onboarding/ui/OnboardingSettings/OnboardingSettings.tsx";
 import { Dispatch, SetStateAction, useState } from "react";
-import { useResize } from "../../../hooks/useResize.tsx";
-import Button from "../../../shared/Button/Button.tsx";
-import ButtonIcon from "../../../shared/ButtonIcon/ButtonIcon.tsx";
-import { ButtonIconTypes } from "../../../shared/ButtonIcon/types";
+import { useResize } from "../../hooks/useResize.tsx";
+import Button from "../../shared/Button/Button.tsx";
+import ButtonIcon from "../../shared/ButtonIcon/ButtonIcon.tsx";
+import { ButtonIconTypes } from "../../shared/ButtonIcon/types";
 
 interface SourceFormProps {
   editStatus: EditStatus | null;

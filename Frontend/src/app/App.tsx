@@ -5,6 +5,7 @@ import { useCookies } from "react-cookie";
 import { Suspense, useEffect } from "react";
 import { useStores } from "../stores/root-store-context.ts";
 import Spinner, { SpinnerTypes } from "../shared/Spinner/Spinner.tsx";
+import { runInAction } from "mobx";
 
 function App() {
   const [cookies] = useCookies(["user_id"]);
@@ -16,7 +17,9 @@ function App() {
       if (cookies.user_id) {
         await userStore.getUser(cookies.user_id);
       }
-      userStore.isReady = true;
+      runInAction(() => {
+        userStore.isReady = true;
+      });
     })();
   }, []);
 

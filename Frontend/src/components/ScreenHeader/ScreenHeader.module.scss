@@ -1,0 +1,19 @@
+.header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.titleContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: var(--font-size-h4);
+  line-height: var(--font-line-h4);
+  font-weight: var(--font-weight-600);
+}

@@ -20,28 +20,38 @@ const Navigation = () => {
   };
 
   return (
-    <div className={styles.navigation}>
-      <div className={styles.block}>
-        <NavigationLink to="/your-reports">
-          <HomeIcon className={getIconClass("/your-reports")} /> Ваши отчеты
-        </NavigationLink>
-        <NavigationLink to="/company-reports">
-          <ReportIcon className={getIconClass("/company-reports")} /> Отчеты
-          компании
-        </NavigationLink>
-        <NavigationLink to="/templates">
-          <TemplateIcon className={getIconClass("/templates")} /> Шаблоны
-        </NavigationLink>
-      </div>
-      <div className={styles.block}>
-        <NavigationLink to="/settings">
-          <SettingsIcon className={getIconClass("/settings")} /> Настройки
-        </NavigationLink>
-        <NavigationLink to="/faq">
-          <FaqIcon className={getIconClass("/faq")} /> FAQ
-        </NavigationLink>
-      </div>
-    </div>
+    <nav className={styles.navigation}>
+      <ul className={styles.block}>
+        <li>
+          <NavigationLink to="/your-reports">
+            <HomeIcon className={getIconClass("/your-reports")} /> Ваши отчеты
+          </NavigationLink>
+        </li>
+        <li>
+          <NavigationLink to="/company-reports">
+            <ReportIcon className={getIconClass("/company-reports")} /> Отчеты
+            компании
+          </NavigationLink>
+        </li>
+        <li>
+          <NavigationLink to="/templates">
+            <TemplateIcon className={getIconClass("/templates")} /> Шаблоны
+          </NavigationLink>
+        </li>
+      </ul>
+      <ul className={styles.block}>
+        <li>
+          <NavigationLink to="/settings">
+            <SettingsIcon className={getIconClass("/settings")} /> Настройки
+          </NavigationLink>
+        </li>
+        <li>
+          <NavigationLink to="/faq">
+            <FaqIcon className={getIconClass("/faq")} /> FAQ
+          </NavigationLink>
+        </li>
+      </ul>
+    </nav>
   );
 };
 

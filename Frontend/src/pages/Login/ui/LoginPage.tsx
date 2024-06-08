@@ -1,5 +1,5 @@
 import styles from "./LoginPage.module.scss";
-import LoginForm from "../../../components/Forms/LoginForm/LoginForm.tsx";
+import LoginForm from "./LoginForm/LoginForm.tsx";
 import Logo from "../../../shared/Logo/Logo.tsx";
 import { useResize } from "../../../hooks/useResize.tsx";
 

@@ -1,15 +1,15 @@
 /// <reference types="vite-plugin-svgr/client" />
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
-import LoginIcon from "../../../assets/images/icons/login.svg?react";
+import LoginIcon from "../../../../assets/images/icons/login.svg?react";
 
-import Form from "../../../shared/Form/Form.tsx";
-import Input from "../../../shared/Input/Input.tsx";
-import InputPassword from "../../../shared/InputPassword/InputPassword.tsx";
-import Button from "../../../shared/Button/Button.tsx";
+import Form from "../../../../shared/Form/Form.tsx";
+import Input from "../../../../shared/Input/Input.tsx";
+import InputPassword from "../../../../shared/InputPassword/InputPassword.tsx";
+import Button from "../../../../shared/Button/Button.tsx";
 import { useNavigate } from "react-router-dom";
-import { useStores } from "../../../stores/root-store-context.ts";
-import { LoginRequest } from "../../../api/login.ts";
+import { useStores } from "../../../../stores/root-store-context.ts";
+import { LoginRequest } from "../../../../api/login.ts";
 
 const LoginForm = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);

@@ -17,11 +17,12 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding-bottom: 60px;
+  padding-bottom: 32px;
   box-sizing: border-box;
 }
 
 .screens {
   grid-area: screens;
   box-shadow: 0 0 0 1px var(--border-color);
+  padding: 32px;
 }

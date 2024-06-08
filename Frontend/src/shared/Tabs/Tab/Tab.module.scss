@@ -1,0 +1,16 @@
+.tab {
+  background: transparent;
+  border: none;
+  padding: 8px 0;
+  box-sizing: border-box;
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  font-weight: var(--font-weight-400);
+  cursor: pointer;
+  color: var(--pale-color)
+}
+
+.active {
+  color: var(--blue-color);
+  border-bottom: 1px solid var(--blue-color);
+}

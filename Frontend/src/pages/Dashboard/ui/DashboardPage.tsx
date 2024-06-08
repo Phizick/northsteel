@@ -10,6 +10,7 @@ import Logo from "../../../shared/Logo/Logo.tsx";
 import Avatar from "../../../shared/Avatar/Avatar.tsx";
 import Button from "../../../shared/Button/Button.tsx";
 import LogoutIcon from "../../../assets/images/icons/logout.svg?react";
+import { getReport } from "../../../api/getReport.ts";
 
 const DashboardPage = () => {
   const location = useLocation();
@@ -23,6 +24,13 @@ const DashboardPage = () => {
     } else if (location.pathname === "/") {
       navigate("/your-reports");
     }
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const report = await getReport(1);
+      console.log(report);
+    })();
   }, []);
 
   return (
