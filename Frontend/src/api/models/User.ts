@@ -9,6 +9,7 @@ export interface User {
 export interface Thematic {
   id: string;
   value: string;
+  niches: string[];
 }
 
 export interface TrustedSource {

@@ -1,0 +1,72 @@
+.modal {
+  position: fixed;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  z-index: 999;
+}
+
+.closeButton {
+  position: absolute;
+  left: 50%;
+  top: -60px;
+  transform: translateX(-50%);
+  z-index: 999;
+}
+
+.popup {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.2);
+  opacity: 0;
+  animation: rising 0.5s forwards;
+}
+
+$profileWidth: 24.5vw;
+
+.profile {
+  top: 0;
+  right: 0;
+  animation: slide 0.3s forwards;
+  height: 100%;
+  box-sizing: border-box;
+  border-radius: 0;
+}
+
+.closeProfile {
+  animation: slideBack 0.2s forwards;
+}
+
+@keyframes slide {
+  0% {
+    right: -$profileWidth;
+  }
+
+  100% {
+    right: 0;
+  }
+}
+
+@keyframes slideBack {
+  0% {
+    right: 0;
+  }
+
+  100% {
+    right: -$profileWidth;
+  }
+}
+
+@keyframes rising {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.2);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}

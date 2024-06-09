@@ -13,6 +13,7 @@ import DashboardPage from "../../../pages/Dashboard/ui/DashboardPage.tsx";
 import CompanyReports from "../../../pages/CompanyReports/CompanyReports.tsx";
 import Settings from "../../../pages/Settings/Settings.tsx";
 import FAQ from "../../../pages/FAQ/FAQ.tsx";
+import Example from "../../../pages/Example/Example.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -32,6 +33,7 @@ const router = createBrowserRouter(
           <Route path="/faq" element={<FAQ />} />
         </Route>
       </Route>
+      <Route path="/example" element={<Example />} />
     </>,
   ),
 );

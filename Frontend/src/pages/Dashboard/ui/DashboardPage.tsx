@@ -28,7 +28,7 @@ const DashboardPage = () => {
 
   useEffect(() => {
     (async () => {
-      const report = await getReport(1);
+      const report = await getReport();
       console.log(report);
     })();
   }, []);

@@ -1,5 +1,7 @@
 import styles from "./OnboardingSettings.module.scss";
-import Select, { Option } from "../../../../shared/Select/Select.tsx";
+import MultiSelect, {
+  Option,
+} from "../../../../shared/MultiSelect/MultiSelect.tsx";
 import { useState } from "react";
 import { useStores } from "../../../../stores/root-store-context.ts";
 import { ActionMeta, MultiValue } from "react-select";
@@ -7,29 +9,7 @@ import Spinner from "../../../../shared/Spinner/Spinner.tsx";
 import { observer } from "mobx-react-lite";
 import OnboardingSources from "./OnboardingSources/OnboardingSources.tsx";
 import Button from "../../../../shared/Button/Button.tsx";
-
-const thematics = [
-  {
-    id: "1",
-    value: "Металлургия",
-  },
-  {
-    id: "2",
-    value: "Финансовый сектор",
-  },
-  {
-    id: "3",
-    value: "Ювелирное производство",
-  },
-  {
-    id: "4",
-    value: "Добыча полезных ископаемых",
-  },
-  {
-    id: "5",
-    value: "Самолетостроение",
-  },
-];
+import { thematics } from "../../../../utils/variables.ts";
 
 const defaultThematics: Option[] = [
   {
@@ -71,7 +51,7 @@ const OnboardingSettings = () => {
           Для продолжения необходимо настроить аккаунт
         </p>
         <div className={styles.forms}>
-          <Select
+          <MultiSelect
             options={options}
             title="Укажите тематики для исследований"
             selectedOptions={selectedThematics}

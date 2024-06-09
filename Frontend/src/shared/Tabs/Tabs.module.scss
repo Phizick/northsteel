@@ -1,7 +1,17 @@
-.tabs {
+.simple {
   display: flex;
   gap: 16px;
   padding: 0;
   margin: 0;
+  list-style: none;
+}
+
+.shadow {
+  display: flex;
+  justify-content: stretch;
+  border-radius: 30px;
+  padding: 1px;
+  margin: 0;
+  background: #F2F3F4;
   list-style: none;
 }
