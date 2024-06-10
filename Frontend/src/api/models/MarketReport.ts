@@ -23,14 +23,14 @@ export enum AutoupdateStatus {
 }
 
 export interface Data {
-  id: string;
-  isDefault: boolean;
+  id: string; // служебная для реакта
+  isDefault: boolean; // служебная для разделения на редактируемые и нередактируемые блоки в интерфейсе
   type: "table" | "text";
   title: string;
-  split: boolean;
-  by?: string;
+  split: boolean; // если false - ищем в целом по рынку/нише, если true - разделеям по:
+  by?: string; // указанному здесь параметру (Компания - по компаниям, Регион - по регионам и т.д., что укажет юзер)
   indicators: Array<string>;
-  dates: "current" | "custom";
+  dates: "current" | "custom"; // если current - ищем на текущую дату без разбивок, если "custom" - разбиваем по месяцам/годам в указанном периоде (datesOfReview)
   data?: Array<{ [key: string]: string | null }>;
 }
 
@@ -42,7 +42,7 @@ const example: Data = {
   split: true,
   by: "Компания",
   indicators: ["Доход", "Расходы", "Прибыль"],
-  dates: "current",
+  dates: "custom",
   data: [
     {
       Компания: null,
