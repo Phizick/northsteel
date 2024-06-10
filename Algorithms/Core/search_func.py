@@ -28,7 +28,7 @@ async def search(query: str) -> str:
             results = root.findall(".//results/grouping/group/doc")
             print(f"Found results.")
             for result in results:
-                if len(reply) >= 15000:
+                if len(reply) >= 800:
                     reply += '... [Message truncated due to length.]'
                     break
 
@@ -51,5 +51,5 @@ async def search(query: str) -> str:
                 reply = 'no results'
 
             print(f"Final reply: {reply}")
-            return reply[:config.MAX_REPLY_LENGTH]
+            return parsed_sentences
 

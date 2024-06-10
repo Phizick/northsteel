@@ -4,7 +4,7 @@ import os
 load_dotenv()
 
 YNDX_SEARCH_URL = 'https://yandex.ru/search/xml?'
-MAX_REPLY_LENGTH = 4096
+MAX_REPLY_LENGTH = 1025
 DAISY_URL = 'https://api.neuraldeep.tech/chatgpt'
 DAISY_TOKEN = os.getenv('DAISY_TOKEN')
 YNDX_TOKEN = os.getenv('YNDX_TOKEN')
