@@ -89,7 +89,8 @@ const NewReport = ({ onClose }: NewReportProps) => {
     totalSteps = 2;
   }
 
-  const handleTabStorage = (tab: Tab) => {
+  const handleTabClick = (tab: Tab) => {
+    setStep(1);
     localStorage.setItem(LOCALSTORAGE_NEW_REPORT_TAB, JSON.stringify(tab));
   };
 
@@ -122,6 +123,13 @@ const NewReport = ({ onClose }: NewReportProps) => {
           {totalSteps > 1 && (
             <ProgressLine totalSteps={totalSteps} curStep={step} />
           )}
+          {step > 1 && totalSteps > 1 && (
+            <ButtonIcon
+              className={styles.backButton}
+              icon={ButtonIconTypes.BACK}
+              onClick={() => setStep(step - 1)}
+            />
+          )}
         </header>
         <h2 className={styles.title}>{marketReportRequest.title}</h2>
         <Tabs
@@ -129,7 +137,7 @@ const NewReport = ({ onClose }: NewReportProps) => {
           active={activeTab}
           setActive={setActiveTab}
           visualType="shadow"
-          additionalAction={handleTabStorage}
+          additionalAction={handleTabClick}
         />
         {getForm()}
       </div>

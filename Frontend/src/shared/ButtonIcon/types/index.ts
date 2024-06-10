@@ -3,6 +3,7 @@ export enum ButtonIconTypes {
   EDIT = "edit",
   URL = "url",
   CANCEL = "cancel",
+  BACK = "back",
 }
 
 export enum ButtonIconSize {

@@ -11,7 +11,7 @@ export interface MarketReport {
     to: Dayjs;
   };
   autoupdate: AutoupdateStatus;
-  blocks: Array<PlainData | SearchData>;
+  blocks: Array<Data>;
 }
 
 export enum AutoupdateStatus {
@@ -22,25 +22,40 @@ export enum AutoupdateStatus {
   "YEAR",
 }
 
-export interface PlainData {
+export interface Data {
   type: "table" | "text";
   title: string;
-  columns?: string[];
-  data: {
-    type: "fixed";
-    rows: { [key: string]: string | null }[];
-  };
+  by: "total" | string;
+  indicators: Array<string>;
+  data: Array<{ [key: string]: string | null }>;
 }
 
-export interface SearchData {
-  type: "table" | "text";
-  title: string;
-  columns?: string[];
-  data: {
-    type: "search";
-    rows: {
-      string: string | null;
-      subRows: { [key: string]: string | null }[];
-    }[];
-  };
-}
+const example: Data = {
+  type: "table",
+  title: "Лидеры рынка молока",
+  by: "Компания",
+  indicators: ["Доход", "Расходы", "Прибыль"],
+  data: [
+    {
+      Компания: null,
+      Показатель: "Доход",
+      "2021г.": null,
+      "2022г.": null,
+      "2023г.": null,
+    },
+    {
+      Компания: null,
+      Показатель: "Расход",
+      "2021г.": null,
+      "2022г.": null,
+      "2023г.": null,
+    },
+    {
+      Компания: null,
+      Показатель: "Прибыль",
+      "2021г.": null,
+      "2022г.": null,
+      "2023г.": null,
+    },
+  ],
+};
