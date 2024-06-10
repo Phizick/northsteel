@@ -11,16 +11,18 @@ const ButtonSimple = ({
   className = "",
   children,
   visualType = "blue",
+  disabled,
   ...rest
 }: ButtonProps) => {
   const buttonClass = classnames({
     [styles.button]: true,
     [styles[visualType]]: true,
     [className]: true,
+    [styles.disabled]: disabled,
   });
 
   return (
-    <button className={buttonClass} {...rest}>
+    <button className={buttonClass} disabled={disabled} {...rest}>
       {children}
     </button>
   );

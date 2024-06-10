@@ -1,5 +1,4 @@
-import styles from "./NewMarketReport.module.scss";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import StepOne from "./StepOne/StepOne.tsx";
 import { NewMarketReportContext } from "../NewReport.tsx";
 import StepTwo from "./StepTwo/StepTwo.tsx";

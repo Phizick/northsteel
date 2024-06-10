@@ -1,3 +1,97 @@
+import { MarketReport } from "../api/models/MarketReport.ts";
+import dayjs from "dayjs";
+
+export const initialMarketReportRequest: MarketReport = {
+  title: "Новый отчет",
+  market: "",
+  marketNiche: "",
+  autoupdate: 0,
+  splitByDates: false,
+  datesOfReview: {
+    by: "month",
+    from: dayjs(),
+    to: dayjs(),
+  },
+  blocks: [
+    {
+      id: "1",
+      isDefault: true,
+      type: "text",
+      title: "Определение продуктовой ниши",
+      split: false,
+      by: "",
+      dates: "current",
+      indicators: ["Драйверы роста", "Органичения роста", "Тренды в развитии"],
+    },
+    {
+      id: "2",
+      isDefault: true,
+      type: "table",
+      title: "Объемы рынка",
+      split: true,
+      by: "Ниша",
+      dates: "current",
+      indicators: ["Доли рыночных ниш", "Количество потребителей"],
+    },
+    {
+      id: "3",
+      isDefault: true,
+      type: "table",
+      title: "Динамика по регионам",
+      split: true,
+      by: "Регион РФ",
+      dates: "current",
+      indicators: ["Доля региона", "Количество потребителей"],
+    },
+    {
+      id: "4",
+      isDefault: true,
+      type: "table",
+      title: "Лидеры рынка",
+      split: true,
+      by: "Компания",
+      dates: "custom",
+      indicators: [
+        "Доля на рынке",
+        "Доходы",
+        "Расходы",
+        "EBITDA",
+        "Чистая прибыль",
+      ],
+    },
+    {
+      id: "5",
+      isDefault: true,
+      type: "table",
+      title: "Лидеры по потреблению",
+      split: true,
+      by: "Потребитель",
+      dates: "current",
+      indicators: ["Доля"],
+    },
+    {
+      id: "6",
+      isDefault: true,
+      type: "table",
+      title: "Прирост потребителей",
+      split: true,
+      by: "Ниша",
+      dates: "custom",
+      indicators: ["Количество потребителей"],
+    },
+    {
+      id: "7",
+      isDefault: true,
+      type: "table",
+      title: "Лидеры по потреблению",
+      split: true,
+      by: "Продукт",
+      dates: "current",
+      indicators: ["Технология", "Компания-владелец", "Ссылак на ресурс"],
+    },
+  ],
+};
+
 export const thematics = [
   {
     id: "1",

@@ -1,16 +1,27 @@
+/// <reference types="vite-plugin-svgr/client" />
 import styles from "./NewReportBlock.module.scss";
 import { Data } from "../../../api/models/MarketReport.ts";
 import Badge from "../../../shared/Badge/Badge.tsx";
-import { useContext } from "react";
+import { Dispatch, SetStateAction, useContext } from "react";
 import { NewMarketReportContext } from "../NewReport.tsx";
 import ButtonSimple from "../../../shared/ButtonSimple/ButtonSimple.tsx";
+import EditIcon from "../../../assets/images/icons/edit-button.svg?react";
+import { EditStatus } from "../../../pages/Onboarding/ui/OnboardingSettings/OnboardingSettings.tsx";
 
 interface NewReportBlockProps {
   block: Data;
+  editStatus: EditStatus | null;
+  setKeyToEdit: Dispatch<SetStateAction<string | null>>;
+  setEditStatus: Dispatch<SetStateAction<EditStatus | null>>;
 }
 
-const NewReportBlock = ({ block }: NewReportBlockProps) => {
-  const { title, type, by, isDefault, indicators, dates } = block;
+const NewReportBlock = ({
+  block,
+  setKeyToEdit,
+  setEditStatus,
+  editStatus,
+}: NewReportBlockProps) => {
+  const { title, type, by, indicators, dates } = block;
 
   const { marketReportRequest, setMarketReportRequest } = useContext(
     NewMarketReportContext,
@@ -30,6 +41,8 @@ const NewReportBlock = ({ block }: NewReportBlockProps) => {
     setMarketReportRequest({ ...marketReportRequest, blocks: blocks });
   };
 
+  console.log(block);
+
   return (
     <div className={styles.block}>
       <h2 className={styles.title}>{title}</h2>
@@ -44,8 +57,25 @@ const NewReportBlock = ({ block }: NewReportBlockProps) => {
           <span className={styles.point}>Итого по рынку/нише</span>
         ) : (
           <>
-            <span className={styles.point}>Разделить по:</span>
+            <span className={styles.point}>Разделить по критерию:</span>
             <Badge visualType="blue">{by}</Badge>
+          </>
+        )}
+      </div>
+      <div className={styles.string}>
+        <span className={styles.point}>Период:</span>
+        {dates === "current" ? (
+          <span className={styles.point}>на сегодняшнюю дату</span>
+        ) : (
+          <>
+            <span className={styles.point}>с</span>
+            <Badge visualType="blue">
+              {getFormatedDate(marketReportRequest.datesOfReview.by, "from")}
+            </Badge>
+            <span className={styles.point}>по</span>
+            <Badge visualType="blue">
+              {getFormatedDate(marketReportRequest.datesOfReview.by, "to")}
+            </Badge>
           </>
         )}
       </div>
@@ -59,27 +89,23 @@ const NewReportBlock = ({ block }: NewReportBlockProps) => {
           ))}
         </ul>
       </div>
-      <div className={styles.string}>
-        {dates === "current" ? (
-          <span className={styles.point}>На сегодняшнюю дату</span>
-        ) : (
-          <>
-            <span className={styles.point}>С</span>
-            <Badge visualType="blue">
-              {getFormatedDate(marketReportRequest.datesOfReview.by, "from")}
-            </Badge>
-            <span className={styles.point}>по</span>
-            <Badge visualType="blue">
-              {getFormatedDate(marketReportRequest.datesOfReview.by, "to")}
-            </Badge>
-          </>
-        )}
-      </div>
-      <div className={styles.buttons}>
-        <ButtonSimple visualType="common" onClick={handleDelete}>
-          Удалить
-        </ButtonSimple>
-      </div>
+      {!block.isDefault && (
+        <div className={styles.buttons}>
+          <ButtonSimple
+            onClick={() => {
+              setKeyToEdit(block.id);
+              setEditStatus("editing");
+            }}
+          >
+            <EditIcon className={styles.editIcon} /> Редактировать
+          </ButtonSimple>
+          <ButtonSimple visualType="common" onClick={handleDelete}>
+            Удалить
+          </ButtonSimple>
+        </div>
+      )}
+
+      {editStatus && <div className={styles.overlay}></div>}
     </div>
   );
 };

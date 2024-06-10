@@ -5,7 +5,9 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 8px
+  gap: 8px;
+  position: relative;
+  color: var(--pale-color);
 }
 
 .title {
@@ -13,6 +15,7 @@
   font-size: var(--font-size-m);
   line-height: var(--font-line-m);
   font-weight: var(--font-weight-500);
+  color: #15171E;
 }
 
 .point {
@@ -48,4 +51,17 @@
   gap: 12px;
   align-items: center;
   margin-top: 8px;
+}
+
+.editIcon * {
+    stroke: var(--blue-color);
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(21, 23, 30, 0.6);
 }

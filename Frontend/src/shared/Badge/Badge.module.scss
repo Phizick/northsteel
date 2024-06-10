@@ -5,6 +5,9 @@
   font-weight: var(--font-weight-400);
   box-sizing: border-box;
   border-radius: 30px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .blue {

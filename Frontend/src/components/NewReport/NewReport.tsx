@@ -13,77 +13,7 @@ import dayjs from "dayjs";
 import ButtonIcon from "../../shared/ButtonIcon/ButtonIcon.tsx";
 import { ButtonIconTypes } from "../../shared/ButtonIcon/types";
 import ProgressLine from "../../shared/ProgressLine/ProgressLine.tsx";
-
-export const initialMarketReportRequest: MarketReport = {
-  title: "Новый отчет",
-  market: "",
-  marketNiche: "",
-  autoupdate: 0,
-  splitByDates: false,
-  datesOfReview: {
-    by: "month",
-    from: dayjs(),
-    to: dayjs(),
-  },
-  blocks: [
-    {
-      id: "1",
-      isDefault: true,
-      type: "table",
-      title: "Определение продуктовой ниши",
-      split: true,
-      by: "Компания",
-      dates: "custom",
-      indicators: [
-        "Драйверы роста",
-        "Органичения роста",
-        "Тренды в развитии",
-        "Лидеры на рынке",
-        "Доля лидеров на рынке",
-      ],
-    },
-    {
-      id: "2",
-      isDefault: true,
-      type: "text",
-      title: "Объемы рынка",
-      split: false,
-      by: "total",
-      dates: "current",
-      indicators: ["Динамика развития", "Доли рыночных ниш"],
-    },
-    {
-      id: "3",
-      isDefault: true,
-      type: "text",
-      title: "Объемы рынка",
-      split: false,
-      by: "total",
-      dates: "current",
-      indicators: ["Динамика развития", "Доли рыночных ниш"],
-    },
-    {
-      id: "4",
-      isDefault: true,
-      type: "text",
-      title: "Объемы рынка",
-      split: false,
-      by: "total",
-      dates: "current",
-      indicators: ["Динамика развития", "Доли рыночных ниш"],
-    },
-    {
-      id: "5",
-      isDefault: true,
-      type: "text",
-      title: "Объемы рынка",
-      split: false,
-      by: "total",
-      dates: "current",
-      indicators: ["Динамика развития", "Доли рыночных ниш"],
-    },
-  ],
-};
+import { initialMarketReportRequest } from "../../utils/variables.ts";
 
 enum FormVariant {
   MARKET_REVIEW = "market review",

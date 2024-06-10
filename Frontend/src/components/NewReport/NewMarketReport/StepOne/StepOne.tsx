@@ -1,5 +1,5 @@
 import styles from "./StepOne.module.scss";
-import { Dispatch, SetStateAction, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import Input from "../../../../shared/Input/Input.tsx";
 import Select from "../../../../shared/Select/Select.tsx";
 import { NewMarketReportContext } from "../../NewReport.tsx";

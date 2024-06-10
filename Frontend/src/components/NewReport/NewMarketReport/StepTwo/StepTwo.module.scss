@@ -39,6 +39,8 @@
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
+  gap: 12px;
+  padding-bottom: 12px;
 
   &::-webkit-scrollbar {
     width: 1px;
