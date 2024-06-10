@@ -165,7 +165,7 @@ const StepOne = () => {
 
   return (
     <div className={styles.step}>
-      <div>
+      <div className={styles.forms}>
         <p className={styles.title}>Информация об отчете</p>
         <form className={styles.form}>
           <Input

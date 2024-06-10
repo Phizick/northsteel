@@ -6,6 +6,7 @@
   flex-direction: column;
   box-sizing: border-box;
   justify-content: space-between;
+  overflow-y: scroll;
 }
 
 .title {
@@ -53,4 +54,8 @@
   font-size: var(--font-size-m);
   line-height: var(--font-line-m);
   font-weight: var(--font-weight-500);
+}
+
+.forms {
+  overflow-y: scroll;
 }

@@ -3,12 +3,19 @@ import styles from "./ButtonSimple.module.scss";
 import classnames from "classnames";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  visualType?: "blue" | "common";
   className?: string;
 }
 
-const ButtonSimple = ({ className = "", children, ...rest }: ButtonProps) => {
+const ButtonSimple = ({
+  className = "",
+  children,
+  visualType = "blue",
+  ...rest
+}: ButtonProps) => {
   const buttonClass = classnames({
     [styles.button]: true,
+    [styles[visualType]]: true,
     [className]: true,
   });
 

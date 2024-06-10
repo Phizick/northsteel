@@ -1,0 +1,12 @@
+.form {
+  padding: 12px 1px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.radioWrapper {
+  display: flex;
+  justify-content: space-evenly;
+}

@@ -19,13 +19,70 @@ export const initialMarketReportRequest: MarketReport = {
   market: "",
   marketNiche: "",
   autoupdate: 0,
-  blocks: [],
   splitByDates: false,
   datesOfReview: {
     by: "month",
     from: dayjs(),
     to: dayjs(),
   },
+  blocks: [
+    {
+      id: "1",
+      isDefault: true,
+      type: "table",
+      title: "Определение продуктовой ниши",
+      split: true,
+      by: "Компания",
+      dates: "custom",
+      indicators: [
+        "Драйверы роста",
+        "Органичения роста",
+        "Тренды в развитии",
+        "Лидеры на рынке",
+        "Доля лидеров на рынке",
+      ],
+    },
+    {
+      id: "2",
+      isDefault: true,
+      type: "text",
+      title: "Объемы рынка",
+      split: false,
+      by: "total",
+      dates: "current",
+      indicators: ["Динамика развития", "Доли рыночных ниш"],
+    },
+    {
+      id: "3",
+      isDefault: true,
+      type: "text",
+      title: "Объемы рынка",
+      split: false,
+      by: "total",
+      dates: "current",
+      indicators: ["Динамика развития", "Доли рыночных ниш"],
+    },
+    {
+      id: "4",
+      isDefault: true,
+      type: "text",
+      title: "Объемы рынка",
+      split: false,
+      by: "total",
+      dates: "current",
+      indicators: ["Динамика развития", "Доли рыночных ниш"],
+    },
+    {
+      id: "5",
+      isDefault: true,
+      type: "text",
+      title: "Объемы рынка",
+      split: false,
+      by: "total",
+      dates: "current",
+      indicators: ["Динамика развития", "Доли рыночных ниш"],
+    },
+  ],
 };
 
 enum FormVariant {
@@ -132,13 +189,18 @@ const NewReport = ({ onClose }: NewReportProps) => {
           )}
         </header>
         <h2 className={styles.title}>{marketReportRequest.title}</h2>
-        <Tabs
-          list={newReportTabs}
-          active={activeTab}
-          setActive={setActiveTab}
-          visualType="shadow"
-          additionalAction={handleTabClick}
-        />
+        {step <= 1 ? (
+          <Tabs
+            list={newReportTabs}
+            active={activeTab}
+            setActive={setActiveTab}
+            visualType="shadow"
+            additionalAction={handleTabClick}
+          />
+        ) : (
+          <h2 className={styles.subtitle}>Содержание отчета</h2>
+        )}
+
         {getForm()}
       </div>
     </NewMarketReportContext.Provider>

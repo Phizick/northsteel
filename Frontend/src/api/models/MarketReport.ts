@@ -23,18 +23,26 @@ export enum AutoupdateStatus {
 }
 
 export interface Data {
+  id: string;
+  isDefault: boolean;
   type: "table" | "text";
   title: string;
-  by: "total" | string;
+  split: boolean;
+  by?: string;
   indicators: Array<string>;
-  data: Array<{ [key: string]: string | null }>;
+  dates: "current" | "custom";
+  data?: Array<{ [key: string]: string | null }>;
 }
 
 const example: Data = {
+  id: "1",
+  isDefault: true,
   type: "table",
   title: "Лидеры рынка молока",
+  split: true,
   by: "Компания",
   indicators: ["Доход", "Расходы", "Прибыль"],
+  dates: "current",
   data: [
     {
       Компания: null,
@@ -59,3 +67,18 @@ const example: Data = {
     },
   ],
 };
+
+const text = [
+  {
+    Компания: "Северсталь",
+    Выручка: 200,
+    Расходы: 100,
+    Прибыль: 100,
+  },
+  {
+    Компания: "МТК",
+    Выручка: 200,
+    Расходы: 100,
+    Прибыль: 100,
+  },
+];

@@ -17,6 +17,14 @@
   min-height: 40px;
 }
 
+.subtitle {
+  padding: 0;
+  margin: 0;
+  font-size: var(--font-size-h4);
+  line-height: var(--font-line-h4);
+  font-weight: var(--font-weight-400);
+}
+
 .header {
   width: 100%;
   display: grid;
