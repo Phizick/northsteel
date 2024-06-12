@@ -1,7 +1,59 @@
-import re
-import json
+import aiohttp
+import asyncio
+from bs4 import BeautifulSoup
 
-data_str = "{\n  \"Компания\": \"Северсталь\",\n  \"Показатель\": \"Прибыль\",\n  \"2019\": 225 млн. долларов,\n  \"2020\": 325 млн. долларов,\n  \"2021\": 400 млн. долларов\n}\n\n{\n  \"Компания\": \"Северсталь\",\n  \"Показатель\": \"Расход\",\n  \"2019\": 150 млн. долларов,\n  \"2020\": 200 млн. долларов,\n  \"2021\": 250 млн. долларов\n}\n\n{\n  \"Компания\": \"Северсталь\",\n  \"Показатель\": \"Доход\",\n  \"2019\": 375 млн. долларов,\n  \"2020\": 525 млн. долларов,\n  \"2021\": 650 млн. долларов\n}\n\n{\n  \"Компания\": \"НЛМК\",\n  \"Показатель\": \"Прибыль\",\n  \"2019\": 200 млн. долларов,\n  \"2020\": 275 млн. долларов,\n  \"2021\": 350 млн. долларов\n}\n\n{\n  \"Компания\": \"НЛМК\",\n  \"Показатель\": \"Расход\",\n  \"2019\": 125 млн. долларов,\n  \"2020\": 175 млн. долларов,\n  \"2021\": 225 млн. долларов\n}\n\n{\n  \"Компания\": \"НЛМК\",\n  \"Показатель\": \"Доход\",\n  \"2019\": 325 млн. долларов,\n  \"2020\": 450 млн. долларов,\n  \"2021\": 575 млн. долларов\n}"
+
+async def scrape_crawler(keywords):
+    start_url = "https://www.rbc.ru/industries/regions"
+    base_url = "https://www.rbc.ru"
+    class_name = "info-block-title"
+    keywords = keywords.split() if isinstance(keywords, str) else keywords
+
+    final_results = []
+
+    async with aiohttp.ClientSession() as session:
+        try:
+            async with session.get(start_url) as response:
+                response.raise_for_status()
+                html_content = await response.text()
+        except aiohttp.ClientError as e:
+            return f"Ошибка при загрузке страницы {start_url}: {e}"
+
+        soup = BeautifulSoup(html_content, 'html.parser')
+        links = soup.find_all('a', class_=class_name)
+        urls = []
+
+        for link in links:
+            text = link.text.strip().lower()
+            href = link.get('href')
+            if href and any(keyword.lower() in text for keyword in keywords):
+                if not href.startswith("http"):
+                    href = base_url + href
+                urls.append(href)
+
+        for url in urls:
+            try:
+                async with session.get(url) as response:
+                    response.raise_for_status()
+                    page_content = await response.text()
+            except aiohttp.ClientError as e:
+                final_results.append(f"Ошибка при загрузке страницы {url}: {e}")
+                continue
+
+            page_soup = BeautifulSoup(page_content, 'html.parser')
+            paragraphs = page_soup.find_all('p')
+            content_for_page = []
+
+            for paragraph in paragraphs:
+                par_text = paragraph.text.strip()
+                if par_text:
+                    content_for_page.append(par_text)
+
+            final_results.append("n".join(content_for_page) + "n-------n")
+            print(final_results)
+
+    return final_results
 
 
-print(data_str)
+if __name__ == "__main__":
+    asyncio.run(scrape_crawler("Информационная безопасность"))
