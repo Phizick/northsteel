@@ -1,0 +1,10 @@
+Flask
+pymongo
+aiohttp
+beautifulsoup4
+nltk
+selenium
+python-dotenv
+aiogram
+asyncio
+flask-cors

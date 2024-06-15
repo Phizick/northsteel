@@ -23,13 +23,9 @@ async def send_message_to_neural_deep_tech(message, credentials):
                 "role": "assistant",
                 "content": "Хорошо, начнем."
             },
-            # {
-            #     "role": "user",
-            #     "content": message
-            # },
             {
                 "role": "user",
-                "content": f"расскажи о {message}. Составь таблицу по доступным данным с полями: {credentials}. ответ верни в виде обьекта"
+                "content": f"расскажи о {message}. Составь таблицу по доступным данным с полями: {credentials}. ответ верни в виде обьекта без лишних комментариев"
 
             }
         ],

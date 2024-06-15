@@ -1,8 +1,11 @@
+import nltk
 from heapq import nlargest
 from collections import defaultdict
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from string import punctuation
+
+nltk.data.path.append('/root/nltk_data')
 
 
 async def extract_sentences(text_content, num_keywords, keywords):

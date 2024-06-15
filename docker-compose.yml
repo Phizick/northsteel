@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    image: phizickdocker/server_alg:latest
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/code
+    environment:
+      - FLASK_ENV=development
+      - FLASK_APP=app.py
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:

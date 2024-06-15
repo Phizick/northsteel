@@ -1,7 +1,6 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup
 menu = [
-    [InlineKeyboardButton(text="Общая информация о компании", callback_data="simple_search"),
-    InlineKeyboardButton(text="Детальная информация о компании", callback_data="analytic_search")]
+    [InlineKeyboardButton(text="найти другой продукт", callback_data="search")]
 ]
 menu = InlineKeyboardMarkup(inline_keyboard=menu)
 

@@ -2,7 +2,7 @@ import aiohttp
 from bs4 import BeautifulSoup
 import re
 from Algorithms.Core.extract_sentences import extract_sentences
-from Algorithms.Core.filter_array import key_for_test
+from Algorithms.Core.filter_array import key_for_bot
 
 
 async def my_parser(url, keywords):
@@ -32,7 +32,7 @@ async def my_parser(url, keywords):
                     return sentences_matched
 
                 text_content = ' '.join(sentences_matched)
-                sentences_matched = await extract_sentences(text_content, 50, key_for_test)
+                sentences_matched = await extract_sentences(text_content, 50, key_for_bot)
     print('parser')
     # print(sentences_matched)
     return sentences_matched

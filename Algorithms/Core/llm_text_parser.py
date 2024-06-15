@@ -5,7 +5,7 @@ import json
 from Algorithms.Core import config
 
 
-async def send_message_to_neural_deep_tech(message):
+async def llm_text_parser(data):
     url = config.DAISY_URL
     token = config.DAISY_TOKEN
     headers = {
@@ -17,7 +17,7 @@ async def send_message_to_neural_deep_tech(message):
         "messages": [
             {
                 "role": "user",
-                "content": "проведем анализ"
+                "content": "проведи анализ текста"
             },
             {
                 "role": "assistant",
@@ -25,7 +25,7 @@ async def send_message_to_neural_deep_tech(message):
             },
             {
                 "role": "user",
-                "content": f"расскажи на русском языке о {message}. найди информацию о Драйверы роста, Органичения роста, Тренды в развитии, Лидеры рынка, компаний, рейтинг, выручка, сотрудники, EBITDA, CAGR. без лишних комментариев"
+                "content": f"проведи анализ текста {data} и перепиши его с большим кол-вом цифр и данных, которые сможешь добавить по тематике текста. разбей на абзацы и ответ верни без лишних комментариев в виде обьекта text: в котором каждый абзац будет значением свойства p"
 
             }
         ],

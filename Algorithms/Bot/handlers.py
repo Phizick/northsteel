@@ -6,16 +6,17 @@ from aiogram import F
 from Algorithms.Bot.contains_cyrillic import contains_cyrillic
 from aiogram.enums.parse_mode import ParseMode
 from aiogram.filters import Command
-from Algorithms.Core.search_func import search
+from Algorithms.Core.neural_deep import send_message_to_neural_deep_tech
 from Algorithms.Core.neural_deep_search_func import neural_deep_search
 from Algorithms.Bot.states import Gen
 from asyncio.exceptions import TimeoutError
+from Algorithms.Core.filter_array import key_for_bot
 import html
 from Algorithms.Bot import kb
 from Algorithms.Bot import text
 from Algorithms.Bot import config
 import asyncio
-
+from Algorithms.Core.search_func import search
 
 import sys
 sys.path.append('C:/Users/KDFX Modes/Documents/GitHub/northsteel')
@@ -35,27 +36,13 @@ async def start_handler(msg: Message):
     await bot.send_message(chat_id=msg.chat.id, text=greet_with_name)
 
 
-@router.message(Command("simple_search"))
-async def enter_simple_search(message: types.Message, state: FSMContext):
-    await message.answer(text.mock_text)
-    await state.set_state(Gen.waiting_for_simple_search_query)
-
-
-@router.callback_query(F.data == "simple_search")
-async def simple_search_data(callback_query: types.CallbackQuery, state: FSMContext):
-    await callback_query.message.answer("<blockquote>" + html.escape(text.mock_text) + "</blockquote>",
-                                        parse_mode=ParseMode.HTML)
-    await callback_query.answer()
-    await state.set_state(Gen.waiting_for_simple_search_query)
-
-
-@router.message(Command("analytic_search"))
+@router.message(Command("search"))
 async def enter_analytic_search(message: types.Message, state: FSMContext):
-    await message.answer(text.mock_text)
+    await message.answer(text.search_text)
     await state.set_state(Gen.waiting_for_analytic_search_query)
 
 
-@router.callback_query(F.data == "analytic_search")
+@router.callback_query(F.data == "search")
 async def analytic_search_data(callback_query: types.CallbackQuery, state: FSMContext):
     await callback_query.message.answer("<blockquote>" + html.escape(text.mock_text) + "</blockquote>",
                                         parse_mode=ParseMode.HTML)
@@ -89,9 +76,9 @@ async def process_search_query(message: types.Message, state: FSMContext):
         Gen.waiting_for_analytic_search_query.state: "Результаты поиска: ",
     }
 
-    search_function = search if current_state == Gen.waiting_for_simple_search_query.state else neural_deep_search
+    search_data = await search(search_query)
     try:
-        search_result = await asyncio.wait_for(search_function(search_query), timeout=30)
+        search_result = await asyncio.wait_for(send_message_to_neural_deep_tech(search_data), timeout=30)
         await message.reply(
             "Результаты поиска: " + "<blockquote>" + html.escape(search_result) + "</blockquote>",
             parse_mode=ParseMode.HTML,

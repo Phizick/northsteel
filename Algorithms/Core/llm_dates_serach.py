@@ -5,7 +5,7 @@ import json
 from Algorithms.Core import config
 
 
-async def send_message_to_neural_deep_tech(message):
+async def llm_dates_search(dates, credentials, company):
     url = config.DAISY_URL
     token = config.DAISY_TOKEN
     headers = {
@@ -17,7 +17,7 @@ async def send_message_to_neural_deep_tech(message):
         "messages": [
             {
                 "role": "user",
-                "content": "проведем анализ"
+                "content": "сформируй мне отчет с данными"
             },
             {
                 "role": "assistant",
@@ -25,7 +25,7 @@ async def send_message_to_neural_deep_tech(message):
             },
             {
                 "role": "user",
-                "content": f"расскажи на русском языке о {message}. найди информацию о Драйверы роста, Органичения роста, Тренды в развитии, Лидеры рынка, компаний, рейтинг, выручка, сотрудники, EBITDA, CAGR. без лишних комментариев"
+                "content": f"расскажи на русском языке о {credentials} компаний {company} за года {dates}. ответ верни в виде массива обьектов: Компания: название компании, Показатель: каждый из {credentials}, Итого (каждый год из {dates})  и так далее, значения заполни сам без лишних комментариев"
 
             }
         ],
