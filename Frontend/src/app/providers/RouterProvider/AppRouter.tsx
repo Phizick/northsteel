@@ -11,9 +11,10 @@ import LoginPage from "../../../pages/Login/ui/LoginPage.tsx";
 import OnboardingPage from "../../../pages/Onboarding/ui/OnboardingPage.tsx";
 import DashboardPage from "../../../pages/Dashboard/ui/DashboardPage.tsx";
 import CompanyReports from "../../../pages/CompanyReports/CompanyReports.tsx";
-import Settings from "../../../pages/Settings/Settings.tsx";
+import SettingsPage from "../../../pages/SettingsPage/SettingsPage.tsx";
 import FAQ from "../../../pages/FAQ/FAQ.tsx";
 import Example from "../../../pages/Example/Example.tsx";
+import ReportView from "../../../components/Report/ReportView.tsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -29,8 +30,9 @@ const router = createBrowserRouter(
           <Route path="/your-reports" element={<YourReports />} />
           <Route path="/company-reports" element={<CompanyReports />} />
           <Route path="/templates" element={<Templates />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route path="/settings" element={<SettingsPage />} />
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/your-reports/:id" element={<ReportView />} />
         </Route>
       </Route>
       <Route path="/example" element={<Example />} />

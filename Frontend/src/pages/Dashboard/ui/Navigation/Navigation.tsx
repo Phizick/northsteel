@@ -8,7 +8,11 @@ import SettingsIcon from "../../../../assets/images/icons/user-edit.svg?react";
 import FaqIcon from "../../../../assets/images/icons/faq.svg?react";
 import { useLocation } from "react-router-dom";
 
-const Navigation = () => {
+interface NavigationProps {
+  additionalAction?: () => void;
+}
+
+const Navigation = ({ additionalAction = () => {} }: NavigationProps) => {
   const location = useLocation();
 
   const getIconClass = (to: string) => {
@@ -23,30 +27,30 @@ const Navigation = () => {
     <nav className={styles.navigation}>
       <ul className={styles.block}>
         <li>
-          <NavigationLink to="/your-reports">
+          <NavigationLink to="/your-reports" onClick={additionalAction}>
             <HomeIcon className={getIconClass("/your-reports")} /> Ваши отчеты
           </NavigationLink>
         </li>
         <li>
-          <NavigationLink to="/company-reports">
+          <NavigationLink to="/company-reports" onClick={additionalAction}>
             <ReportIcon className={getIconClass("/company-reports")} /> Отчеты
             компании
           </NavigationLink>
         </li>
         <li>
-          <NavigationLink to="/templates">
+          <NavigationLink to="/templates" onClick={additionalAction}>
             <TemplateIcon className={getIconClass("/templates")} /> Шаблоны
           </NavigationLink>
         </li>
       </ul>
       <ul className={styles.block}>
         <li>
-          <NavigationLink to="/settings">
+          <NavigationLink to="/settings" onClick={additionalAction}>
             <SettingsIcon className={getIconClass("/settings")} /> Настройки
           </NavigationLink>
         </li>
         <li>
-          <NavigationLink to="/faq">
+          <NavigationLink to="/faq" onClick={additionalAction}>
             <FaqIcon className={getIconClass("/faq")} /> FAQ
           </NavigationLink>
         </li>

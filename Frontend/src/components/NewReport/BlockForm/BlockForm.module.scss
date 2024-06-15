@@ -1,3 +1,5 @@
+@import "../../../app/styles/mixins";
+
 .form {
   padding: 12px 1px;
   border-bottom: 1px solid var(--border-color);
@@ -36,4 +38,13 @@
   gap: 12px;
   align-items: center;
 
+  @include mobile {
+    flex-direction: column;
+  }
+}
+
+.button {
+  @include mobile {
+    height: 40px;
+  }
 }

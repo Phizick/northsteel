@@ -14,7 +14,7 @@ const OnboardingPage = () => {
     if (userStore.user?.verification) {
       navigate("/");
     }
-  }, []);
+  }, [userStore.user?.verification]);
 
   return (
     <div className={styles.page}>

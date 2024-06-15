@@ -1,0 +1,21 @@
+.reportSettings {
+  background: #FFFFFF;
+  padding: 16px;
+  box-sizing: border-box;
+  border-radius: 30px;
+  min-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.button {
+  width: auto;
+  height: 40px;
+}

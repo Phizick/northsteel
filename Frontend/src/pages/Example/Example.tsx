@@ -20,6 +20,7 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { usePDF } from "react-to-pdf";
+import { MRT_Localization_RU } from "material-react-table/locales/ru";
 
 const Example = () => {
   const [columns, setColumns] = useState<MRT_ColumnDef<any>[]>([]);
@@ -90,7 +91,7 @@ const Example = () => {
     muiTableContainerProps: {
       sx: {
         height: "500px",
-        width: "45vw",
+        width: "45svw",
       },
     },
     renderRowActions: ({ row }) => (

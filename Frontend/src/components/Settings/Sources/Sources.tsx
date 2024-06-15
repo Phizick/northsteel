@@ -1,35 +1,29 @@
 /// <reference types="vite-plugin-svgr/client" />
-import styles from "./OnboardingSources.module.scss";
+import styles from "./Sources.module.scss";
 import { Dispatch, SetStateAction, useState } from "react";
-import { TrustedSource } from "../../../../../api/models/User.ts";
-import Source from "../../../../../components/Source/Source.tsx";
-import Plus from "../../../../../assets/images/icons/plus.svg?react";
-import PlusWhite from "../../../../../assets/images/icons/plus-white.svg?react";
-import ButtonSimple from "../../../../../shared/ButtonSimple/ButtonSimple.tsx";
-import SourceForm from "../../../../../components/SourceForm/SourceForm.tsx";
-import { EditStatus } from "../OnboardingSettings.tsx";
-import { useResize } from "../../../../../hooks/useResize.tsx";
-import Button from "../../../../../shared/Button/Button.tsx";
-
-const defaultSources: TrustedSource[] = [
-  {
-    title: "РБК",
-    url: "https://rbc.ru",
-    isDefault: true,
-    authEnabled: false,
-  },
-];
+import { TrustedSource } from "../../../api/models/User.ts";
+import Source from "../../Source/Source.tsx";
+import Plus from "../../../assets/images/icons/plus.svg?react";
+import PlusWhite from "../../../assets/images/icons/plus-white.svg?react";
+import ButtonSimple from "../../../shared/ButtonSimple/ButtonSimple.tsx";
+import SourceForm from "../../SourceForm/SourceForm.tsx";
+import { useResize } from "../../../hooks/useResize.tsx";
+import Button from "../../../shared/Button/Button.tsx";
+import { EditStatus } from "../Settings.tsx";
 
 interface OnboardingSourcesProps {
   editStatus: EditStatus | null;
   setEditStatus: Dispatch<SetStateAction<EditStatus | null>>;
+  sources: TrustedSource[];
+  setSources: Dispatch<SetStateAction<TrustedSource[]>>;
 }
 
-const OnboardingSources = ({
+const Sources = ({
   editStatus,
   setEditStatus,
+  sources,
+  setSources,
 }: OnboardingSourcesProps) => {
-  const [sources, setSources] = useState<TrustedSource[]>(defaultSources);
   const [keyToEdit, setKeyToEdit] = useState<number | null>(null);
 
   const { isMobileScreen } = useResize();
@@ -101,4 +95,4 @@ const OnboardingSources = ({
   );
 };
 
-export default OnboardingSources;
+export default Sources;

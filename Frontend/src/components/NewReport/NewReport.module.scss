@@ -1,3 +1,5 @@
+@import "../../app/styles/mixins";
+
 .newReport {
   height: 100%;
   width: 600px;
@@ -6,6 +8,14 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+
+  @include tablet {
+    width: 512px;
+  }
+
+  @include mobile{
+    width: 100svw;
+  }
 }
 
 .title {
@@ -15,6 +25,11 @@
   line-height: var(--font-line-h4);
   font-weight: var(--font-weight-600);
   min-height: 40px;
+
+  @include mobile{
+    font-size: var(--font-size-h4-mobile);
+    line-height: var(--font-line-h4-mobile);
+  }
 }
 
 .subtitle {
@@ -23,6 +38,12 @@
   font-size: var(--font-size-h4);
   line-height: var(--font-line-h4);
   font-weight: var(--font-weight-400);
+
+  @include mobile{
+    font-size: var(--font-size-h4-mobile);
+    line-height: var(--font-line-h4-mobile);
+    font-weight: var(--font-weight-400);
+  }
 }
 
 .header {

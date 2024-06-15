@@ -1,8 +1,11 @@
-import { MarketReport } from "../api/models/MarketReport.ts";
+import { MarketReportRequest, ReportType } from "../api/models/MarketReport.ts";
 import dayjs from "dayjs";
+import { CompetitorReportRequest } from "../api/models/CompetitorReport.ts";
+import { Option } from "../shared/MultiSelect/MultiSelect.tsx";
 
-export const initialMarketReportRequest: MarketReport = {
+export const initialMarketReportRequest: MarketReportRequest = {
   title: "Новый отчет",
+  type: ReportType.MARKET,
   market: "",
   marketNiche: "",
   autoupdate: 0,
@@ -20,8 +23,8 @@ export const initialMarketReportRequest: MarketReport = {
       title: "Определение продуктовой ниши",
       split: false,
       by: "",
-      dates: "current",
-      indicators: ["Драйверы роста", "Органичения роста", "Тренды в развитии"],
+      splitByDates: false,
+      indicators: ["Драйверы роста", "Ограничения роста", "Тренды в развитии"],
     },
     {
       id: "2",
@@ -30,7 +33,7 @@ export const initialMarketReportRequest: MarketReport = {
       title: "Объемы рынка",
       split: true,
       by: "Ниша",
-      dates: "current",
+      splitByDates: false,
       indicators: ["Доли рыночных ниш", "Количество потребителей"],
     },
     {
@@ -40,7 +43,7 @@ export const initialMarketReportRequest: MarketReport = {
       title: "Динамика по регионам",
       split: true,
       by: "Регион РФ",
-      dates: "current",
+      splitByDates: false,
       indicators: ["Доля региона", "Количество потребителей"],
     },
     {
@@ -50,7 +53,7 @@ export const initialMarketReportRequest: MarketReport = {
       title: "Лидеры рынка",
       split: true,
       by: "Компания",
-      dates: "custom",
+      splitByDates: true,
       indicators: [
         "Доля на рынке",
         "Доходы",
@@ -66,7 +69,7 @@ export const initialMarketReportRequest: MarketReport = {
       title: "Лидеры по потреблению",
       split: true,
       by: "Потребитель",
-      dates: "current",
+      splitByDates: true,
       indicators: ["Доля"],
     },
     {
@@ -76,21 +79,47 @@ export const initialMarketReportRequest: MarketReport = {
       title: "Прирост потребителей",
       split: true,
       by: "Ниша",
-      dates: "custom",
+      splitByDates: true,
       indicators: ["Количество потребителей"],
     },
     {
       id: "7",
       isDefault: true,
       type: "table",
-      title: "Лидеры по потреблению",
+      title: "",
       split: true,
-      by: "Продукт",
-      dates: "current",
-      indicators: ["Технология", "Компания-владелец", "Ссылак на ресурс"],
+      by: "Продукты конкурентов",
+      splitByDates: true,
+      indicators: ["Технология", "Компания-владелец", "Ссылка на ресурс"],
     },
   ],
 };
+
+export const initialCompetitorReportRequest: CompetitorReportRequest = {
+  title: "Новый отчет",
+  type: ReportType.COMPETITOR,
+  competitorName: "",
+  autoupdate: 0,
+};
+
+export const autoupdateOptions: Option[] = [
+  {
+    label: "Каждый день",
+    value: "1",
+  },
+  {
+    label: "Каждую неделю",
+    value: "2",
+  },
+  {
+    label: "Каждый месяц",
+    value: "3",
+  },
+  {
+    label: "Каждый год",
+    value: "4",
+  },
+];
 
 export const thematics = [
   {
@@ -139,3 +168,12 @@ export const thematics = [
     ],
   },
 ];
+
+export function isJsonObject(strData: string) {
+  try {
+    JSON.parse(strData);
+  } catch (e) {
+    return false;
+  }
+  return true;
+}

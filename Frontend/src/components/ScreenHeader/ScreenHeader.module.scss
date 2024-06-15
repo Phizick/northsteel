@@ -1,3 +1,5 @@
+@import '../../app/styles/mixins';
+
 .header {
   width: 100%;
   display: flex;
@@ -10,6 +12,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
+
+  @include mobile {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 .title {

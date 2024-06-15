@@ -7,7 +7,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   isLoading?: boolean;
   disabled?: boolean;
-  color?: "blue" | "transparent";
+  color?: "blue" | "transparent" | "grey";
 }
 
 const Button: FC<ButtonProps> = (props) => {

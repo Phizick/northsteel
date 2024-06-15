@@ -1,33 +1,36 @@
 /// <reference types="vite-plugin-svgr/client" />
 import styles from "./NewReportBlock.module.scss";
-import { Data } from "../../../api/models/MarketReport.ts";
+import { Data, MarketReportRequest } from "../../../api/models/MarketReport.ts";
 import Badge from "../../../shared/Badge/Badge.tsx";
-import { Dispatch, SetStateAction, useContext } from "react";
-import { NewMarketReportContext } from "../NewReport.tsx";
+import { Dispatch, SetStateAction } from "react";
 import ButtonSimple from "../../../shared/ButtonSimple/ButtonSimple.tsx";
 import EditIcon from "../../../assets/images/icons/edit-button.svg?react";
-import { EditStatus } from "../../../pages/Onboarding/ui/OnboardingSettings/OnboardingSettings.tsx";
+import { EditStatus } from "../../Settings/Settings.tsx";
 
 interface NewReportBlockProps {
   block: Data;
   editStatus: EditStatus | null;
   setKeyToEdit: Dispatch<SetStateAction<string | null>>;
   setEditStatus: Dispatch<SetStateAction<EditStatus | null>>;
+  marketReportRequest: MarketReportRequest;
+  setMarketReportRequest:
+    | Dispatch<SetStateAction<MarketReportRequest>>
+    | ((request: MarketReportRequest) => void);
 }
 
 const NewReportBlock = ({
   block,
   setKeyToEdit,
   setEditStatus,
-  editStatus,
+  marketReportRequest,
+  setMarketReportRequest,
 }: NewReportBlockProps) => {
-  const { title, type, by, indicators, dates } = block;
-
-  const { marketReportRequest, setMarketReportRequest } = useContext(
-    NewMarketReportContext,
-  );
+  const { title, type, by, indicators, splitByDates } = block;
 
   const getFormatedDate = (by: "month" | "year", period: "from" | "to") => {
+    if (!marketReportRequest.datesOfReview[period]) {
+      return 0;
+    }
     if (by === "month") {
       return `${String(marketReportRequest.datesOfReview[period].month() + 1).padStart(2, "0")}.${marketReportRequest.datesOfReview[period].year()}`;
     }
@@ -40,8 +43,6 @@ const NewReportBlock = ({
     );
     setMarketReportRequest({ ...marketReportRequest, blocks: blocks });
   };
-
-  console.log(block);
 
   return (
     <div className={styles.block}>
@@ -64,8 +65,11 @@ const NewReportBlock = ({
       </div>
       <div className={styles.string}>
         <span className={styles.point}>Период:</span>
-        {dates === "current" ? (
+        {!splitByDates ? (
           <span className={styles.point}>на сегодняшнюю дату</span>
+        ) : !marketReportRequest.datesOfReview.from ||
+          !marketReportRequest.datesOfReview.to ? (
+          <span className={styles.point}>не выбраны даты в настройках</span>
         ) : (
           <>
             <span className={styles.point}>с</span>
@@ -82,11 +86,12 @@ const NewReportBlock = ({
       <div className={styles.twoColumns}>
         <span className={styles.point}>Показатели:</span>
         <ul className={styles.list}>
-          {indicators.map((indicator, index) => (
-            <li key={index}>
-              <Badge>{indicator}</Badge>
-            </li>
-          ))}
+          {indicators &&
+            indicators.map((indicator, index) => (
+              <li key={index}>
+                <Badge>{indicator}</Badge>
+              </li>
+            ))}
         </ul>
       </div>
       {!block.isDefault && (
@@ -104,8 +109,6 @@ const NewReportBlock = ({
           </ButtonSimple>
         </div>
       )}
-
-      {editStatus && <div className={styles.overlay}></div>}
     </div>
   );
 };

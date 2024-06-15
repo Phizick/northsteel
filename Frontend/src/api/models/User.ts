@@ -1,6 +1,6 @@
 export interface User {
   username: string;
-  user_id: number;
+  user_id: string;
   verification: boolean;
   thematics: Thematic[];
   trusted_sources: TrustedSource[];

@@ -7,18 +7,18 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   message: string;
-  user_id: number;
+  user_id: string;
 }
 
 export const login = async (request: LoginRequest): Promise<LoginResponse> => {
-  let response = await fetch(`${API_URL}/auth`, {
+  let response = await fetch(`${API_URL}/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
       username: request.username,
-      password: +request.password,
+      password: request.password,
     }),
   });
 

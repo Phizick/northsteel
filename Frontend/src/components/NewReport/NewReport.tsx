@@ -6,14 +6,19 @@ import {
   useMemo,
   useState,
 } from "react";
-import { MarketReport } from "../../api/models/MarketReport.ts";
+import { MarketReportRequest } from "../../api/models/MarketReport.ts";
 import Tabs, { Tab } from "../../shared/Tabs/Tabs.tsx";
 import NewMarketReport from "./NewMarketReport/NewMarketReport.tsx";
 import dayjs from "dayjs";
 import ButtonIcon from "../../shared/ButtonIcon/ButtonIcon.tsx";
 import { ButtonIconTypes } from "../../shared/ButtonIcon/types";
 import ProgressLine from "../../shared/ProgressLine/ProgressLine.tsx";
-import { initialMarketReportRequest } from "../../utils/variables.ts";
+import {
+  initialCompetitorReportRequest,
+  initialMarketReportRequest,
+} from "../../utils/variables.ts";
+import { CompetitorReportRequest } from "../../api/models/CompetitorReport.ts";
+import NewCompetitorReport from "./NewCompetitorReport/NewCompetitorReport.tsx";
 
 enum FormVariant {
   MARKET_REVIEW = "market review",
@@ -26,39 +31,54 @@ const newReportTabs: Tab[] = [
 ];
 
 interface INewMarketReportContext {
-  marketReportRequest: MarketReport;
-  setMarketReportRequest: (request: MarketReport) => void;
+  marketReportRequest: MarketReportRequest;
+  setMarketReportRequest: (request: MarketReportRequest) => void;
+  competitorReportRequest: CompetitorReportRequest;
+  setCompetitorReportRequest: (request: CompetitorReportRequest) => void;
   step: number;
   setStep: Dispatch<SetStateAction<number>>;
+  closeModal: () => void;
 }
 
 export const NewMarketReportContext = createContext<INewMarketReportContext>({
   marketReportRequest: initialMarketReportRequest,
   setMarketReportRequest: () => {},
+  competitorReportRequest: initialCompetitorReportRequest,
+  setCompetitorReportRequest: () => {},
   step: 1,
   setStep: () => {},
+  closeModal: () => {},
 });
 
 export const LOCALSTORAGE_NEW_REPORT_TAB = "newReportTab";
 export const LOCALSTORAGE_MARKET_DRAFT = "marketDraft";
+export const LOCALSTORAGE_COMPETITOR_DRAFT = "competitorDraft";
 
 interface NewReportProps {
   onClose: () => void;
 }
 
 const NewReport = ({ onClose }: NewReportProps) => {
-  const [marketReportRequest, setMarketReportRequest] = useState<MarketReport>(
-    () => {
+  const [marketReportRequest, setMarketReportRequest] =
+    useState<MarketReportRequest>(() => {
       const storageValue = localStorage.getItem(LOCALSTORAGE_MARKET_DRAFT);
       if (storageValue) {
-        const value: MarketReport = JSON.parse(storageValue);
+        const value: MarketReportRequest = JSON.parse(storageValue);
         value.datesOfReview.from = dayjs(value.datesOfReview.from);
         value.datesOfReview.to = dayjs(value.datesOfReview.to);
         return value;
       }
       return initialMarketReportRequest;
-    },
-  );
+    });
+
+  const [competitorReportRequest, setCompetitorReportRequest] =
+    useState<CompetitorReportRequest>(() => {
+      const storageValue = localStorage.getItem(LOCALSTORAGE_COMPETITOR_DRAFT);
+      if (storageValue) {
+        return JSON.parse(storageValue);
+      }
+      return initialCompetitorReportRequest;
+    });
 
   const [step, setStep] = useState<number>(1);
 
@@ -85,21 +105,52 @@ const NewReport = ({ onClose }: NewReportProps) => {
     if (activeTab.value === FormVariant.MARKET_REVIEW) {
       return <NewMarketReport />;
     }
+    if (activeTab.value === FormVariant.COMPETITOR_ANALYSIS) {
+      return <NewCompetitorReport />;
+    }
   };
 
-  const handleRequestChange = (request: MarketReport) => {
+  const getTitle = () => {
+    if (activeTab.value === FormVariant.MARKET_REVIEW) {
+      return marketReportRequest.title;
+    }
+    if (activeTab.value === FormVariant.COMPETITOR_ANALYSIS) {
+      return competitorReportRequest.title;
+    }
+  };
+
+  const handleMarketRequestChange = (request: MarketReportRequest) => {
     setMarketReportRequest(request);
     localStorage.setItem(LOCALSTORAGE_MARKET_DRAFT, JSON.stringify(request));
+  };
+
+  const handleCompetitorRequestChange = (request: CompetitorReportRequest) => {
+    setCompetitorReportRequest(request);
+    localStorage.setItem(
+      LOCALSTORAGE_COMPETITOR_DRAFT,
+      JSON.stringify(request),
+    );
   };
 
   const contextValue = useMemo(
     () => ({
       marketReportRequest,
-      setMarketReportRequest: handleRequestChange,
+      setMarketReportRequest: handleMarketRequestChange,
+      competitorReportRequest,
+      setCompetitorReportRequest: handleCompetitorRequestChange,
       setStep,
       step,
+      closeModal: onClose,
     }),
-    [marketReportRequest, setMarketReportRequest, setStep, step],
+    [
+      marketReportRequest,
+      setMarketReportRequest,
+      setStep,
+      step,
+      competitorReportRequest,
+      setCompetitorReportRequest,
+      onClose,
+    ],
   );
 
   return (
@@ -118,7 +169,7 @@ const NewReport = ({ onClose }: NewReportProps) => {
             />
           )}
         </header>
-        <h2 className={styles.title}>{marketReportRequest.title}</h2>
+        <h2 className={styles.title}>{getTitle()}</h2>
         {step <= 1 ? (
           <Tabs
             list={newReportTabs}

@@ -10,8 +10,8 @@
 
 .closeButton {
   position: absolute;
-  left: 50%;
-  top: -60px;
+  top: 0;
+  right: 0;
   transform: translateX(-50%);
   z-index: 999;
 }
@@ -22,6 +22,14 @@
   transform: translate(-50%, -50%) scale(0.2);
   opacity: 0;
   animation: rising 0.5s forwards;
+}
+
+.menu {
+  top: 0;
+  right: 0;
+  animation: slideTop 0.3s forwards;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 $profileWidth: 24.5vw;
@@ -46,6 +54,16 @@ $profileWidth: 24.5vw;
 
   100% {
     right: 0;
+  }
+}
+
+@keyframes slideTop {
+  0% {
+    top: -100%;
+  }
+
+  100% {
+    top: 0;
   }
 }
 

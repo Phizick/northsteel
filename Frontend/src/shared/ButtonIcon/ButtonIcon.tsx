@@ -8,6 +8,8 @@ import Delete from "../../assets/images/icons/delete-button.svg?react";
 import URL from "../../assets/images/icons/url-button.svg?react";
 import Cancel from "../../assets/images/icons/x.svg?react";
 import Back from "../../assets/images/icons/chevron-left.svg?react";
+import Dots from "../../assets/images/icons/dots.svg?react";
+import Menu from "../../assets/images/icons/menu.svg?react";
 import { Tooltip } from "react-tooltip";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -36,6 +38,8 @@ const ButtonIcon = ({
     [ButtonIconTypes.URL]: <URL />,
     [ButtonIconTypes.CANCEL]: <Cancel />,
     [ButtonIconTypes.BACK]: <Back />,
+    [ButtonIconTypes.DOTS]: <Dots />,
+    [ButtonIconTypes.MENU]: <Menu />,
   };
 
   return (

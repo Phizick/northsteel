@@ -3,14 +3,14 @@
 @import "mixins";
 
 .app {
-  font-family: var(--font-family_main);
+  font-family: var(--font-family_main), "Times New Roman", serif;
   font-size: var(--font-size-l);
   line-height: var(--font-line-l);
   font-weight: var(--font-weight-400);
   background: var(--bg-color);
   color: var(--text-color);
-  height: 100vh;
-  width: 100vw;
+  height: 100svh;
+  width: 100svw;
   display: flex;
   justify-content: center;
   align-items: center;

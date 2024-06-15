@@ -1,14 +1,18 @@
+/// <reference types="vite-plugin-svgr/client" />
 import styles from "./Modal.module.scss";
-import { useEffect, FC, ReactNode, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import classnames from "classnames";
 import ModalOverlay from "./ModalOverlay/ModalOverlay.tsx";
+import CloseIcon from "../../assets/images/icons/x.svg?react";
+import ButtonSimple from "../ButtonSimple/ButtonSimple.tsx";
 
 const modalsContainer = document.querySelector("#modals") as HTMLElement;
 
 export enum ModalFor {
   POPUP = "popup",
   PROFILE = "profile",
+  MENU = "menu",
 }
 
 interface ModalProps {
@@ -21,6 +25,7 @@ interface ModalProps {
 const Modal: FC<ModalProps> = ({
   closeModal,
   forType = ModalFor.POPUP,
+  isCloseButton = true,
   children,
 }) => {
   const [closing, setClosing] = useState(false);
@@ -54,7 +59,14 @@ const Modal: FC<ModalProps> = ({
 
   return createPortal(
     <>
-      <div className={modalClass}>{children}</div>
+      <div className={modalClass}>
+        {isCloseButton && (
+          <ButtonSimple className={styles.closeButton} onClick={handleClose}>
+            <CloseIcon />
+          </ButtonSimple>
+        )}
+        {children}
+      </div>
       <ModalOverlay onClick={handleClose} />
     </>,
     modalsContainer,

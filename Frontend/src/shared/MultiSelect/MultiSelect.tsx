@@ -1,5 +1,5 @@
 import styles from "./MultiSelect.module.scss";
-import { FC } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
 import ReactSelect, { ActionMeta, MultiValue } from "react-select";
 
 export interface Option {
@@ -10,17 +10,18 @@ export interface Option {
 
 interface SelectProps {
   options: Option[];
-  title: string;
+  title?: string;
   placeholder: string;
   selectedOptions: Option[];
   setSelectedOptions:
     | ((newValue: MultiValue<Option>, actionMeta: ActionMeta<Option>) => void)
+    | Dispatch<SetStateAction<Option[]>>
     | undefined;
 }
 
 const MultiSelect: FC<SelectProps> = ({
   options,
-  title,
+  title = "",
   placeholder,
   selectedOptions,
   setSelectedOptions,
@@ -30,7 +31,12 @@ const MultiSelect: FC<SelectProps> = ({
       <span className={styles.title}>{title}</span>
       <ReactSelect
         value={selectedOptions}
-        onChange={setSelectedOptions}
+        onChange={
+          setSelectedOptions as (
+            newValue: MultiValue<Option>,
+            actionMeta: ActionMeta<Option>,
+          ) => void
+        }
         options={options}
         classNames={{
           menuList: () => styles.menuList,

@@ -1,0 +1,18 @@
+.modal {
+  border-radius: 30px;
+  background: #FFFFFF;
+  padding: 16px;
+}
+
+.buttonsContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.button {
+  height: 40px;
+  width: auto;
+}

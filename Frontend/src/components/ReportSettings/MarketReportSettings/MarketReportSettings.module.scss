@@ -1,0 +1,59 @@
+.settings {
+  overflow-y: scroll;
+  max-height: 80svh;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &::-webkit-scrollbar {
+    width: 1px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--blue-color);
+    border-radius: 30px;
+  }
+}
+
+.form {
+  margin: 8px 0 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 1px;
+}
+
+.dates {
+  width: 100%;
+}
+
+.datePicker {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.autoUpdate {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.addButton {
+  margin-top: 12px;
+}

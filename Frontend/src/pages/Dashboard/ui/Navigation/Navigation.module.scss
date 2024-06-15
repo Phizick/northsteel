@@ -1,3 +1,5 @@
+@import '../../../../app/styles/mixins';
+
 .navigation {
  display: flex;
  flex-direction: column;
@@ -9,6 +11,7 @@
  flex-direction: column;
  border-bottom: 1px solid var(--border-color);
  margin: 0;
+ list-style: none;
 
  &:last-of-type {
   border-bottom: none;

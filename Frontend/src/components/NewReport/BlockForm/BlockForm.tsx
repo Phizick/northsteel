@@ -3,21 +3,15 @@ import styles from "./BlockForm.module.scss";
 import { v4 as uuidv4 } from "uuid";
 import Input from "../../../shared/Input/Input.tsx";
 import Select, { Option } from "../../../shared/Select/Select.tsx";
-import {
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { NewMarketReportContext } from "../NewReport.tsx";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { SingleValue } from "react-select";
-import { Data } from "../../../api/models/MarketReport.ts";
+import { Data, MarketReportRequest } from "../../../api/models/MarketReport.ts";
 import Badge from "../../../shared/Badge/Badge.tsx";
 import Cross from "../../../assets/images/icons/x.svg?react";
 import ButtonSimple from "../../../shared/ButtonSimple/ButtonSimple.tsx";
-import { EditStatus } from "../../../pages/Onboarding/ui/OnboardingSettings/OnboardingSettings.tsx";
+import { EditStatus } from "../../Settings/Settings.tsx";
+import { useResize } from "../../../hooks/useResize.tsx";
+import Button from "../../../shared/Button/Button.tsx";
 
 const formatOptions: Option[] = [
   {
@@ -43,11 +37,11 @@ const splitOptions: Option[] = [
 
 const datesOptions: Option[] = [
   {
-    value: "current",
+    value: "false",
     label: "На сегодняшнюю дату",
   },
   {
-    value: "custom",
+    value: "true",
     label: "Указанный на первом шаге период",
   },
 ];
@@ -60,28 +54,39 @@ const defaultBlock: Data = {
   split: false,
   by: "",
   indicators: [],
-  dates: "current",
+  splitByDates: true,
 };
 
 interface BlockFormProps {
   initialBlock?: Data;
   setEditStatus: Dispatch<SetStateAction<EditStatus | null>>;
   setKeyToEdit: Dispatch<SetStateAction<string | null>>;
+  marketReportRequest: MarketReportRequest;
+  setMarketReportRequest:
+    | Dispatch<SetStateAction<MarketReportRequest>>
+    | ((request: MarketReportRequest) => void);
 }
 
 const BlockForm = ({
   initialBlock,
   setEditStatus,
   setKeyToEdit,
+  marketReportRequest,
+  setMarketReportRequest,
 }: BlockFormProps) => {
-  const { marketReportRequest, setMarketReportRequest } = useContext(
-    NewMarketReportContext,
-  );
   const [block, setBlock] = useState<Data>(
-    initialBlock ? initialBlock : { ...defaultBlock, id: uuidv4() },
+    initialBlock
+      ? initialBlock
+      : {
+          ...defaultBlock,
+          id: uuidv4(),
+          splitByDates: marketReportRequest.splitByDates,
+        },
   );
 
   const [newIndicator, setNewIndicator] = useState("");
+
+  const { isMobileScreen } = useResize();
 
   const getSelected = (value: string, options: Option[]): Option | null => {
     if (value) {
@@ -100,7 +105,7 @@ const BlockForm = ({
   };
 
   const setSelectedDates = (option: SingleValue<Option>): void => {
-    setBlock({ ...block, dates: option?.value as "current" | "custom" });
+    setBlock({ ...block, splitByDates: option?.value === "true" });
   };
 
   const setSelectedSplit = (option: SingleValue<Option>): void => {
@@ -206,7 +211,10 @@ const BlockForm = ({
       <Select
         options={datesOptions}
         placeholder="Укажите период отчета"
-        selectedOption={getSelected(block.dates, datesOptions)}
+        selectedOption={getSelected(
+          block.splitByDates ? "true" : "false",
+          datesOptions,
+        )}
         setSelectedOption={setSelectedDates}
         title="Период отчета"
       />
@@ -236,12 +244,33 @@ const BlockForm = ({
         </ul>
       </div>
       <div className={styles.buttonsWrapper}>
-        <ButtonSimple disabled={!isValid()} onClick={handleSubmit}>
-          {!initialBlock ? "Добавить блок" : "Сохранить изменения"}
-        </ButtonSimple>
-        <ButtonSimple visualType="common" onClick={handleCancel}>
-          Отмена
-        </ButtonSimple>
+        {!isMobileScreen ? (
+          <>
+            <ButtonSimple disabled={!isValid()} onClick={handleSubmit}>
+              {!initialBlock ? "Добавить блок" : "Сохранить изменения"}
+            </ButtonSimple>
+            <ButtonSimple visualType="common" onClick={handleCancel}>
+              Отмена
+            </ButtonSimple>
+          </>
+        ) : (
+          <>
+            <Button
+              disabled={!isValid()}
+              onClick={handleSubmit}
+              className={styles.button}
+            >
+              {!initialBlock ? "Добавить блок" : "Сохранить изменения"}
+            </Button>
+            <Button
+              color={"transparent"}
+              onClick={handleCancel}
+              className={styles.button}
+            >
+              Отмена
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );

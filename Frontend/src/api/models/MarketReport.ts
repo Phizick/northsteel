@@ -1,6 +1,25 @@
 import { Dayjs } from "dayjs";
+import { ChartOptions } from "../../components/Report/ReportBlock/TableView/ReportChart/types";
 
 export interface MarketReport {
+  id?: string;
+  type: ReportType;
+  title: string;
+  market: string;
+  marketNiche: string;
+  splitByDates: boolean;
+  datesOfReview: {
+    by: "month" | "year";
+    from: string;
+    to: string;
+  };
+  autoupdate: AutoupdateStatus;
+  blocks: Array<TableResponse | TextResponse>;
+}
+
+export interface MarketReportRequest {
+  id?: string;
+  type: ReportType;
   title: string;
   market: string;
   marketNiche: string;
@@ -12,6 +31,11 @@ export interface MarketReport {
   };
   autoupdate: AutoupdateStatus;
   blocks: Array<Data>;
+}
+
+export enum ReportType {
+  MARKET = "market",
+  COMPETITOR = "competitor",
 }
 
 export enum AutoupdateStatus {
@@ -30,55 +54,27 @@ export interface Data {
   split: boolean; // если false - ищем в целом по рынку/нише, если true - разделеям по:
   by?: string; // указанному здесь параметру (Компания - по компаниям, Регион - по регионам и т.д., что укажет юзер)
   indicators: Array<string>;
-  dates: "current" | "custom"; // если current - ищем на текущую дату без разбивок, если "custom" - разбиваем по месяцам/годам в указанном периоде (datesOfReview)
-  data?: Array<{ [key: string]: string | null }>;
+  splitByDates: boolean;
 }
 
-const example: Data = {
-  id: "1",
-  isDefault: true,
-  type: "table",
-  title: "Лидеры рынка молока",
-  split: true,
-  by: "Компания",
-  indicators: ["Доход", "Расходы", "Прибыль"],
-  dates: "custom",
-  data: [
-    {
-      Компания: null,
-      Показатель: "Доход",
-      "2021г.": null,
-      "2022г.": null,
-      "2023г.": null,
-    },
-    {
-      Компания: null,
-      Показатель: "Расход",
-      "2021г.": null,
-      "2022г.": null,
-      "2023г.": null,
-    },
-    {
-      Компания: null,
-      Показатель: "Прибыль",
-      "2021г.": null,
-      "2022г.": null,
-      "2023г.": null,
-    },
-  ],
-};
+export interface TableResponse extends Data {
+  charts: ChartOptions[];
+  data: { [key: string]: string | number | null }[];
+  groups: string[];
+  periods: string[];
+  columnsKeysOrder?: [];
+}
 
-const text = [
-  {
-    Компания: "Северсталь",
-    Выручка: 200,
-    Расходы: 100,
-    Прибыль: 100,
-  },
-  {
-    Компания: "МТК",
-    Выручка: 200,
-    Расходы: 100,
-    Прибыль: 100,
-  },
-];
+export interface TextResponse extends Data {
+  data: {
+    links: {
+      title: string;
+      url: string;
+    }[];
+    text: {
+      text: {
+        [key: string]: string;
+      };
+    };
+  };
+}

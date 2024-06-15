@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { login } from "../api/login.ts";
 import { User } from "../api/models/User.ts";
-import { getUser } from "../api/getUser.ts";
+import { getUser, patchUser } from "../api/users.ts";
 import { Cookies } from "react-cookie";
 
 const cookies = new Cookies();
@@ -16,7 +16,7 @@ class UserStore {
     makeAutoObservable(this);
   }
 
-  getUser = async (id: number) => {
+  getUser = async (id: string) => {
     this.isLoading = true;
     try {
       const user = await getUser(id);
@@ -35,7 +35,7 @@ class UserStore {
   };
 
   login = async (username: string, password: string) => {
-    let userId: number | null = null;
+    let userId: string | null = null;
     this.isLoading = true;
     try {
       const data = await login({ username, password });
@@ -61,6 +61,27 @@ class UserStore {
   logout = () => {
     this.user = null;
     cookies.remove("user_id");
+  };
+
+  patchUser = async (id: string, body: Partial<User>) => {
+    this.isLoading = true;
+    try {
+      const response = await patchUser(id, body);
+      if (response.message === "User updated.") {
+        runInAction(() => {
+          if (!this.user) return;
+          this.user = { ...this.user, ...body };
+          this.error = null;
+        });
+      }
+    } catch (error: unknown) {
+      console.log(error);
+      this.error = `Ошибка при обновлении данных`;
+    } finally {
+      runInAction(() => {
+        this.isLoading = false;
+      });
+    }
   };
 }
 
