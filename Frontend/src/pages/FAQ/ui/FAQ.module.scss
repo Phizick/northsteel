@@ -1,3 +1,5 @@
+@import "../../../app/styles/mixins";
+
 .page {
  display: flex;
   flex-direction: column;
@@ -35,7 +37,7 @@
 }
 
 .container {
-  max-height: calc(100vh - 230px);
+  max-height: calc(100svh - 220px);
   overflow-y: scroll;
 
   &::-webkit-scrollbar {
@@ -50,5 +52,9 @@
   &::-webkit-scrollbar-thumb {
     background-color: var(--blue-color);
     border-radius: 30px;
+  }
+
+  @include mobile {
+    max-height: calc(100svh - 270px);
   }
 }
