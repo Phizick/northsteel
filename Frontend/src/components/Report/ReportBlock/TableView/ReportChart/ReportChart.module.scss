@@ -1,0 +1,15 @@
+.chart {
+  position: relative;
+  max-width: 82svw;
+  overflow-x: scroll;
+  overflow-y: hidden;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+
+}
+
+.button {
+  color: var(--notification-text-color);
+}

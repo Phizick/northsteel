@@ -1,0 +1,26 @@
+ @import "../../app/styles/mixins";
+
+.modal {
+  border-radius: 30px;
+  background: #FFFFFF;
+  padding: 24px;
+}
+
+.buttonsContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  width: 100%;
+  margin-top: 16px;
+
+  @include mobile {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+}
+
+.button {
+  height: 40px;
+  width: auto;
+}

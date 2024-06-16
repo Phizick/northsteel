@@ -1,0 +1,47 @@
+@import "../../app/styles/mixins";
+
+.source {
+  width: 100%;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+
+  @include mobile {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.info {
+
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+
+  @include mobile {
+    gap: 12px;
+  }
+}
+
+.title {
+  margin: 0;
+}
+
+.link {
+  text-decoration: none;
+  color: var(--blue-color);
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.button {
+  @include mobile {
+    height: 40px;
+  }
+}

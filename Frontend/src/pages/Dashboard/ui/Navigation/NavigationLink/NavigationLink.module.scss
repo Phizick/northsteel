@@ -1,0 +1,19 @@
+.link {
+  height: 40px;
+  width: 100%;
+  text-decoration: none;
+  color: var(--text-color-primary);
+  padding: 0 16px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  font-weight: var(--font-weight-500);
+}
+
+.active {
+  background: var(--light-blue-color);
+  color: var(--blue-color)
+}

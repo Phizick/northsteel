@@ -1,0 +1,49 @@
+@import '../../../../app/styles/mixins';
+
+.logo {
+  grid-area: logo;
+  padding: 12px 16px;
+  box-shadow: 0 0 0 1px var(--border-color);
+}
+
+.header {
+  grid-area: header;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 12px 16px;
+
+  @include mobile {
+    justify-content: space-between;
+  }
+}
+
+.navigation {
+  grid-area: navigation;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 32px;
+  box-sizing: border-box;
+}
+
+.screens {
+  grid-area: screens;
+  box-shadow: -1px -1px var(--border-color);
+  padding: 32px;
+  box-sizing: border-box;
+  width: 100%;
+  &::-webkit-scrollbar {
+    width: 1px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--blue-color);
+    border-radius: 30px;
+  }
+}

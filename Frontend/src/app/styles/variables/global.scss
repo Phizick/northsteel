@@ -1,5 +1,5 @@
 :root {
-  --font-family_main: InterTight, "Times New Roman", serif;
+  --font-family_main: InterTight;
   --font-size-h1: 64px;
   --font-line-h1: 96px;
   --font-size-h1-mobile: 48px;
@@ -31,11 +31,17 @@
   --font-weight-600: 600;
 
   --bg-color: #FFFFFF;
+  --blue-color: #0E3C81;
+  --pale-color: #525860;
+  --grey-color: #F2F3F4;
+  --light-blue-color: #F1F4F9;
   --text-color-primary: #2D3239;
   --text-color-inverted: #FFFFFF;
   --text-color-secondary: #737373;
   --input-color: #464B53;
   --border-color: #E3E5E8;
+  --notification-text-color: #9C1C1C;
+  --notification-bg-color: #F8F2F2;
 }
 
 @font-face {

@@ -1,0 +1,20 @@
+.accordion {
+  width: 100%;
+
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  font-weight: var(--font-weight-600);
+  color: var(--pale-color);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.reverse {
+  transform: rotate(180deg);
+}

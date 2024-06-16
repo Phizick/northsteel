@@ -1,0 +1,12 @@
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.error {
+  color: var(--notification-text-color);
+  margin: 20px 0 0;
+  min-height: 24px;
+}

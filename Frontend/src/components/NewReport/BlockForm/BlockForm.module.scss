@@ -1,0 +1,50 @@
+@import "../../../app/styles/mixins";
+
+.form {
+  padding: 12px 1px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.radioWrapper {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.indicatorsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.indicatorsList {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.crossIcon {
+  cursor: pointer;
+}
+
+.buttonsWrapper {
+  margin-top: 4px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  @include mobile {
+    flex-direction: column;
+  }
+}
+
+.button {
+  @include mobile {
+    height: 40px;
+  }
+}

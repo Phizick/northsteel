@@ -1,0 +1,59 @@
+.input {
+  padding: 12px;
+  margin: 0 0 28px;
+  width: 100%;
+  border-radius: 30px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-color);
+  color: var(--text-color-primary);
+  cursor: pointer;
+  box-sizing: border-box;
+  caret-color: var(--text-color-primary);
+
+
+  &:focus {
+    outline: 1px solid var(--blue-color);
+    border-color: transparent;
+  }
+}
+
+.common {
+  height: 48px;
+}
+
+.narrow {
+  height: 40px;
+}
+
+.inputError {
+  outline: 1px solid red;
+  border-color: transparent;
+  margin-bottom: 4px;
+
+  &:focus {
+    outline: 1px solid red;
+    border-color: transparent;
+  }
+}
+
+.noErrorHandling {
+  margin-bottom: 0;
+}
+
+.errorMessage {
+  display: inline-block;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--notification-text-color);
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.inputWrapper {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}

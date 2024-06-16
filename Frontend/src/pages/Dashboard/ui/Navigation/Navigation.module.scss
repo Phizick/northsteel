@@ -1,0 +1,23 @@
+@import '../../../../app/styles/mixins';
+
+.navigation {
+ display: flex;
+ flex-direction: column;
+}
+
+.block {
+ padding: 8px 0;
+ display: flex;
+ flex-direction: column;
+ border-bottom: 1px solid var(--border-color);
+ margin: 0;
+ list-style: none;
+
+ &:last-of-type {
+  border-bottom: none;
+ }
+}
+
+.active * {
+ stroke: var(--blue-color);
+}

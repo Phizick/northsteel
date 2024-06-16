@@ -1,0 +1,22 @@
+.view {
+  width: 100%;
+}
+
+.text {
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  font-weight: var(--font-weight-400);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sources {
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  font-weight: var(--font-weight-400);
+  padding: 8px 0;
+}
+
+.link {
+  margin-left: 20px;
+}
