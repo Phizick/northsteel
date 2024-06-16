@@ -1,0 +1,20 @@
+.badge {
+  padding: 0 12px;
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  font-weight: var(--font-weight-400);
+  box-sizing: border-box;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.blue {
+  background: var(--light-blue-color);
+  color: var(--blue-color);
+}
+
+.common {
+  border: 1px solid var(--border-color);
+}

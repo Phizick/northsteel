@@ -1,0 +1,41 @@
+@import '../../app/styles/mixins';
+
+#createButton {
+  width: 157px;
+  height: 40px;
+  padding: 10px 16px;
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+
+  @include mobile {
+    width: 100%;
+  }
+}
+
+.viewContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 32px;
+  box-sizing: border-box;
+  max-height: calc(100svh - 225px);
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 1px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--blue-color);
+    border-radius: 30px;
+  }
+
+  @include mobile {
+    max-height: calc(100svh - 265px);
+  }
+}

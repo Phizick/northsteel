@@ -1,0 +1,27 @@
+@import '../../app/styles/mixins';
+
+.header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.titleContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+
+  @include mobile {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.title {
+  font-size: var(--font-size-h4);
+  line-height: var(--font-line-h4);
+  font-weight: var(--font-weight-600);
+}

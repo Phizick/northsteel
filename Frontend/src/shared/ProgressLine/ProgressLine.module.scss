@@ -1,0 +1,21 @@
+.progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  direction: ltr;
+}
+
+.line {
+  width: 160px;
+  height: 4px;
+  background: var(--border-color);
+  border-radius: 30px;
+}
+
+.blueLine {
+  height: 4px;
+  background: var(--blue-color);
+  border-radius: 30px;
+}

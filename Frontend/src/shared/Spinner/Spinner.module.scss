@@ -1,0 +1,30 @@
+.spinner {
+  border: 3px solid var(--text-color-inverted);
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+.common {
+  width: 35px;
+  height: 35px;
+}
+
+.app {
+  border: 3px solid var(--blue-color);
+  border-bottom-color: transparent;
+  width: 15svw;
+  height: 15svw;
+  margin: auto;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

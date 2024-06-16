@@ -1,0 +1,44 @@
+@import '../../app/styles/mixins';
+
+.forms {
+  width: 100%;
+  padding-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.container {
+  max-height: 70svh;
+}
+
+.sources {
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  font-weight: var(--font-weight-500);
+  margin-bottom: 8px;
+}
+
+.notification {
+  width: 100%;
+  padding: 8px 16px;
+  background-color: var(--notification-bg-color);
+  color: var(--notification-text-color);
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  font-weight: var(--font-weight-400);
+  border-left: 1px solid var(--notification-text-color);
+  box-sizing: border-box;
+}
+
+.button {
+  max-width: 209px;
+  height: 40px;
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  font-weight: var(--font-weight-500);
+
+  @include mobile {
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,18 @@
+@import "../../../../../app/styles/mixins";
+
+.view {
+  width: 100%;
+
+  @include tablet {
+    width: 70svw;
+  }
+
+  @include mobile {
+    width: 80svw;
+  }
+}
+
+.button {
+  margin-top: 10px;
+  margin-left: 10px;
+}

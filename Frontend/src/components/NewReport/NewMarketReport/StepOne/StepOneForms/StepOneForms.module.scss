@@ -1,0 +1,35 @@
+.title {
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  font-weight: var(--font-weight-500);
+}
+
+.forms {
+
+}
+
+.form {
+  margin: 8px 0 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 1px;
+}
+
+.dates {
+  width: 100%;
+}
+
+.datePicker {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.autoUpdate {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 32px;
+}

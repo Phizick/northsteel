@@ -1,0 +1,49 @@
+@import "../../../app/styles/mixins";
+
+.card {
+  padding: 16px;
+  box-sizing: border-box;
+  border: 1px solid var(--border-color);
+  border-radius: 30px;
+  width: 368px;
+
+  @include mobile {
+    width: 80svw;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  width: 100%;
+  height: 20px;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-l);
+  line-height: var(--font-line-l);
+  font-weight: var(--font-weight-500);
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+}
+
+.subtitle {
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  font-weight: var(--font-weight-400);
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.button {
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  font-weight: var(--font-weight-400);
+  margin-top: 8px;
+}
