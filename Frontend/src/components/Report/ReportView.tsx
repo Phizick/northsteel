@@ -12,6 +12,7 @@ import SettingsIcon from "../../assets/images/icons/settings.svg?react";
 import SaveIcon from "../../assets/images/icons/save.svg?react";
 import RefreshIcon from "../../assets/images/icons/refresh.svg?react";
 import DownloadIcon from "../../assets/images/icons/download.svg?react";
+import DeleteIcon from "../../assets/images/icons/delete.svg?react";
 import Button from "../../shared/Button/Button.tsx";
 import ButtonSimple from "../../shared/ButtonSimple/ButtonSimple.tsx";
 import getMonthForm from "../../utils/getMonthForm.ts";
@@ -30,292 +31,13 @@ import { observer } from "mobx-react-lite";
 import Spinner from "../../shared/Spinner/Spinner.tsx";
 import ConfirmModal from "../ConfirmModal/ConfirmModal.tsx";
 import SaveTemplateModal from "./SaveTemplateModal/SaveTemplateModal.tsx";
-import { ITemplate } from "../Template/Template.tsx";
-import SettingsModal from "./SettingsModal/SettingsModal.tsx";
+import { ITemplate } from "../TemplateCards/TemplateCard/TemplateCard.tsx";
 import dayjs from "dayjs";
 import ReportSettings from "../ReportSettings/ReportSettings.tsx";
-import marketReportSettings from "../ReportSettings/MarketReportSettings/MarketReportSettings.tsx";
-import Modal from "../../shared/Modal/Modal.tsx";
-import { Space } from "react-zoomable-ui";
-
-// const example: TableResponse = {
-//   id: "1",
-//   isDefault: true,
-//   type: "table",
-//   title: "Лидеры рынка металлургии в РФ",
-//   split: true,
-//   by: "Компания",
-//   indicators: ["Доход", "Расход", "Прибыль"],
-//   dates: "custom",
-//   charts: [],
-//   groups: ["Северсталь", "МТК"],
-//   periods: ["Итого 2021", "Итого 2022", "Итого 2023"],
-//   data: [
-//     {
-//       Компания: "Северсталь",
-//       Показатель: "Доход",
-//       "Итого 2021": 200,
-//       "Итого 2022": 250,
-//       "Итого 2023": 300,
-//     },
-//     {
-//       Компания: "Северсталь",
-//       Показатель: "Расход",
-//       "Итого 2021": 100,
-//       "Итого 2022": 120,
-//       "Итого 2023": 170,
-//     },
-//     {
-//       Компания: "Северсталь",
-//       Показатель: "Прибыль",
-//       "Итого 2021": 100,
-//       "Итого 2022": 130,
-//       "Итого 2023": 130,
-//     },
-//     {
-//       Компания: "МТК",
-//       Показатель: "Доход",
-//       "Итого 2021": 150,
-//       "Итого 2022": 170,
-//       "Итого 2023": 190,
-//     },
-//     {
-//       Компания: "МТК",
-//       Показатель: "Расход",
-//       "Итого 2021": 80,
-//       "Итого 2022": 100,
-//       "Итого 2023": 120,
-//     },
-//     {
-//       Компания: "МТК",
-//       Показатель: "Прибыль",
-//       "Итого 2021": 70,
-//       "Итого 2022": 70,
-//       "Итого 2023": 70,
-//     },
-//   ],
-// };
-//
-// const example2: TableResponse = {
-//   id: "2",
-//   isDefault: true,
-//   type: "table",
-//   title: "Ещё одни лидеры",
-//   split: true,
-//   by: "Компания",
-//   indicators: [
-//     "Доход",
-//     "Расход",
-//     "Валовая прибыль",
-//     "EBITDA",
-//     "Чистая прибыль",
-//   ],
-//   dates: "custom",
-//   charts: [],
-//   groups: ["Северсталь", "МТК", "ЧВК"],
-//   periods: [
-//     "Итого 2021",
-//     "Итого 2022",
-//     "Итого 2023",
-//     "Итого 2024",
-//     "Итого 2025",
-//   ],
-//   data: [
-//     {
-//       Компания: "Северсталь",
-//       Показатель: "Доход",
-//       "Итого 2021": 200,
-//       "Итого 2022": 250,
-//       "Итого 2023": 300,
-//       "Итого 2024": 300,
-//       "Итого 2025": 300,
-//     },
-//     {
-//       Компания: "Северсталь",
-//       Показатель: "Расход",
-//       "Итого 2021": 100,
-//       "Итого 2022": 120,
-//       "Итого 2023": 170,
-//       "Итого 2024": 300,
-//       "Итого 2025": 300,
-//     },
-//     {
-//       Компания: "Северсталь",
-//       Показатель: "Валовая прибыль",
-//       "Итого 2021": 100,
-//       "Итого 2022": 130,
-//       "Итого 2023": 130,
-//       "Итого 2024": 300,
-//       "Итого 2025": 300,
-//     },
-//     {
-//       Компания: "Северсталь",
-//       Показатель: "EBITDA",
-//       "Итого 2021": 100,
-//       "Итого 2022": 130,
-//       "Итого 2023": 130,
-//       "Итого 2024": 300,
-//       "Итого 2025": 300,
-//     },
-//     {
-//       Компания: "Северсталь",
-//       Показатель: "Чистая прибыль",
-//       "Итого 2021": 100,
-//       "Итого 2022": 120,
-//       "Итого 2023": 170,
-//       "Итого 2024": 300,
-//       "Итого 2025": 300,
-//     },
-//     {
-//       Компания: "МТК",
-//       Показатель: "Доход",
-//       "Итого 2021": 150,
-//       "Итого 2022": 170,
-//       "Итого 2023": 190,
-//       "Итого 2024": 300,
-//       "Итого 2025": 300,
-//     },
-//     {
-//       Компания: "МТК",
-//       Показатель: "Расход",
-//       "Итого 2021": 80,
-//       "Итого 2022": 100,
-//       "Итого 2023": 120,
-//       "Итого 2024": 300,
-//       "Итого 2025": 300,
-//     },
-//     {
-//       Компания: "МТК",
-//       Показатель: "Валовая прибыль",
-//       "Итого 2021": 70,
-//       "Итого 2022": 70,
-//       "Итого 2023": 70,
-//       "Итого 2024": 300,
-//       "Итого 2025": 300,
-//     },
-//     {
-//       Компания: "МТК",
-//       Показатель: "EBITDA",
-//       "Итого 2021": 80,
-//       "Итого 2022": 100,
-//       "Итого 2023": 120,
-//       "Итого 2024": 300,
-//       "Итого 2025": 300,
-//     },
-//     {
-//       Компания: "МТК",
-//       Показатель: "Чистая прибыль",
-//       "Итого 2021": 70,
-//       "Итого 2022": 70,
-//       "Итого 2023": 70,
-//       "Итого 2024": 300,
-//       "Итого 2025": 300,
-//     },
-//     {
-//       Компания: "ЧВК",
-//       Показатель: "Доход",
-//       "Итого 2021": 150,
-//       "Итого 2022": 170,
-//       "Итого 2023": 190,
-//       "Итого 2024": 300,
-//       "Итого 2025": 300,
-//     },
-//     {
-//       Компания: "ЧВК",
-//       Показатель: "Расход",
-//       "Итого 2021": 80,
-//       "Итого 2022": 100,
-//       "Итого 2023": 120,
-//       "Итого 2024": 300,
-//       "Итого 2025": 300,
-//     },
-//     {
-//       Компания: "ЧВК",
-//       Показатель: "Валовая прибыль",
-//       "Итого 2021": 70,
-//       "Итого 2022": 70,
-//       "Итого 2023": 70,
-//       "Итого 2024": 300,
-//       "Итого 2025": 300,
-//     },
-//     {
-//       Компания: "ЧВК",
-//       Показатель: "EBITDA",
-//       "Итого 2021": 80,
-//       "Итого 2022": 100,
-//       "Итого 2023": 120,
-//       "Итого 2024": 300,
-//       "Итого 2025": 300,
-//     },
-//     {
-//       Компания: "ЧВК",
-//       Показатель: "Чистая прибыль",
-//       "Итого 2021": 70,
-//       "Итого 2022": 70,
-//       "Итого 2023": 70,
-//       "Итого 2024": 300,
-//       "Итого 2025": 300,
-//     },
-//   ],
-// };
-//
-// const example3: TableResponse = {
-//   id: "3",
-//   isDefault: true,
-//   type: "table",
-//   title: "Кастомный заголовок",
-//   split: true,
-//   by: "Компания",
-//   indicators: ["Доход", "Расход", "Прибыль"],
-//   dates: "custom",
-//   charts: [],
-//   groups: ["Северсталь", "МТК"],
-//   periods: ["Итого 2021", "Итого 2022", "Итого 2023"],
-//   data: [
-//     {
-//       Компания: "Северсталь",
-//       Показатель: "Доход",
-//       "Итого 2021": 200,
-//       "Итого 2022": 250,
-//       "Итого 2023": 300,
-//     },
-//     {
-//       Компания: "Северсталь",
-//       Показатель: "Расход",
-//       "Итого 2021": 100,
-//       "Итого 2022": 120,
-//       "Итого 2023": 170,
-//     },
-//     {
-//       Компания: "Северсталь",
-//       Показатель: "Прибыль",
-//       "Итого 2021": 100,
-//       "Итого 2022": 130,
-//       "Итого 2023": 130,
-//     },
-//     {
-//       Компания: "МТК",
-//       Показатель: "Доход",
-//       "Итого 2021": 150,
-//       "Итого 2022": 170,
-//       "Итого 2023": 190,
-//     },
-//     {
-//       Компания: "МТК",
-//       Показатель: "Расход",
-//       "Итого 2021": 80,
-//       "Итого 2022": 100,
-//       "Итого 2023": 120,
-//     },
-//     {
-//       Компания: "МТК",
-//       Показатель: "Прибыль",
-//       "Итого 2021": 70,
-//       "Итого 2022": 70,
-//       "Итого 2023": 70,
-//     },
-//   ],
-// };
+import { useResize } from "../../hooks/useResize.tsx";
+import DeleteModal from "./DeleteModal/DeleteModal.tsx";
+import { SwipeableDrawer } from "@mui/material";
+import { CompetitorReportRequest } from "../../api/models/CompetitorReport.ts";
 
 export interface IReportContext {
   currentReport: MarketReport | null;
@@ -338,13 +60,22 @@ const ReportView = () => {
 
   const { id } = useParams();
 
+  const { isMobileScreen } = useResize();
+
   const [currentReport, setCurrentReport] = useState<MarketReport | null>(null);
-  const [reportSettings, setReportSettings] =
-    useState<MarketReportRequest | null>(null);
+  const [reportSettings, setReportSettings] = useState<
+    MarketReportRequest | CompetitorReportRequest | null
+  >(null);
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
   const [newTemplateTitle, setNewTemplateTitle] = useState("");
 
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+
+  const [currentState, setCurrentState] = useState<
+    MarketReportRequest | CompetitorReportRequest | null
+  >(null);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -352,23 +83,36 @@ const ReportView = () => {
   useEffect(() => {
     (async () => {
       if (userStore.user) {
-        const report = await reportsStore.getReport(
-          id as string,
-          userStore.user?.user_id,
-        );
+        const report = await reportsStore.getReport(id as string);
 
         if (report) {
           setCurrentReport(report);
-          const convertedFromDate = dayjs(report?.datesOfReview.from);
-          const convertedToDate = dayjs(report?.datesOfReview.to);
-          setReportSettings({
-            ...report,
-            datesOfReview: {
-              ...report.datesOfReview,
-              from: convertedFromDate,
-              to: convertedToDate,
-            },
-          });
+
+          if (report.type === "market") {
+            const convertedFromDate = dayjs(report?.datesOfReview.from);
+            const convertedToDate = dayjs(report?.datesOfReview.to);
+
+            setReportSettings({
+              ...report,
+              datesOfReview: {
+                ...report.datesOfReview,
+                from: convertedFromDate,
+                to: convertedToDate,
+              },
+            });
+            setCurrentState({
+              ...report,
+              datesOfReview: {
+                ...report.datesOfReview,
+                from: convertedFromDate,
+                to: convertedToDate,
+              },
+            });
+          } else {
+            setReportSettings(report as CompetitorReportRequest);
+            setCurrentState(report as CompetitorReportRequest);
+          }
+
           localStorage.setItem(
             LOCAL_STORAGE_INIT_REPORT,
             JSON.stringify(report),
@@ -383,13 +127,15 @@ const ReportView = () => {
     page: { margin: Margin.SMALL },
   });
 
+  const isUserReport = () => {
+    return userStore.user?.user_id == currentReport?.owner_id;
+  };
+
   const handleBlockChange = (blockId: string, newData: TableResponse) => {
     const index = currentReport?.blocks.findIndex(
       (block) => block.id === blockId,
     );
     currentReport?.blocks.splice(index || 0, 1, newData);
-
-    console.log(currentReport?.blocks);
 
     setCurrentReport(structuredClone(currentReport));
   };
@@ -433,6 +179,11 @@ const ReportView = () => {
               `;
   };
 
+  const handleRecreateReport = async () => {
+    reportsStore.recreateReport(currentReport.id as string, currentReport);
+    navigate("/waiting");
+  };
+
   const handleSaveTemplate = async () => {
     const createTemplateBody = () => {
       const blocks = currentReport.blocks.map((block) => ({
@@ -448,13 +199,29 @@ const ReportView = () => {
 
     const newTemplate: ITemplate = {
       title: newTemplateTitle,
+      // @ts-ignore
       body: createTemplateBody(),
+      template_id: "",
     };
 
-    await templatesStore.createTemplate(newTemplate);
+    await templatesStore.createTemplate(
+      newTemplate,
+      userStore.user?.user_id as string,
+    );
 
     setIsTemplateModalOpen(false);
     setNewTemplateTitle("");
+  };
+
+  const handleDeleteReport = async () => {
+    const success = await reportsStore.deleteReport(
+      currentReport.id as string,
+      userStore.user?.user_id as string,
+    );
+
+    if (success) {
+      navigate("/your-reports");
+    }
   };
 
   return (
@@ -483,20 +250,43 @@ const ReportView = () => {
                   data-html2canvas-ignore="true"
                 >
                   <div className={styles.headerButtons_left}>
-                    <Button
-                      className={styles.button}
-                      color="transparent"
-                      onClick={() => setIsSettingsModalOpen(true)}
-                    >
-                      <SettingsIcon /> Настройка отчета
-                    </Button>
-                    <Button
-                      className={styles.button}
-                      color="grey"
-                      onClick={() => setIsTemplateModalOpen(true)}
-                    >
-                      <SaveIcon /> Сохранить как шаблон
-                    </Button>
+                    {isUserReport() && (
+                      <Button
+                        className={styles.button}
+                        color="transparent"
+                        onClick={() => setIsSettingsModalOpen(true)}
+                      >
+                        <SettingsIcon /> Настройка отчета
+                      </Button>
+                    )}
+                    {!isMobileScreen && currentReport.type === "market" && (
+                      <Button
+                        className={styles.button}
+                        color="grey"
+                        onClick={() => setIsTemplateModalOpen(true)}
+                      >
+                        <SaveIcon /> Сохранить как шаблон
+                      </Button>
+                    )}
+                  </div>
+                  <div className={styles.headerButtons_right}>
+                    {isMobileScreen && currentReport.type === "market" && (
+                      <Button
+                        className={styles.button}
+                        color="grey"
+                        onClick={() => setIsTemplateModalOpen(true)}
+                      >
+                        <SaveIcon /> Сохранить как шаблон
+                      </Button>
+                    )}
+                    {isUserReport() && (
+                      <ButtonSimple
+                        visualType="common"
+                        onClick={() => setIsDeleteModalOpen(true)}
+                      >
+                        {!isMobileScreen && "Удалить"} <DeleteIcon />
+                      </ButtonSimple>
+                    )}
                   </div>
                 </div>
                 <ul className={styles.list}>
@@ -511,15 +301,25 @@ const ReportView = () => {
               </div>
             </div>
             <div className={styles.bottomIsland}>
-              <Button className={styles.button} color="transparent">
-                <RefreshIcon /> Сгенерировать заново
-              </Button>
+              {isUserReport() && (
+                <Button
+                  className={styles.button}
+                  color="transparent"
+                  onClick={() => handleRecreateReport()}
+                >
+                  <RefreshIcon />{" "}
+                  {!isMobileScreen
+                    ? "Сгенерировать заново"
+                    : "Перегенерировать"}
+                </Button>
+              )}
               <Button
                 onClick={() => toPDF()}
                 className={styles.button}
                 color="blue"
               >
-                <DownloadIcon /> Экспортировать в PDF
+                <DownloadIcon />{" "}
+                {!isMobileScreen ? "Экспортировать в PDF" : "Экспорт"}
               </Button>
             </div>
           </>
@@ -527,6 +327,7 @@ const ReportView = () => {
       </div>
       {isTemplateModalOpen && (
         <ConfirmModal
+          isModalOpen={isTemplateModalOpen}
           closeModal={() => {
             setIsTemplateModalOpen(false);
             setNewTemplateTitle("");
@@ -541,17 +342,39 @@ const ReportView = () => {
           />
         </ConfirmModal>
       )}
-      {isSettingsModalOpen && (
-        <Modal
-          closeModal={() => {
-            setIsSettingsModalOpen(false);
-          }}
-        >
+      <SwipeableDrawer
+        anchor="right"
+        open={isSettingsModalOpen}
+        onClose={() => setIsSettingsModalOpen(false)}
+        onOpen={() => setIsSettingsModalOpen(true)}
+      >
+        <div className={styles.wrapper}>
           <ReportSettings
             report={reportSettings as MarketReportRequest}
             onConfirm={setReportSettings}
+            currentState={
+              currentState as MarketReportRequest | CompetitorReportRequest
+            }
+            setCurrentState={
+              setCurrentState as Dispatch<
+                SetStateAction<MarketReportRequest | CompetitorReportRequest>
+              >
+            }
+            onClose={() => setIsSettingsModalOpen(false)}
           />
-        </Modal>
+        </div>
+      </SwipeableDrawer>
+      {isDeleteModalOpen && (
+        <ConfirmModal
+          isModalOpen={isDeleteModalOpen}
+          closeModal={() => {
+            setIsDeleteModalOpen(false);
+          }}
+          onConfirm={handleDeleteReport}
+          confirmText="Удалить отчет"
+        >
+          <DeleteModal />
+        </ConfirmModal>
       )}
     </ReportContext.Provider>
   );

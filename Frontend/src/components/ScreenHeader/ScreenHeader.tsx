@@ -4,7 +4,7 @@ import { ReactElement } from "react";
 interface ScreenHeaderProps {
   title: string;
   button?: ReactElement;
-  tabs: ReactElement;
+  tabs?: ReactElement;
 }
 
 const ScreenHeader = ({ title, button, tabs }: ScreenHeaderProps) => {
@@ -14,7 +14,7 @@ const ScreenHeader = ({ title, button, tabs }: ScreenHeaderProps) => {
         <h1>{title}</h1>
         {button && button}
       </div>
-      {tabs}
+      {tabs && tabs}
     </div>
   );
 };

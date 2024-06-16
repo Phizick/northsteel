@@ -16,12 +16,19 @@ import { SingleValue } from "react-select";
 import { Option } from "../../../shared/MultiSelect/MultiSelect.tsx";
 import ButtonSimple from "../../../shared/ButtonSimple/ButtonSimple.tsx";
 import { useResize } from "../../../hooks/useResize.tsx";
+import { useStores } from "../../../stores/root-store-context.ts";
+import { observer } from "mobx-react-lite";
+import { useNavigate } from "react-router-dom";
 
 const NewCompetitorReport = () => {
   const { competitorReportRequest, setCompetitorReportRequest, closeModal } =
     useContext(NewMarketReportContext);
 
   const { isMobileScreen } = useResize();
+
+  const { reportsStore, userStore } = useStores();
+
+  const navigate = useNavigate();
 
   const getAutoUpdateBy = (value: string): Option | null => {
     if (value) {
@@ -51,9 +58,12 @@ const NewCompetitorReport = () => {
   };
 
   const handleSubmit = () => {
-    console.log(JSON.stringify(competitorReportRequest));
-    clear();
+    reportsStore.createReport(
+      userStore.user?.user_id as string,
+      competitorReportRequest,
+    );
     closeModal();
+    navigate("/waiting");
   };
 
   return (
@@ -150,4 +160,4 @@ const NewCompetitorReport = () => {
   );
 };
 
-export default NewCompetitorReport;
+export default observer(NewCompetitorReport);

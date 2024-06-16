@@ -1,13 +1,13 @@
 import { TableResponse } from "../../../../../api/models/MarketReport.ts";
-import { BarOptions } from "../ReportChart/types";
+import { ChartOptions } from "../ReportChart/types";
 import { Dispatch, SetStateAction } from "react";
 import NewChartDatesModal from "./NewChartDatesModal/NewChartDatesModal.tsx";
 import NewChartFlatModal from "./NewChartFlatModal/NewChartFlatModal.tsx";
 
 interface NewChartModalProps {
   block: TableResponse;
-  options: BarOptions;
-  setOptions: Dispatch<SetStateAction<BarOptions>>;
+  options: ChartOptions;
+  setOptions: Dispatch<SetStateAction<ChartOptions>>;
   type: "dates" | "flat";
 }
 

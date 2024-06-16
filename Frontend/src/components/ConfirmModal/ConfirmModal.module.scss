@@ -1,7 +1,9 @@
+ @import "../../app/styles/mixins";
+
 .modal {
   border-radius: 30px;
   background: #FFFFFF;
-  padding: 16px;
+  padding: 24px;
 }
 
 .buttonsContainer {
@@ -10,6 +12,12 @@
   justify-items: center;
   width: 100%;
   margin-top: 16px;
+
+  @include mobile {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
 }
 
 .button {

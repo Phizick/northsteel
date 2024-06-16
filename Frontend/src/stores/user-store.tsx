@@ -3,6 +3,8 @@ import { login } from "../api/login.ts";
 import { User } from "../api/models/User.ts";
 import { getUser, patchUser } from "../api/users.ts";
 import { Cookies } from "react-cookie";
+import RootStore from "./root-store.tsx";
+import messages from "../api/messages";
 
 const cookies = new Cookies();
 
@@ -11,8 +13,10 @@ class UserStore {
   isLoading = false;
   error: string | null = null;
   isReady = false;
+  rootStore: RootStore;
 
-  constructor() {
+  constructor(rootStore: RootStore) {
+    this.rootStore = rootStore;
     makeAutoObservable(this);
   }
 
@@ -72,10 +76,18 @@ class UserStore {
           if (!this.user) return;
           this.user = { ...this.user, ...body };
           this.error = null;
+          this.rootStore.notificationsStore.setNotification({
+            type: "success",
+            message: messages.patchUser.success,
+          });
         });
       }
     } catch (error: unknown) {
       console.log(error);
+      this.rootStore.notificationsStore.setNotification({
+        type: "error",
+        message: messages.patchUser.error,
+      });
       this.error = `Ошибка при обновлении данных`;
     } finally {
       runInAction(() => {
@@ -85,4 +97,4 @@ class UserStore {
   };
 }
 
-export default new UserStore();
+export default UserStore;

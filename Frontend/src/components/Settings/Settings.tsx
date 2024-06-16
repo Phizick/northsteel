@@ -9,6 +9,7 @@ import { ActionMeta, MultiValue } from "react-select";
 import Sources from "./Sources/Sources.tsx";
 import Button from "../../shared/Button/Button.tsx";
 import { observer } from "mobx-react-lite";
+import { useLocation } from "react-router-dom";
 
 const defaultThematics: Option[] = [
   {
@@ -36,6 +37,8 @@ const defaultSources: TrustedSource[] = [
 
 const Settings = () => {
   const { userStore } = useStores();
+
+  const location = useLocation();
 
   if (!userStore.user) {
     return <Spinner />;
@@ -75,6 +78,32 @@ const Settings = () => {
     }
   };
 
+  const hasChanges = () => {
+    if (location.pathname === "/onboarding") {
+      return true;
+    }
+
+    if (
+      JSON.stringify(userStore.user?.thematics) !==
+      JSON.stringify(
+        selectedThematics.map((thematic) =>
+          thematics.find((them) => them.value === thematic.value),
+        ) as Thematic[],
+      )
+    ) {
+      return true;
+    }
+
+    if (
+      JSON.stringify(userStore.user?.trusted_sources) !==
+      JSON.stringify(sources)
+    ) {
+      return true;
+    }
+
+    return false;
+  };
+
   return (
     <div className={styles.forms}>
       <div className={styles.container}>
@@ -108,7 +137,7 @@ const Settings = () => {
       </div>
       {!editStatus && (
         <Button
-          disabled={userStore.isLoading}
+          disabled={userStore.isLoading || !hasChanges()}
           className={styles.button}
           onClick={handleSubmit}
           isLoading={userStore.isLoading}

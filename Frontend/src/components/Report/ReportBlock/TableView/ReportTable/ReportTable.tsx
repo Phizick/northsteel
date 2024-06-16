@@ -111,7 +111,7 @@ const ReportTable = ({ block }: ReportTableProps) => {
   });
 
   return (
-    <div className={styles.tableView}>
+    <div className={styles.view}>
       <MaterialReactTable table={table} />
     </div>
   );

@@ -14,51 +14,6 @@ const ReportCards = ({ reports }: ReportCards) => {
           <ReportCard report={report} />
         </li>
       ))}
-      {/*{reports.map((report) => (*/}
-      {/*  <li key={report.id}>*/}
-      {/*    <ReportCard report={report} />*/}
-      {/*  </li>*/}
-      {/*))}*/}
-      {/*{reports.map((report) => (*/}
-      {/*  <li key={report.id}>*/}
-      {/*    <ReportCard report={report} />*/}
-      {/*  </li>*/}
-      {/*))}*/}
-      {/*{reports.map((report) => (*/}
-      {/*  <li key={report.id}>*/}
-      {/*    <ReportCard report={report} />*/}
-      {/*  </li>*/}
-      {/*))}*/}
-      {/*{reports.map((report) => (*/}
-      {/*  <li key={report.id}>*/}
-      {/*    <ReportCard report={report} />*/}
-      {/*  </li>*/}
-      {/*))}*/}
-      {/*{reports.map((report) => (*/}
-      {/*  <li key={report.id}>*/}
-      {/*    <ReportCard report={report} />*/}
-      {/*  </li>*/}
-      {/*))}*/}
-      {/*{reports.map((report) => (*/}
-      {/*  <li key={report.id}>*/}
-      {/*    <ReportCard report={report} />*/}
-      {/*  </li>*/}
-      {/*))}*/}
-      {/*{reports.map((report) => (*/}
-      {/*  <li key={report.id}>*/}
-      {/*    <ReportCard report={report} />*/}
-      {/*  </li>*/}
-      {/*))}*/}
-      {/*{reports.map((report) => (*/}
-      {/*  <li key={report.id}>*/}
-      {/*    <ReportCard report={report} />*/}
-      {/*  </li>*/}
-      {/*))}*/}
-      {/*{reports.map((report) => (*/}
-      {/*  <li key={report.id}>*/}
-      {/*    <ReportCard report={report} />*/}
-      {/*  </li>*/}
-      {/*))}*/}
     </ul>
   );
 };

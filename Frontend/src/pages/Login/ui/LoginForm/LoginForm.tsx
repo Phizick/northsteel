@@ -28,7 +28,6 @@ const LoginForm = () => {
     await userStore.login(data.username, data.password);
 
     if (userStore.user) {
-      console.log(userStore);
       navigate("/");
     }
   };

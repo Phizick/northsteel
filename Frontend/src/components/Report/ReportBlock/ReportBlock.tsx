@@ -20,6 +20,8 @@ import { observer } from "mobx-react-lite";
 import ConfirmModal from "../../ConfirmModal/ConfirmModal.tsx";
 import NewChartModal from "./TableView/NewChartModal/NewChartModal.tsx";
 import { ChartOptions, ChartType } from "./TableView/ReportChart/types";
+import { isDataInvalid } from "./utils";
+import { useNavigate } from "react-router-dom";
 
 interface ReportBlockProps {
   block: TableResponse | TextResponse;
@@ -39,6 +41,8 @@ const ReportBlock = ({ block }: ReportBlockProps) => {
 
   const ref = useRef<HTMLDivElement>(null);
 
+  const navigate = useNavigate();
+
   const [newChartOptions, setNewChartOptions] = useState<ChartOptions>({
     title: "",
     indicator: "",
@@ -50,8 +54,12 @@ const ReportBlock = ({ block }: ReportBlockProps) => {
     type: ChartType.BAR,
   });
 
+  const isUserReport = () => {
+    return userStore.user?.user_id == currentReport?.owner_id;
+  };
+
   const getView = () => {
-    if (Array.isArray(block.data) && !block.data.length) {
+    if (!block.data) {
       return (
         <div className={styles.noData}>
           Данные по запросу не найдены. Попробуйте поменять настройки отчета и
@@ -62,6 +70,15 @@ const ReportBlock = ({ block }: ReportBlockProps) => {
 
     if (block.type === "text") {
       return <TextView block={block as TextResponse} />;
+    }
+
+    if (isDataInvalid(block)) {
+      return (
+        <div className={styles.noData}>
+          Данные по запросу не найдены. Попробуйте поменять настройки отчета и
+          сгенерировать блок заново.
+        </div>
+      );
     }
 
     return <TableView block={block as TableResponse} />;
@@ -110,7 +127,6 @@ const ReportBlock = ({ block }: ReportBlockProps) => {
 
   const handleUpdate = async () => {
     if (currentReport && userStore.user) {
-      console.log("ПАТЧ", currentReport);
       setIsLoading(true);
 
       for (let block of currentReport.blocks) {
@@ -139,6 +155,19 @@ const ReportBlock = ({ block }: ReportBlockProps) => {
   const shouldDisplayRightButtons = () =>
     block.type === "text" || (Array.isArray(block.data) && block.data.length);
 
+  const handleRecreateBlock = () => {
+    if (currentReport) {
+      const blockToRecreate: MarketReport = {
+        ...currentReport,
+        blocks: [block],
+      };
+
+      reportsStore.recreateReport(currentReport?.id as string, blockToRecreate);
+
+      navigate("/waiting");
+    }
+  };
+
   return (
     <div className={styles.block} ref={ref}>
       <div className={styles.header}>
@@ -157,11 +186,11 @@ const ReportBlock = ({ block }: ReportBlockProps) => {
           }}
         >
           {isVisible ? (
-            <span className={styles.span}>
+            <span className={styles.span} data-html2canvas-ignore="true">
               Скрыть <EyeClose />
             </span>
           ) : (
-            <span className={styles.span}>
+            <span className={styles.span} data-html2canvas-ignore="true">
               Показать <EyeOpen />
             </span>
           )}
@@ -170,39 +199,46 @@ const ReportBlock = ({ block }: ReportBlockProps) => {
       {isVisible && (
         <div>
           {getView()}
-          <div className={styles.buttons} data-html2canvas-ignore="true">
-            <Button color="transparent" className={styles.generateButton}>
-              <RefreshIcon /> Сгенерировать блок заново
-            </Button>
-            <div className={styles.rightButtonsContainer}>
-              {block.type === "table" &&
-              Array.isArray(block.data) &&
-              block.data.length ? (
-                <ButtonSimple
-                  className={styles.addButton}
-                  data-html2canvas-ignore="true"
-                  onClick={() => setIsModalOpen(true)}
-                >
-                  <Plus /> Добавить график
-                </ButtonSimple>
-              ) : null}
-              {shouldDisplayRightButtons() ? (
-                <Button
-                  color="blue"
-                  className={styles.button}
-                  disabled={!hasChanges()}
-                  onClick={handleUpdate}
-                  isLoading={isLoading}
-                >
-                  Сохранить изменения
-                </Button>
-              ) : null}
+          {isUserReport() && (
+            <div className={styles.buttons} data-html2canvas-ignore="true">
+              <Button
+                color="transparent"
+                className={styles.generateButton}
+                onClick={() => handleRecreateBlock()}
+              >
+                <RefreshIcon /> Сгенерировать блок заново
+              </Button>
+              <div className={styles.rightButtonsContainer}>
+                {block.type === "table" &&
+                Array.isArray(block.data) &&
+                block.data.length ? (
+                  <ButtonSimple
+                    className={styles.addButton}
+                    data-html2canvas-ignore="true"
+                    onClick={() => setIsModalOpen(true)}
+                  >
+                    <Plus /> Добавить график
+                  </ButtonSimple>
+                ) : null}
+                {shouldDisplayRightButtons() ? (
+                  <Button
+                    color="blue"
+                    className={styles.button}
+                    disabled={!hasChanges()}
+                    onClick={handleUpdate}
+                    isLoading={isLoading}
+                  >
+                    Сохранить изменения
+                  </Button>
+                ) : null}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       )}
       {isModalOpen && (
         <ConfirmModal
+          isModalOpen={isModalOpen}
           closeModal={() => setIsModalOpen(false)}
           onConfirm={handleConfirm}
           confirmText="Добавить график"

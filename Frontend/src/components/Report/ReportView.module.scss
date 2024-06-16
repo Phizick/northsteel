@@ -1,13 +1,15 @@
+@import "../../app/styles/mixins";
+
 .reportView {
   width: 100%;
   box-sizing: border-box;
-  max-width: 1400px;
   margin: 0 auto;
 }
 
 .reportWrapper {
   overflow-y: auto;
   max-height: calc(100svh - 150px);
+  max-width: 80svw;
 
   &::-webkit-scrollbar {
     width: 0;
@@ -20,6 +22,14 @@
   &::-webkit-scrollbar-thumb {
     background-color: var(--blue-color);
     border-radius: 30px;
+  }
+
+  @include tablet {
+    max-width: 60svw;
+  }
+
+  @include tablet {
+    max-width: 90svw;
   }
 }
 
@@ -43,8 +53,13 @@
 .header {
   margin: 16px 0;
   font-size: var(--font-size-h4);
-  line-height: var(--font-line-h4);
+  line-height: var(--font-line-h3);
   font-weight: var(--font-weight-600);
+
+  @include mobile {
+    font-size: var(--font-size-h4-mobile);
+    line-height: var(--font-line-h3-mobile);
+  }
 }
 
 .subtitle {
@@ -58,17 +73,37 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
+
+  @include mobile {
+    flex-direction: column;
+  }
 
   &_left {
     display: flex;
     align-items: center;
     gap: 8px;
+    width: 100%;
+  }
+
+  &_right{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    @include mobile {
+      width: 100%;
+    }
   }
 }
 
 .button {
   height: 40px;
   width: auto;
+
+  @include mobile {
+    width: 100%;
+  }
 }
 
 .bottomIsland {
@@ -88,5 +123,21 @@
 
   &:hover {
     box-shadow: 0p 4px 16px 0 #15171E14;
+  }
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  box-sizing: border-box;
+
+  @include tablet {
+    width: 512px;
+  }
+
+  @include mobile{
+    width: 100svw;
   }
 }

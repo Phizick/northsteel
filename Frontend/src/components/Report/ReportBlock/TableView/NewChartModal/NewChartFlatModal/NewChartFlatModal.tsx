@@ -4,7 +4,7 @@ import { ChartOptions, ChartType } from "../../ReportChart/types";
 import styles from "../NewChartModal.module.scss";
 import Input from "../../../../../../shared/Input/Input.tsx";
 import { TableResponse } from "../../../../../../api/models/MarketReport.ts";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import MultiSelect from "../../../../../../shared/MultiSelect/MultiSelect.tsx";
 
 interface NewChartModalProps {
@@ -17,7 +17,6 @@ const chartTypeOptions: Option[] = [
   { value: ChartType.BAR, label: "Столбчатая диаграмма" },
   { value: ChartType.LINE, label: "Линейная диаграмма" },
   { value: ChartType.AREA, label: "Диограмма с областями" },
-  { value: ChartType.PIE, label: "Круговая диограмма" },
 ];
 
 const NewChartFlatModal = ({

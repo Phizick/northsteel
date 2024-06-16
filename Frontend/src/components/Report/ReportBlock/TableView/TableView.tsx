@@ -14,7 +14,7 @@ const TableView = ({ block }: TableViewProps) => {
       {block.data.length && <ReportTable block={block} />}
       <div className={styles.charts}>
         {block.charts.map((chart, i) => (
-          <ReportChart block={block} options={chart} index={i} />
+          <ReportChart block={block} options={chart} key={i} index={i} />
         ))}
       </div>
     </div>

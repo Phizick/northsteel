@@ -24,6 +24,7 @@ import Button from "../../../shared/Button/Button.tsx";
 import ButtonSimple from "../../../shared/ButtonSimple/ButtonSimple.tsx";
 import Plus from "../../../assets/images/icons/plus.svg?react";
 import PlusWhite from "../../../assets/images/icons/plus-white.svg?react";
+import classnames from "classnames";
 
 interface SettingsProps {
   currentState: MarketReportRequest;
@@ -32,6 +33,7 @@ interface SettingsProps {
   setDateToError: Dispatch<SetStateAction<boolean>>;
   editStatus: EditStatus | null;
   setEditStatus: Dispatch<SetStateAction<EditStatus | null>>;
+  height?: "short" | "long";
 }
 
 const MarketReportSettings = ({
@@ -41,6 +43,7 @@ const MarketReportSettings = ({
   setDateFromError,
   editStatus,
   setEditStatus,
+  height = "long",
 }: SettingsProps) => {
   const { userStore } = useStores();
 
@@ -49,6 +52,11 @@ const MarketReportSettings = ({
   const { blocks } = currentState;
 
   const { isMobileScreen } = useResize();
+
+  const settingsClass = classnames({
+    [styles.settings]: true,
+    [styles[height]]: true,
+  });
 
   const addButton = () => {
     if (isMobileScreen) {
@@ -170,7 +178,7 @@ const MarketReportSettings = ({
   };
 
   return (
-    <div className={styles.settings}>
+    <div className={settingsClass}>
       <form className={styles.form}>
         <Input
           noErrorHandling={true}
@@ -237,6 +245,7 @@ const MarketReportSettings = ({
                       : ["year", "month"]
                   }
                   value={currentState.datesOfReview.from}
+                  maxDate={dayjs(new Date())}
                   onError={(err) => setDateFromError(!!err)}
                   onChange={(newValue) =>
                     setCurrentState({

@@ -20,8 +20,6 @@ interface ChartProps {
 const BarChartView = ({ block, options }: ChartProps) => {
   const { chartData, points } = convertToChartData(block, options);
 
-  console.log(options);
-
   return (
     <BarChart
       width={options.width}

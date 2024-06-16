@@ -1,12 +1,25 @@
+@import '../../app/styles/mixins';
+
 .reportSettings {
   background: #FFFFFF;
-  padding: 16px;
   box-sizing: border-box;
   border-radius: 30px;
-  min-width: 500px;
+  width: 600px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 16px;
+  height: 100%;
+  overflow-y: scroll;
+  padding: 16px;
+
+  @include tablet {
+    width: 512px;
+  }
+
+  @include mobile{
+    width: 100svw;
+  }
 }
 
 .buttonsContainer {
@@ -18,4 +31,20 @@
 .button {
   width: auto;
   height: 40px;
+}
+
+.createButton {
+  height: 40px;
+}
+
+.topButtonsContainer {
+  margin-top: 16px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-direction: row-reverse;
+}
+
+.wrapper {
+  overflow-y: scroll;
 }

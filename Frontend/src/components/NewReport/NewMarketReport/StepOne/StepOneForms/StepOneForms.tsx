@@ -113,6 +113,7 @@ const StepOneForms = ({
     setMarketReportRequest({
       ...marketReportRequest,
       market: option?.value || "",
+      marketNiche: "",
     });
   };
 
@@ -140,10 +141,8 @@ const StepOneForms = ({
     });
   };
 
-  console.log(marketReportRequest.datesOfReview.from);
-
   return (
-    <div>
+    <div className={styles.forms}>
       <p className={styles.title}>Информация об отчете</p>
       <form className={styles.form}>
         <Input
@@ -212,6 +211,7 @@ const StepOneForms = ({
                       ? ["year"]
                       : ["year", "month"]
                   }
+                  maxDate={dayjs(new Date())}
                   value={marketReportRequest.datesOfReview.from}
                   onError={(err) => setDateFromError(!!err)}
                   onChange={(newValue) =>

@@ -39,8 +39,8 @@ export const initialMarketReportRequest: MarketReportRequest = {
     {
       id: "3",
       isDefault: true,
-      type: "table",
-      title: "Динамика по регионам",
+      type: "text",
+      title: "Распределение по регионам",
       split: true,
       by: "Регион РФ",
       splitByDates: false,
@@ -82,16 +82,6 @@ export const initialMarketReportRequest: MarketReportRequest = {
       splitByDates: true,
       indicators: ["Количество потребителей"],
     },
-    {
-      id: "7",
-      isDefault: true,
-      type: "table",
-      title: "",
-      split: true,
-      by: "Продукты конкурентов",
-      splitByDates: true,
-      indicators: ["Технология", "Компания-владелец", "Ссылка на ресурс"],
-    },
   ],
 };
 
@@ -129,43 +119,8 @@ export const thematics = [
   },
   {
     id: "2",
-    value: "Финансовый сектор",
-    niches: [
-      "Кредитный рынок",
-      "Валютный рынок",
-      "Рынок ценных бумаг",
-      "Рынок страхования",
-      "Рынок драгоценных металлов",
-    ],
-  },
-  {
-    id: "3",
-    value: "Ювелирное производство",
-    niches: [],
-  },
-  {
-    id: "4",
     value: "Добыча полезных ископаемых",
-    niches: [
-      "Нефть",
-      "Природный газ",
-      "Уголь",
-      "Апатиты",
-      "Калийные соли",
-      "Фосфориты",
-      "Алмазы",
-    ],
-  },
-  {
-    id: "5",
-    value: "Информационные технологии",
-    niches: [
-      "ERP системы",
-      "Информационная безопасность",
-      "Веб-разработка",
-      "Мобильная разработка",
-      "Разработка игр",
-    ],
+    niches: ["Нефть", "Уголь"],
   },
 ];
 

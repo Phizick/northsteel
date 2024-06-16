@@ -1,9 +1,10 @@
 .settings {
   overflow-y: scroll;
-  max-height: 80svh;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 12px;
+  max-height: 90%;
 
   &::-webkit-scrollbar {
     width: 1px;

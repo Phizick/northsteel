@@ -3,8 +3,10 @@ import { ChartOptions } from "../../components/Report/ReportBlock/TableView/Repo
 
 export interface MarketReport {
   id?: string;
+  owner_id?: string;
   type: ReportType;
   title: string;
+  competitorName?: string;
   market: string;
   marketNiche: string;
   splitByDates: boolean;
@@ -62,7 +64,7 @@ export interface TableResponse extends Data {
   data: { [key: string]: string | number | null }[];
   groups: string[];
   periods: string[];
-  columnsKeysOrder?: [];
+  columnsKeysOrder?: string[];
 }
 
 export interface TextResponse extends Data {
@@ -77,4 +79,5 @@ export interface TextResponse extends Data {
       };
     };
   };
+  columnsKeysOrder?: string[];
 }

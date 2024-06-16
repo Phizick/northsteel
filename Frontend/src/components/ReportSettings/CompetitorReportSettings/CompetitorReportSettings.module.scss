@@ -1,0 +1,24 @@
+.settings {
+  padding-top: 32px;
+}
+
+.title {
+  font-size: var(--font-size-m);
+  line-height: var(--font-line-m);
+  font-weight: var(--font-weight-500);
+}
+
+.form {
+  margin: 8px 0 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 1px;
+}
+
+.autoUpdate {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 32px;
+}

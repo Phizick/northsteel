@@ -13,7 +13,7 @@ import ReportCards from "../../components/ReportCards/ReportCards.tsx";
 import Spinner from "../../shared/Spinner/Spinner.tsx";
 import { SwipeableDrawer } from "@mui/material";
 
-const yourReportsTabs: Tab[] = [
+export const ReportsTabs: Tab[] = [
   {
     value: "market",
     title: "Обзоры рынка",
@@ -25,7 +25,7 @@ const yourReportsTabs: Tab[] = [
 ];
 
 const YourReports = () => {
-  const [activeTab, setActiveTab] = useState<Tab>(yourReportsTabs[0]);
+  const [activeTab, setActiveTab] = useState<Tab>(ReportsTabs[0]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -47,10 +47,12 @@ const YourReports = () => {
       return <Spinner />;
     }
 
-    return reportsStore.userReports.filter(
+    const filtered = reportsStore.userReports.filter(
       (report) => report.type === activeTab.value,
-    ).length ? (
-      <ReportCards reports={reportsStore.userReports} />
+    );
+
+    return filtered.length ? (
+      <ReportCards reports={filtered} />
     ) : (
       <p>{`Вы пока не создали ни одного отчета типа "${activeTab.title}"`}</p>
     );
@@ -68,7 +70,7 @@ const YourReports = () => {
         }
         tabs={
           <Tabs
-            list={yourReportsTabs}
+            list={ReportsTabs}
             active={activeTab}
             setActive={setActiveTab}
           />

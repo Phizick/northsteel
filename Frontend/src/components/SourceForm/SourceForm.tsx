@@ -10,12 +10,12 @@ import PlusIcon from "../../assets/images/icons/plus.svg?react";
 import PlusIconWhite from "../../assets/images/icons/plus-white.svg?react";
 import Checkbox from "../../shared/Checkbox/Checkbox.tsx";
 import ButtonSimple from "../../shared/ButtonSimple/ButtonSimple.tsx";
-import { EditStatus } from "../../pages/Onboarding/ui/OnboardingSettings/OnboardingSettings.tsx";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useResize } from "../../hooks/useResize.tsx";
 import Button from "../../shared/Button/Button.tsx";
 import ButtonIcon from "../../shared/ButtonIcon/ButtonIcon.tsx";
 import { ButtonIconTypes } from "../../shared/ButtonIcon/types";
+import { EditStatus } from "../Settings/Settings.tsx";
 
 interface SourceFormProps {
   editStatus: EditStatus | null;

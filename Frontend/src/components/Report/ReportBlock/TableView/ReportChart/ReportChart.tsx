@@ -7,7 +7,7 @@ import LineChartView from "./LineChartView/LineChartView.tsx";
 import PieChartView from "./PieChart/PieChartView.tsx";
 import AreaChartView from "./AreaChartView/AreaChartView.tsx";
 import ButtonSimple from "../../../../../shared/ButtonSimple/ButtonSimple.tsx";
-import TooltipButtons from "../../../../../shared/TooltipButtons/TooltipButtons.tsx";
+import Popover from "../../../../../shared/Popover/Popover.tsx";
 import { useContext } from "react";
 import { ReportContext } from "../../../ReportView.tsx";
 
@@ -27,8 +27,6 @@ const ReportChart = ({ block, options, index }: ChartProps) => {
         charts: block.charts.filter((_, chartIndex) => chartIndex !== index),
       };
 
-      console.log("!!!");
-
       handleBlockChange(block.id, newBlock);
     }
   };
@@ -36,11 +34,12 @@ const ReportChart = ({ block, options, index }: ChartProps) => {
   if (options.type === ChartType.BAR) {
     return (
       <div className={styles.chart}>
-        <TooltipButtons>
+        <Popover>
           <ButtonSimple className={styles.button} onClick={handleDeleteButton}>
             Удалить
           </ButtonSimple>
-        </TooltipButtons>
+        </Popover>
+        <p>{options.title}</p>
         <BarChartView block={block} options={options} />
       </div>
     );
@@ -49,11 +48,12 @@ const ReportChart = ({ block, options, index }: ChartProps) => {
   if (options.type === ChartType.LINE) {
     return (
       <div className={styles.chart}>
-        <TooltipButtons>
+        <Popover>
           <ButtonSimple className={styles.button} onClick={handleDeleteButton}>
             Удалить
           </ButtonSimple>
-        </TooltipButtons>
+        </Popover>
+        <p>{options.title}</p>
         <LineChartView block={block} options={options} />
       </div>
     );
@@ -62,11 +62,12 @@ const ReportChart = ({ block, options, index }: ChartProps) => {
   if (options.type === ChartType.PIE) {
     return (
       <div className={styles.chart}>
-        <TooltipButtons>
+        <Popover>
           <ButtonSimple className={styles.button} onClick={handleDeleteButton}>
             Удалить
           </ButtonSimple>
-        </TooltipButtons>
+        </Popover>
+        <p>{options.title}</p>
         <PieChartView block={block} options={options} />
       </div>
     );
@@ -75,11 +76,12 @@ const ReportChart = ({ block, options, index }: ChartProps) => {
   if (options.type === ChartType.AREA) {
     return (
       <div className={styles.chart}>
-        <TooltipButtons>
+        <Popover>
           <ButtonSimple className={styles.button} onClick={handleDeleteButton}>
             Удалить
           </ButtonSimple>
-        </TooltipButtons>
+        </Popover>
+        <p>{options.title}</p>
         <AreaChartView block={block} options={options} />
       </div>
     );

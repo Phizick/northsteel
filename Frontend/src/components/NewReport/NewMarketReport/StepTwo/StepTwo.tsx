@@ -11,7 +11,9 @@ import { initialMarketReportRequest } from "../../../../utils/variables.ts";
 import { EditStatus } from "../../../Settings/Settings.tsx";
 import StepTwoBlocks from "./StepTwoBlocks/StepTwoBlocks.tsx";
 import { useResize } from "../../../../hooks/useResize.tsx";
-import { createReport } from "../../../../api/reports.ts";
+import { useStores } from "../../../../stores/root-store-context.ts";
+import { observer } from "mobx-react-lite";
+import { useNavigate } from "react-router-dom";
 
 const StepTwo = () => {
   const { marketReportRequest, setMarketReportRequest, closeModal, setStep } =
@@ -19,7 +21,11 @@ const StepTwo = () => {
 
   const [editStatus, setEditStatus] = useState<EditStatus | null>(null);
 
+  const { userStore, reportsStore } = useStores();
+
   const { isMobileScreen } = useResize();
+
+  const navigate = useNavigate();
 
   const clear = () => {
     setMarketReportRequest(initialMarketReportRequest);
@@ -28,10 +34,12 @@ const StepTwo = () => {
   };
 
   const handleSubmit = async () => {
-    console.log(JSON.stringify(marketReportRequest));
-    console.log(marketReportRequest);
+    reportsStore.createReport(
+      userStore.user?.user_id as string,
+      marketReportRequest,
+    );
     closeModal();
-    await createReport(marketReportRequest);
+    navigate("/waiting");
   };
 
   return (
@@ -70,4 +78,4 @@ const StepTwo = () => {
   );
 };
 
-export default StepTwo;
+export default observer(StepTwo);
