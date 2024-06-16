@@ -21,7 +21,7 @@ async def extract_sentences(text_content, num_keywords, keywords):
 
     words_frequency = defaultdict(int)
     for word in word_tokenize(text_content):
-        word = word.lower()  # Приводим слово к нижнему регистру
+        word = word.lower()
         if word not in stop_words:
             words_frequency[word] += 1
 
@@ -35,7 +35,7 @@ async def extract_sentences(text_content, num_keywords, keywords):
         for keyword in top_keywords:
             if keyword.lower() in sentence.lower():
                 relevant_sentences.append(sentence)
-                break  # Прерываем цикл, чтобы избежать добавления предложения несколько раз
+                break
 
     result_text = " ".join(relevant_sentences)
     print("extract_sentences")

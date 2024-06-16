@@ -8,6 +8,7 @@ import time
 # эмулирует поведение пользователя на сайте
 # для наглядности выбрана википедия
 
+
 def login_to_site(username, password):
     s = Service('../chromedriver/chromedriver.exe')
 

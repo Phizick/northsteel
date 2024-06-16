@@ -2,7 +2,7 @@ import aiohttp
 from bs4 import BeautifulSoup
 import re
 from Algorithms.Core.extract_sentences import extract_sentences
-from Algorithms.Core.filter_array import key_for_bot
+
 
 # функция парсинга. проходится по данным на странице
 # (для краткости ответа выбраны только ['p', 'span', 'h1', 'h2'], если добавить "div"

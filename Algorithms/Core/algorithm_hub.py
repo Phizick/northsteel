@@ -12,7 +12,7 @@ from datetime import datetime
 from typing import Dict, List, Any
 
 
-# основной хаб алгоритмов. принимает на вход запрос со структурой и метриками
+# основной хаб алгоритмов для анализа рынка. принимает на вход запрос со структурой и метриками
 # производит вычисления и наполняет структуру данными ответа
 
 def extract_years(from_date, to_date):
@@ -116,7 +116,6 @@ async def algorithm_hub_search(data):
                     'links': list(combined_links)
                 }
 
-
             elif block['type'] == 'table':
                 if block.get('by') == "Регион РФ":
                     data_result = await scrape_crawler(regions_query)
@@ -142,14 +141,6 @@ async def algorithm_hub_search(data):
                             data_result_tech = await llm_tech_info(indicators_str, groups_arr)
                             data_result = json.loads(data_result_tech)
                             print(data_result)
-                        # else:
-                        #     groups_arr = block.get('groups', [])
-                        #     data_result_tr = await llm_search(indicators_str,
-                        #                                       groups_arr)
-                        #     raw_response = data_result_tr
-                        #     # data_pars = json.loads(data_result_tr)
-                        #     data_result = json.loads(data_result_tr)
-                        #     print(data_result)
 
         except json.JSONDecodeError:
             print("JSON decode error while processing data, returning raw response")
@@ -158,7 +149,6 @@ async def algorithm_hub_search(data):
             print(f"An error occurred: {e}")
 
         block['data'] = data_result
-
 
     result = json.dumps(data_set, ensure_ascii=False, indent=2)
     # print(result)

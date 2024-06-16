@@ -27,6 +27,7 @@ storage = MemoryStorage()
 
 router = Router()
 
+# хендлеры бота. начинают работу и обрабатывают поисковые запросы
 
 @router.message(Command("start"))
 async def start_handler(msg: Message):
@@ -54,10 +55,7 @@ async def process_search_query(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
 
     active_requests[user_id] = True
-
-    current_state = await state.get_state()
     search_query = message.text.lower()
-
     search_query_str = str(search_query)
 
     if not contains_cyrillic(search_query_str):

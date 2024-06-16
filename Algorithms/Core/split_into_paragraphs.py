@@ -1,9 +1,9 @@
+# функция разбивки текста на параграфы
 def split_into_paragraphs(text, sentences_per_paragraph=5):
     truncated_message_patterns = [
         "[Message truncated",
         "due to length.]",
         "...[Message truncated due to length.]",
-
     ]
 
     for pattern in truncated_message_patterns:

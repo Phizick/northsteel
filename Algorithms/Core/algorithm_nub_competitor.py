@@ -9,7 +9,7 @@ from Algorithms.llm_client.llm_search import llm_search
 from typing import Dict, Any
 
 
-# основной хаб алгоритмов. принимает на вход запрос со структурой и метриками
+# основной хаб алгоритмов для конкурентного анализа. принимает на вход запрос со структурой и метриками
 # производит вычисления и наполняет структуру данными ответа
 
 
@@ -35,16 +35,13 @@ def transform_json_to_object(json_input: Dict[str, Any]) -> Dict[str, Dict[str, 
 async def algorithm_hub_competitor(data):
     data_set = data
     main_query = data_set['title']
-
     blocks = []
     block_id = 1
 
     try:
-
         search_result = await search(main_query, key_for_comp, 9000)
         print(search_result)
         data_paragraphs = await create_paragraphs_object(search_result['text'])
-
         blocks.append({
             "id": block_id,
             "type": "text",
@@ -146,7 +143,6 @@ async def algorithm_hub_competitor(data):
 
         block_id += 1
 
-
     except json.JSONDecodeError:
         print("JSON decode error while processing data.")
     except Exception as e:
@@ -160,6 +156,6 @@ async def algorithm_hub_competitor(data):
     # if autoupdate_interval is not None:
     #     await asyncio.sleep(autoupdate_interval * 60)
     #     print("-----------autoupdate--------")
-    #     await algorithm_hub(data)
+    #     await algorithm_hub_competitor(data)
 
     return data_set

@@ -2,7 +2,7 @@ import aiohttp
 from bs4 import BeautifulSoup
 from nltk.tokenize import sent_tokenize
 
-
+# функция более глубокого анализа доверенных источников. позволяет погружаться на несколько уровней
 async def scrape_crawler(keywords):
     start_url = "https://www.rbc.ru/industries/regions"
     base_url = "https://www.rbc.ru"

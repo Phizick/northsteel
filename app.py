@@ -1,20 +1,11 @@
-import pymongo
-from pydantic import BaseModel
-import signal
-import sys
-from typing import List, Dict, Any
-from pymongo import MongoClient
+from typing import Dict, Any
 from Algorithms.Core.algorithm_hub import algorithm_hub_search
 from Algorithms.Core.algorithm_nub_competitor import algorithm_hub_competitor
-from Algorithms.Bot.main_loop import run_bot
-# from Algorithms.database_init import initialize_database
 from fastapi.middleware.cors import CORSMiddleware
-from concurrent.futures import ThreadPoolExecutor
-from fastapi import FastAPI, HTTPException, status, Request, Depends
-from fastapi import FastAPI, HTTPException, Request, Depends, Path, Query
+from fastapi import FastAPI, HTTPException, Request, status, Path, Query
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
-from typing import List, Optional
+from typing import List
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo.errors import PyMongoError
 import asyncio
@@ -31,7 +22,7 @@ app.add_middleware(
 )
 
 # client = MongoClient('mongodb://mongo:27017/')
-client = AsyncIOMotorClient('mongodb://mongo:27017')
+client = AsyncIOMotorClient('mongodb://localhost:27017')
 
 db = client['myappsdb']
 user_collection = db['users']
@@ -286,10 +277,27 @@ async def update_report(request: Request, report_id: int):
         except json.JSONDecodeError:
             raise HTTPException(status_code=500, detail="Invalid JSON format returned from algorithm_hub")
 
-    result['id'] = report_id
+    if 'blocks' in update_data:
+        if 'blocks' not in existing_report:
+            existing_report['blocks'] = []
 
-    replace_result = await reports_collection.replace_one({'id': report_id}, result)
-    if replace_result.modified_count == 0:
+        updated_blocks = update_data['blocks']
+
+        for block in updated_blocks:
+            for i, existing_block in enumerate(existing_report['blocks']):
+                if existing_block['id'] == block['id']:
+                    existing_report['blocks'][i] = block  # Обновляем существующий блок
+                    break
+            else:
+                existing_report['blocks'].append(block)  # Добавляем новый блок
+
+    # Обновление других полей отчета, если необходимо
+    for key, value in result.items():
+        if key != 'blocks':
+            existing_report[key] = value
+
+    update_result = await reports_collection.update_one({'id': report_id}, {'$set': existing_report})
+    if update_result.modified_count == 0:
         raise HTTPException(status_code=500, detail="Failed to update the report")
 
     updated_report = await reports_collection.find_one({'id': report_id})
@@ -385,7 +393,6 @@ async def update_specific_report(request: Request, report_id, owner_id):
     return {"message": "Report updated successfully"}
 
 
-
 @app.delete("/reports/{report_id}")
 async def delete_report(report_id, owner_id):
     if not owner_id:
@@ -449,7 +456,6 @@ async def delete_template(template_id: str, request: Request):
 async def get_templates():
     templates_cursor = templates_collection.find({}, {'_id': 0})
     templates = await templates_cursor.to_list(None)
-
     for template in templates:
         template.pop('_id', None)
 
@@ -463,10 +469,8 @@ async def reset_database():
         await templates_collection.delete_many({})
         return {"success": True, "message": "Database has been reset successfully"}
     except PyMongoError as e:
-        # Log the exception details here if necessary
         return JSONResponse({"success": False, "message": f"Database error: {str(e)}"}, status_code=500)
     except Exception as ex:
-        # This would catch other unexpected errors
         return JSONResponse({"success": False, "message": f"An unexpected error occurred: {str(ex)}"}, status_code=500)
 
 
@@ -477,6 +481,7 @@ async def init_db_route():
 
 
 async def main():
+    # в вашей версии кода ап бота отключен, так как он работает на сервере
     # bot_loop = asyncio.create_task(run_bot())
     uvicorn_server = uvicorn.Server(uvicorn.Config("app:app", host="0.0.0.0", port=5000, log_level="debug"))
     api_loop = asyncio.create_task(uvicorn_server.serve())
