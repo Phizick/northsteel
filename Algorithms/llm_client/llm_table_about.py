@@ -4,8 +4,10 @@ import aiohttp
 import json
 from Algorithms.Core import config
 
+# функция обработки запросов llm. содержит специфические промпты
 
-async def send_message_to_neural_deep_tech(message, credentials):
+
+async def llm_table_about(query):
     url = config.DAISY_URL
     token = config.DAISY_TOKEN
     headers = {
@@ -17,19 +19,12 @@ async def send_message_to_neural_deep_tech(message, credentials):
         "messages": [
             {
                 "role": "user",
-                "content": "сформируй мне отчет с данными"
-            },
-            {
-                "role": "assistant",
-                "content": "Хорошо, начнем."
-            },
-            {
-                "role": "user",
-                "content": f"расскажи о {message}. Составь таблицу по доступным данным с полями: {credentials}. ответ верни в виде обьекта без лишних комментариев"
-
-            }
-        ],
-        "max_tokens": 4060
+                "content": (f"Пожалуйста создай развернутый отчет на русском языке о компании {query}."
+    f"в отчет включи все данные какие посчитаешь нужными, лучше если это будут цифры. верни ответ в виде JSON обьекта. все поля-значения должны быть в одном обьекте. Следи за тем, что бы не было вложенных обьектов/массивов и формат данных сохранялся четко "
+    f"")
+    }
+    ],
+        "max_tokens": 4096
     }
 
     async with aiohttp.ClientSession() as session:

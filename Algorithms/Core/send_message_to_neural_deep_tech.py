@@ -4,6 +4,7 @@ import aiohttp
 import json
 from Algorithms.Core import config
 
+# функция обработки запросов llm. содержит специфические промпты
 
 async def send_message_to_neural_deep_tech(message):
     url = config.DAISY_URL
@@ -25,7 +26,7 @@ async def send_message_to_neural_deep_tech(message):
             },
             {
                 "role": "user",
-                "content": f"расскажи на русском языке о {message}. найди информацию о Драйверы роста, Органичения роста, Тренды в развитии, Лидеры рынка, компаний, рейтинг, выручка, сотрудники, EBITDA, CAGR. без лишних комментариев"
+                "content": f"расскажи на русском языке о {message}. найди информацию о Драйверы роста, Органичения роста, Тренды в развитии, Лидеры рынка, компаний, рейтинг, выручка, сотрудники, EBITDA, CAGR. и дай выжимку из текста. без лишних комментариев"
 
             }
         ],

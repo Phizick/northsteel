@@ -4,8 +4,10 @@ import aiohttp
 import json
 from Algorithms.Core import config
 
+# функция обработки запросов llm. содержит специфические промпты
 
-async def llm_dates_search(dates, credentials, company):
+
+async def llm_search(message):
     url = config.DAISY_URL
     token = config.DAISY_TOKEN
     headers = {
@@ -17,15 +19,9 @@ async def llm_dates_search(dates, credentials, company):
         "messages": [
             {
                 "role": "user",
-                "content": "сформируй мне отчет с данными"
-            },
-            {
-                "role": "assistant",
-                "content": "Хорошо, начнем."
-            },
-            {
-                "role": "user",
-                "content": f"расскажи на русском языке о {credentials} компаний {company} за года {dates}. ответ верни в виде массива обьектов: Компания: название компании, Показатель: каждый из {credentials}, Итого (каждый год из {dates})  и так далее, значения заполни сам без лишних комментариев"
+                "content": (f"пожалуйста сформируй отчет на русском языке. расскажи о кункурентах {message} "
+                            f"и сформируй из каждого обьект без названия с полями: компаниия, технологии, ссылка не ресурс"
+                            f"ответ верни в виде JSON обьекта без лишних коментариев")
 
             }
         ],

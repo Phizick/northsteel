@@ -5,6 +5,9 @@ from selenium.webdriver.chrome.options import Options
 
 import time
 
+# механизм прохождения авторизации для сайтов с логином/паролем
+# имулирует поведение пользователя на странице авторизации
+
 s = Service('../chromedriver/chromedriver.exe')
 
 options = Options()

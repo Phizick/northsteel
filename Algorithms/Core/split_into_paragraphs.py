@@ -1,12 +1,19 @@
-
 def split_into_paragraphs(text, sentences_per_paragraph=5):
+    truncated_message_patterns = [
+        "[Message truncated",
+        "due to length.]",
+        "...[Message truncated due to length.]",
+
+    ]
+
+    for pattern in truncated_message_patterns:
+        text = text.replace(pattern, '')
 
     sentences = text.replace('!', '.').replace('?', '.').split('.')
     paragraphs = []
     current_paragraph = []
 
     for sentence in sentences:
-
         stripped_sentence = sentence.strip()
         if stripped_sentence:
             current_paragraph.append(stripped_sentence)

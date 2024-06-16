@@ -6,8 +6,7 @@ from aiogram import F
 from Algorithms.Bot.contains_cyrillic import contains_cyrillic
 from aiogram.enums.parse_mode import ParseMode
 from aiogram.filters import Command
-from Algorithms.Core.neural_deep import send_message_to_neural_deep_tech
-from Algorithms.Core.neural_deep_search_func import neural_deep_search
+from Algorithms.Core.send_message_to_neural_deep_tech import send_message_to_neural_deep_tech
 from Algorithms.Bot.states import Gen
 from asyncio.exceptions import TimeoutError
 from Algorithms.Core.filter_array import key_for_bot
@@ -44,7 +43,7 @@ async def enter_analytic_search(message: types.Message, state: FSMContext):
 
 @router.callback_query(F.data == "search")
 async def analytic_search_data(callback_query: types.CallbackQuery, state: FSMContext):
-    await callback_query.message.answer("<blockquote>" + html.escape(text.mock_text) + "</blockquote>",
+    await callback_query.message.answer("<blockquote>" + html.escape(text.search_text) + "</blockquote>",
                                         parse_mode=ParseMode.HTML)
     await callback_query.answer()
     await state.set_state(Gen.waiting_for_analytic_search_query)
@@ -66,17 +65,7 @@ async def process_search_query(message: types.Message, state: FSMContext):
         del active_requests[user_id]
         return
 
-    search_functions = {
-        Gen.waiting_for_simple_search_query.state: search,
-        Gen.waiting_for_analytic_search_query.state: neural_deep_search
-    }
-
-    message_responses = {
-        Gen.waiting_for_simple_search_query.state: "Результаты поиска: ",
-        Gen.waiting_for_analytic_search_query.state: "Результаты поиска: ",
-    }
-
-    search_data = await search(search_query)
+    search_data = await search(search_query, key_for_bot, 5000)
     try:
         search_result = await asyncio.wait_for(send_message_to_neural_deep_tech(search_data), timeout=30)
         await message.reply(
@@ -88,7 +77,7 @@ async def process_search_query(message: types.Message, state: FSMContext):
         await message.reply("Извини, поиск занял слишком много времени. Пожалуйста, попробуй другой запрос.")
     except Exception as e:
         print(f"Ошибка при обработке запроса: {e}")
-        await message.reply(text.mock_text)
+        await message.reply(text.search_text)
     finally:
         await state.clear()
         del active_requests[user_id]

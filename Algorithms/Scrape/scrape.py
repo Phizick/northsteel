@@ -1,5 +1,6 @@
 import aiohttp
 from bs4 import BeautifulSoup
+from nltk.tokenize import sent_tokenize
 
 
 async def scrape_crawler(keywords):
@@ -7,7 +8,6 @@ async def scrape_crawler(keywords):
     base_url = "https://www.rbc.ru"
     class_name = "info-block-title"
     keywords = keywords.split() if isinstance(keywords, str) else keywords
-
     final_results = []
 
     async with aiohttp.ClientSession() as session:
@@ -20,17 +20,9 @@ async def scrape_crawler(keywords):
 
         soup = BeautifulSoup(html_content, 'html.parser')
         links = soup.find_all('a', class_=class_name)
-        urls = []
+        urls = [base_url + link.get('href') if not link.get('href').startswith("http") else link.get('href') for link in links if any(keyword.lower() in link.text.strip().lower() for keyword in keywords)]
 
-        for link in links:
-            text = link.text.strip().lower()
-            href = link.get('href')
-            if href and any(keyword.lower() in text for keyword in keywords):
-                if not href.startswith("http"):
-                    href = base_url + href
-                urls.append(href)
-
-        for url in urls:
+        for url in urls[:2]:
             try:
                 async with session.get(url) as response:
                     response.raise_for_status()
@@ -41,15 +33,10 @@ async def scrape_crawler(keywords):
 
             page_soup = BeautifulSoup(page_content, 'html.parser')
             paragraphs = page_soup.find_all('p')
-            content_for_page = []
+            content_for_page = " ".join(paragraph.text.strip() for paragraph in paragraphs if paragraph.text.strip())
 
-            for paragraph in paragraphs:
-                par_text = paragraph.text.strip()
-                if par_text:
-                    content_for_page.append(par_text)
-
-            final_results.append("n".join(content_for_page))
-            # print(final_results)
+            sentences = sent_tokenize(content_for_page, language='russian')
+            limited_content = " ".join(sentences[:6])
+            final_results.append(limited_content)
 
     return final_results
-

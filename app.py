@@ -1,19 +1,38 @@
 import pymongo
-from flask import Flask, request, jsonify, make_response
+from pydantic import BaseModel
+import signal
+import sys
+from typing import List, Dict, Any
 from pymongo import MongoClient
-from Algorithms.Core.algorithm_hub import algorithm_hub
+from Algorithms.Core.algorithm_hub import algorithm_hub_search
+from Algorithms.Core.algorithm_nub_competitor import algorithm_hub_competitor
 from Algorithms.Bot.main_loop import run_bot
 # from Algorithms.database_init import initialize_database
-from flask_cors import CORS
+from fastapi.middleware.cors import CORSMiddleware
 from concurrent.futures import ThreadPoolExecutor
+from fastapi import FastAPI, HTTPException, status, Request, Depends
+from fastapi import FastAPI, HTTPException, Request, Depends, Path, Query
+from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
+from typing import List, Optional
+from motor.motor_asyncio import AsyncIOMotorClient
+from pymongo.errors import PyMongoError
 import asyncio
 import json
+import uvicorn
 
-app = Flask(__name__)
-CORS(app)
+app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # client = MongoClient('mongodb://mongo:27017/')
-client = MongoClient("mongodb://localhost:27017")
+client = AsyncIOMotorClient('mongodb://mongo:27017')
+
 db = client['myappsdb']
 user_collection = db['users']
 market_collection = db['market']
@@ -21,21 +40,22 @@ reports_collection = db['reports']
 templates_collection = db['templates']
 
 
-def initialize_db():
-    collection_names = db.list_collection_names()
+async def initialize_db():
+    collection_names = await db.list_collection_names()
     if 'users' not in collection_names:
-        db.create_collection('users')
+        await db.create_collection('users')
     if 'market' not in collection_names:
-        db.create_collection('market')
+        await db.create_collection('market')
     if 'reports' not in collection_names:
-        db.create_collection('reports')
+        await db.create_collection('reports')
     if 'templates' not in collection_names:
-        db.create_collection('templates')
+        await db.create_collection('templates')
 
 
-def initialize_database():
-    existing_users = user_collection.count_documents({})
-    existing_market_thematics = market_collection.count_documents({})
+async def initialize_database():
+    await initialize_db()
+    existing_users = await user_collection.count_documents({})
+    existing_market_thematics = await market_collection.count_documents({})
 
     if existing_users == 0:
         users = [
@@ -61,8 +81,10 @@ def initialize_database():
                     }
                 ],
                 "thematics": [
-                    {"id": "1", "value": "Металлургия", "niches": ["Драйверы роста", 'Лидеры на рынке', 'Тренды в развитии']},
-                    {"id": "4", "value": "Добыча полезных ископаемых", "niches": ["Драйверы роста", 'Лидеры на рынке', 'Тренды в развитии']}
+                    {"id": "1", "value": "Металлургия",
+                     "niches": ["Драйверы роста", 'Лидеры на рынке', 'Тренды в развитии']},
+                    {"id": "4", "value": "Добыча полезных ископаемых",
+                     "niches": ["Драйверы роста", 'Лидеры на рынке', 'Тренды в развитии']}
                 ]
             },
             {
@@ -105,14 +127,15 @@ def initialize_database():
                     }
                 ],
                 "thematics": [
-                    {"id": "1", "value": "Металлургия", "niches": ["Драйверы роста", 'Лидеры на рынке', 'Тренды в развитии']},
-                    {"id": "2", "value": "Финансовый сектор", "niches": ["Драйверы роста", 'Лидеры на рынке', 'Тренды в развитии']},
-                    {"id": "4", "value": "Добыча полезных ископаемых", "niches": ["Драйверы роста", 'Лидеры на рынке', 'Тренды в развитии']},
-                    {"id": "5", "value": "Самолетостроение", "niches": ["Драйверы роста", 'Лидеры на рынке', 'Тренды в развитии']}
+                    {"id": "1", "value": "Металлургия",
+                     "niches": ["Драйверы роста", 'Лидеры на рынке', 'Тренды в развитии']},
+                    {"id": "2", "value": "Добыча полезных ископаемых",
+                     "niches": ["Драйверы роста", 'Лидеры на рынке', 'Тренды в развитии']},
+
                 ]
             },
         ]
-        user_collection.insert_many(users)
+        await user_collection.insert_many(users)
         print("Database initialized with sample users.")
     else:
         print("Database already initialized.")
@@ -126,309 +149,339 @@ def initialize_database():
             },
             {
                 "id": "2",
-                "value": "Финансовый сектор",
-                "niches": [
-                    "Кредитный рынок",
-                    "Валютный рынок",
-                    "Рынок ценных бумаг",
-                    "Рынок страхования",
-                    "Рынок драгоценных металлов",
-                ],
-            },
-            {
-                "id": "3",
-                "value": "Ювелирное производство",
-                "niches": [],
-            },
-            {
-                "id": "4",
                 "value": "Добыча полезных ископаемых",
                 "niches": [
                     "Нефть",
-                    "Природный газ",
                     "Уголь",
-                    "Апатиты",
-                    "Калийные соли",
-                    "Фосфориты",
-                    "Алмазы",
-                ],
-            },
-            {
-                "id": "5",
-                "value": "Информационные технологии",
-                "niches": [
-                    "ERP системы",
-                    "Информационная безопасность",
-                    "Веб-разработка",
-                    "Мобильная разработка",
-                    "Разработка игр",
                 ],
             },
         ]
-        market_collection.insert_many(thematics)
+        await market_collection.insert_many(thematics)
         print("Market thematics initialized.")
     else:
         print("Market already initialized.")
 
 
-@app.route('/login', methods=['POST'])
-def auth():
-    data = request.get_json()
+async def add_template_to_db(template: Dict[str, Any], owner_id: str) -> Dict[str, Any]:
+
+    last_document = await templates_collection.find_one({}, sort=[("template_id", -1)])
+    next_id = "1" if not last_document else str(int(last_document.get('template_id', "0")) + 1)
+
+    template['template_id'] = next_id
+    template['owner_id'] = owner_id
+    await templates_collection.insert_one(template)
+
+    return {"message": "Template added successfully", "template_id": next_id}
+
+
+@app.post("/login")
+async def auth(request: Request):
+    data = await request.json()
     if not data:
-        return make_response(jsonify({"error": "No data provided"}), 400)
+        return JSONResponse(content={"error": "No data provided"}, status_code=status.HTTP_400_BAD_REQUEST)
     username = data.get('username')
     password = data.get('password')
     if not username or not password:
-        return make_response(jsonify({"error": "Username and password required"}), 400)
-
-    user = user_collection.find_one({"username": username, "password": password})
+        return JSONResponse(content={"error": "Username and password required"},
+                            status_code=status.HTTP_400_BAD_expr)
+    user = await user_collection.find_one({"username": username, "password": password})
     if user:
-        return jsonify({"message": "Login successful", "user_id": str(user['user_id'])}), 200
+        return JSONResponse(content={"message": "Login successful", "user_id": str(user['user_id'])},
+                            status_code=status.HTTP_200_OK)
     else:
-        return jsonify({"error": "Invalid Credentials"}), 401
+        return JSONResponse(content={"error": "Invalid Credentials"}, status_code=status.HTTP_401_UNAUTHORIZED)
 
 
-@app.route('/users/<int:user_id>', methods=['GET'])
-def get_user(user_id):
-    user = user_collection.find_one({"user_id": user_id})
+@app.get("/users/{user_id}")
+async def get_user(user_id: int):
+    user = await user_collection.find_one({"user_id": user_id})
     if user is None:
-        return jsonify({"error": "User not found"}), 404
+        return JSONResponse(content={"error": "User not found"}, status_code=status.HTTP_404_NOT_FOUND)
     user.pop('_id', None)
-    return jsonify(user)
+    return JSONResponse(content=jsonable_encoder(user))
 
 
-@app.route('/users/<int:user_id>', methods=['PATCH'])
-def update_user(user_id):
-    data = request.json
-    update_result = user_collection.update_one({"user_id": user_id}, {'$set': data})
+@app.patch("/users/{user_id}")
+async def update_user(user_id: int, request: Request):
+    data = await request.json()
+    update_result = await user_collection.update_one({"user_id": user_id}, {'$set': data})
 
     if update_result.matched_count == 0:
-        return jsonify({"error": "User not found"}), 404
+        return JSONResponse(content={"error": "User not found"}, status_code=status.HTTP_404_NOT_FOUND)
     if update_result.modified_count == 0:
-        return jsonify({"error": "No updates performed."}), 400
+        return JSONResponse(content={"error": "No updates performed"}, status_code=status.HTTP_400_BAD_REQUEST)
 
-    return jsonify({"message": "User updated."})
-
-
-@app.route('/markets', methods=['GET'])
-def get_thematics():
-    thematics = list(market_collection.find({}, {'_id': 0}))
-    return jsonify(thematics)
+    return JSONResponse(content={"message": "User updated."})
 
 
-@app.route('/marketreport', methods=['GET'])
-def fetch_market_report():
+@app.get("/markets")
+async def get_thematics():
+    thematics = await market_collection.find({}, {'_id': 0}).to_list(None)
+    return JSONResponse(content=jsonable_encoder(thematics))
+
+
+@app.get("/marketreport")
+async def fetch_market_report():
     try:
-        indicator_data = db['indicator_data']
-        documents = list(indicator_data.find({}, {'_id': 0}))
-        return jsonify(documents)
+        indicator_data = db.indicator_data
+        documents = await indicator_data.find({}, {"_id": 0}).to_list(None)
+        return JSONResponse(content=jsonable_encoder(documents))
     except Exception as e:
-        return make_response(jsonify({"error": f"An error occurred: {str(e)}"}), 400)
+        raise HTTPException(status_code=400, detail=f"An error occurred: {str(e)}")
 
 
-@app.route('/reports', methods=['POST'])
-def post_reports():
-    if request.is_json:
-        data = request.get_json()
-        result = asyncio.run(algorithm_hub(data))
-        if isinstance(result, str):
-            try:
-                result = json.loads(result)
-            except json.JSONDecodeError:
-                return jsonify({"error": "Invalid JSON format returned from algorithm_hub"}), 500
+@app.post("/reports")
+async def post_reports(request: Request, owner_id: str):
+    report_data = await request.json()
+    report_data['owner_id'] = owner_id
 
-        last_document = reports_collection.find_one(sort=[("id", pymongo.DESCENDING)])
+    if 'type' not in report_data:
+        raise HTTPException(status_code=400, detail="Field 'type' is required")
 
-        next_id = "1" if last_document is None else str(int(last_document['id']) + 1)
-        result['id'] = next_id
-
-        reports_collection.insert_one(result)
-        result.pop('_id', None)
-
-        return result
+    if report_data['type'] == 'market':
+        result = await algorithm_hub_search(report_data)
+    elif report_data['type'] == 'competitor':
+        result = await algorithm_hub_competitor(report_data)
     else:
+        raise HTTPException(status_code=400, detail="Field 'type' must be either 'market' or 'competitor'")
 
-        return jsonify({"error": "Invalid data format, JSON expected"}), 400
+    if isinstance(result, str):
+        try:
+            result = json.loads(result)
+        except json.JSONDecodeError:
+            raise HTTPException(status_code=500, detail="Invalid JSON format returned from algorithm_hub")
+
+    last_document = await reports_collection.find_one({}, sort=[("id", -1)])
+    next_id = 1 if not last_document else last_document['id'] + 1
+
+    result['id'] = next_id
+
+    await reports_collection.insert_one(result)
+    result.pop('_id', None)
+
+    return result
 
 
-@app.route('/reports/<report_id>', methods=['GET'])
-def get_report(report_id):
-    owner_id = request.args.get('owner_id')
-    if not owner_id:
-        return jsonify({"error": "Missing owner ID"}), 400
+@app.put("/reports/{report_id}")
+async def update_report(request: Request, report_id: int):
+    update_data = await request.json()
 
-    query = {"id": report_id, "owner_id": owner_id}
-    report = reports_collection.find_one(query)
+    if 'type' not in update_data:
+        raise HTTPException(status_code=400, detail="Field 'type' is required")
+
+    existing_report = await reports_collection.find_one({'id': report_id})
+    if not existing_report:
+        raise HTTPException(status_code=404, detail="Report not found")
+
+    if update_data['type'] == 'market':
+        result = await algorithm_hub_search(update_data)
+    elif update_data['type'] == 'competitor':
+        result = await algorithm_hub_competitor(update_data)
+    else:
+        raise HTTPException(status_code=400, detail="Field 'type' must be either 'market' or 'competitor'")
+
+    if isinstance(result, str):
+        try:
+            result = json.loads(result)
+        except json.JSONDecodeError:
+            raise HTTPException(status_code=500, detail="Invalid JSON format returned from algorithm_hub")
+
+    result['id'] = report_id
+
+    replace_result = await reports_collection.replace_one({'id': report_id}, result)
+    if replace_result.modified_count == 0:
+        raise HTTPException(status_code=500, detail="Failed to update the report")
+
+    updated_report = await reports_collection.find_one({'id': report_id})
+    updated_report.pop('_id', None)
+
+    return updated_report
+
+
+@app.get("/reports/{report_id}", response_model=Dict[str, Any])
+async def get_report(report_id: int = Path(..., description="The ID of the report to retrieve")):
+
+    query = {"id": report_id}
+    report = await reports_collection.find_one(query)
+
     if not report:
-        return jsonify({"message": "No report found or access denied"}), 404
+        raise HTTPException(status_code=404, detail="No report found")
 
-    if '_id' in report:
-        report.pop('_id', None)
-
-    return jsonify(report)
+    report.pop('_id', None)
+    return report
 
 
-@app.route('/reports/<report_id>', methods=['PATCH'])
-def update_report(report_id):
-    owner_id = request.args.get('owner_id')
+@app.get("/reports/")
+async def get_reports_by_owner(owner_id):
+    cursor = reports_collection.find({"owner_id": owner_id}, {"_id": 0})
+    documents = await cursor.to_list(length=None)
+
+    if not documents:
+        raise HTTPException(status_code=404, detail="No reports found for this owner")
+
+    return documents
+
+
+@app.patch("/reports/{report_id}")
+async def update_report(report_id: int, request: Request):
+    owner_id = request.query_params.get("owner_id")
     if not owner_id:
-        return jsonify({"error": "Missing owner ID"}), 400
+        return JSONResponse({"error": "Missing owner ID"}, status_code=400)
 
-    update_data = request.json
+    update_data = await request.json()
     query = {"id": report_id, "owner_id": owner_id}
 
-    updated_report = reports_collection.update_one(query, {"$set": update_data})
-    if updated_report.matched_count == 0:
-        return jsonify({"message": "No report found or access denied"}), 404
+    updated_template = await reports_collection.update_one(query, {"$set": update_data})
+    if updated_template.matched_count == 0:
+        return JSONResponse({"message": "No template found or access denied"}, status_code=404)
 
-    return jsonify({"message": "Report updated successfully"})
+    return JSONResponse({"message": "Template updated successfully"})
 
 
-@app.route('/reports', methods=['GET'])
-def get_reports():
-    owner_not = request.args.get('owner_not')
+@app.get("/reports")
+async def get_reports(owner_not):
     if not owner_not:
-        return jsonify({"error": "Missing owner_not parameter"}), 400
+        raise HTTPException(status_code=400, detail="Missing owner_not parameter")
+
     query = {"owner_id": {"$ne": owner_not}}
-    reports = reports_collection.find(query)
+    reports = await reports_collection.find(query, {"_id": 0}).to_list(None)
 
-    reports_list = []
-    for report in reports:
-        if '_id' in report:
-            report.pop('_id', None)
-        reports_list.append(report)
+    if not reports:
+        raise HTTPException(status_code=404, detail="No reports available")
 
-    if not reports_list:
-        return jsonify({"message": "No reports available"}), 404
-
-    return jsonify(reports_list)
+    return reports
 
 
-@app.route('/report/<report_id>/update', methods=['PATCH'])
-def update_specific_report(report_id):
-    owner_id = request.args.get('owner_id')
+@app.get("/report", response_model=List[dict])
+async def get_reports_owner(owner: str):
+    if not owner:
+        raise HTTPException(status_code=400, detail="Missing 'owner' parameter")
+
+    query = {"owner_id": owner}
+    reports = await reports_collection.find(query, {"_id": 0}).to_list(None)
+
+    if not reports:
+        raise HTTPException(status_code=404, detail="No reports available for this owner")
+
+    return reports
+
+
+@app.patch("/report/{report_id}/update")
+async def update_specific_report(request: Request, report_id, owner_id):
     if not owner_id:
-        return jsonify({"error": "Missing owner ID"}), 400
+        raise HTTPException(status_code=400, detail="Invalid owner ID or not provided")
 
-    update_data = request.get_json()
-    if not update_data:
-        return jsonify({"error": "No data provided"}), 400
+    update_data = await request.json()
 
     query = {"id": report_id, "owner_id": owner_id}
+    result = await reports_collection.update_one(query, {"$set": update_data})
 
-    try:
-        updated_report = reports_collection.update_one(query, {"$set": update_data})
-    except Exception as e:
-        return jsonify({"error": "Failed to update the report", "details": str(e)}), 500
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="No report found or access denied")
 
-    if updated_report.matched_count == 0:
-        return jsonify({"message": "No report found or access denied"}), 404
+    if result.modified_count == 0:
+        return {"message": "Report data is the same as provided data"}
 
-    if updated_report.modified_count == 0:
-        return jsonify({"message": "Report data is the same as provided data"}), 200
-
-    return jsonify({"message": "Report updated successfully"}), 200
+    return {"message": "Report updated successfully"}
 
 
-@app.route('/reports/<report_id>', methods=['DELETE'])
-def delete_report(report_id):
-    owner_id = request.args.get('owner_id')
+
+@app.delete("/reports/{report_id}")
+async def delete_report(report_id, owner_id):
     if not owner_id:
-        return jsonify({"error": "Missing owner ID"}), 400
+        raise HTTPException(status_code=400, detail="Missing owner ID")
 
-    query = {"id": report_id, "owner_id": owner_id}
-    result = reports_collection.delete_one(query)
+    result = await reports_collection.delete_one({"id": report_id, "owner_id": owner_id})
     if result.deleted_count == 0:
-        return jsonify({"message": "No report found or access denied"}), 404
+        raise HTTPException(status_code=404, detail="No report found or access denied")
 
-    return jsonify({"message": "Report deleted successfully"})
-
-
-@app.route('/templates/<template_id>', methods=['POST'])
-def get_template(template_id):
-    data = request.json
-    if data is None or 'owner_id' not in data:
-        return jsonify({"error": "Missing owner ID in request body"}), 400
-    owner_id = data['owner_id']
-
-    query = {"id": template_id, "owner_id": owner_id}
-    report = templates_collection.find_one(query, {'_id': 0})
-    if not report:
-        return jsonify({"message": "No report found or access denied"}), 404
-
-    return jsonify(report)
+    return {"message": "Report deleted successfully"}
 
 
-@app.route('/templates/<template_id>', methods=['PATCH'])
-def update_template(template_id):
-    owner_id = request.args.get('owner_id')
+@app.post("/templates/")
+async def post_templates(
+        template: Dict[str, Any],
+        owner_id: str = Query(..., description="Owner ID")
+):
+
+    last_document = await templates_collection.find_one({}, sort=[("template_id", -1)])
+    next_id = "1" if not last_document else str(int(last_document.get('template_id', "0")) + 1)
+
+    template['template_id'] = next_id
+    template['owner_id'] = owner_id
+
+    await templates_collection.insert_one(template)
+
+    return {"message": "Template added successfully", "template_id": next_id}
+
+
+@app.patch("/templates/{template_id}")
+async def update_template(template_id: str, request: Request):
+    owner_id = request.query_params.get("owner_id")
     if not owner_id:
-        return jsonify({"error": "Missing owner ID"}), 400
+        return JSONResponse({"error": "Missing owner ID"}, status_code=400)
 
-    update_data = request.json
-    query = {"id": template_id, "owner_id": owner_id}
+    update_data = await request.json()
+    query = {"template_id": template_id, "owner_id": owner_id}
 
-    updated_report = templates_collection.update_one(query, {"$set": update_data})
-    if updated_report.matched_count == 0:
-        return jsonify({"message": "No report found or access denied"}), 404
+    updated_template = await templates_collection.update_one(query, {"$set": update_data})
+    if updated_template.matched_count == 0:
+        return JSONResponse({"message": "No template found or access denied"}, status_code=404)
 
-    return jsonify({"message": "Report updated successfully"})
+    return JSONResponse({"message": "Template updated successfully"})
 
 
-@app.route('/templates/<template_id>', methods=['DELETE'])
-def delete_template(template_id):
-    owner_id = request.args.get('owner_id')
+@app.delete("/templates/{template_id}")
+async def delete_template(template_id: str, request: Request):
+    owner_id = request.query_params.get("owner_id")
     if not owner_id:
-        return jsonify({"error": "Missing owner ID"}), 400
+        return JSONResponse({"error": "Missing owner ID"}, status_code=400)
 
-    query = {"id": template_id, "owner_id": owner_id}
-    result = templates_collection.delete_one(query)
+    query = {"template_id": template_id, "owner_id": owner_id}
+    result = await templates_collection.delete_one(query)
     if result.deleted_count == 0:
-        return jsonify({"message": "No report found or access denied"}), 404
+        return JSONResponse({"message": "No template found or access denied"}, status_code=404)
 
-    return jsonify({"message": "Report deleted successfully"})
-
-
-@app.route('/templates', methods=['GET'])
-def get_templates():
-    templates = list(templates_collection.find({}, {'_id': 0}))
-    return jsonify(templates)
+    return JSONResponse({"message": "Template deleted successfully"})
 
 
-@app.route('/init_db', methods=['GET'])
-def init_db_route():
-    initialize_database()
-    return "Database initialization route called."
+@app.get("/templates")
+async def get_templates():
+    templates_cursor = templates_collection.find({}, {'_id': 0})
+    templates = await templates_cursor.to_list(None)
+
+    for template in templates:
+        template.pop('_id', None)
+
+    return templates
 
 
-@app.route('/reset', methods=['GET'])
-def reset_database():
+@app.get("/reset")
+async def reset_database():
     try:
-        user_collection.delete_many({})
-        market_collection.delete_many({})
-        reports_collection.delete_many({})
-        templates_collection.delete_many({})
-
-        return jsonify({'success': True, 'message': 'Database has been reset successfully'}), 200
-    except Exception as e:
-        return jsonify({'success': False, 'message': str(e)}), 500
-
-
-def run_flask_app():
-    app.run(debug=True, host='0.0.0.0')
+        await reports_collection.delete_many({})
+        await templates_collection.delete_many({})
+        return {"success": True, "message": "Database has been reset successfully"}
+    except PyMongoError as e:
+        # Log the exception details here if necessary
+        return JSONResponse({"success": False, "message": f"Database error: {str(e)}"}, status_code=500)
+    except Exception as ex:
+        # This would catch other unexpected errors
+        return JSONResponse({"success": False, "message": f"An unexpected error occurred: {str(ex)}"}, status_code=500)
 
 
-def run_async_code():
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(run_bot())
-    loop.close()
+@app.get("/init_db")
+async def init_db_route():
+    message = await initialize_database()
+    return {"message": message}
+
+
+async def main():
+    # bot_loop = asyncio.create_task(run_bot())
+    uvicorn_server = uvicorn.Server(uvicorn.Config("app:app", host="0.0.0.0", port=5000, log_level="debug"))
+    api_loop = asyncio.create_task(uvicorn_server.serve())
+    await asyncio.gather( api_loop)
 
 
 if __name__ == '__main__':
-    initialize_db()
-    executor = ThreadPoolExecutor()
-    flask_future = executor.submit(run_flask_app)
-    asyncio_future = executor.submit(run_async_code)
-
-
+    asyncio.run(main())

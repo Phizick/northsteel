@@ -4,8 +4,10 @@ import aiohttp
 import json
 from Algorithms.Core import config
 
+# функция обработки запросов llm. содержит специфические промпты
 
-async def llm_text_parser(data):
+
+async def llm_company_about(data):
     url = config.DAISY_URL
     token = config.DAISY_TOKEN
     headers = {
@@ -17,19 +19,10 @@ async def llm_text_parser(data):
         "messages": [
             {
                 "role": "user",
-                "content": "проведи анализ текста"
-            },
-            {
-                "role": "assistant",
-                "content": "Хорошо, начнем."
-            },
-            {
-                "role": "user",
-                "content": f"проведи анализ текста {data} и перепиши его с большим кол-вом цифр и данных, которые сможешь добавить по тематике текста. разбей на абзацы и ответ верни без лишних комментариев в виде обьекта text: в котором каждый абзац будет значением свойства p"
-
-            }
-        ],
-        "max_tokens": 4060
+                "content": (f"пожалуйста создай таблицу с информацией по работе компании {data}. ответ верни в виде JSON обьекта с полями: выручка, доходы, расходы, доля на рынке, чистая прибыль. Следи за тем, что бы не было вложенных обьектов/массивов и формат данных сохранялся четко")
+    }
+    ],
+        "max_tokens": 4096
     }
 
     async with aiohttp.ClientSession() as session:

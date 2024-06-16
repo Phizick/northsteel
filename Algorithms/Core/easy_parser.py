@@ -4,8 +4,12 @@ import re
 from Algorithms.Core.extract_sentences import extract_sentences
 from Algorithms.Core.filter_array import key_for_bot
 
+# функция парсинга. проходится по данным на странице
+# (для краткости ответа выбраны только ['p', 'span', 'h1', 'h2'], если добавить "div"
+# кол-во обрабатываемой информации увеличится ~ в 20 раз, что позволяет масштабировать решение
 
-async def my_parser(url, keywords):
+
+async def easy_parser(url, key, keywords):
     sentences_matched = []
 
     async with aiohttp.ClientSession() as session:
@@ -24,7 +28,7 @@ async def my_parser(url, keywords):
                     text = p.get_text().strip()
                     sentences = re.split('(?<=[.!?]) +', text)
                     for sentence in sentences:
-                        if any(keyword.lower() in sentence.lower() for keyword in keywords):
+                        if any(keyword.lower() in sentence.lower() for keyword in key):
                             sentences_matched.append(sentence.strip())
 
                 if not sentences_matched:
@@ -32,7 +36,7 @@ async def my_parser(url, keywords):
                     return sentences_matched
 
                 text_content = ' '.join(sentences_matched)
-                sentences_matched = await extract_sentences(text_content, 50, key_for_bot)
+                sentences_matched = await extract_sentences(text_content, 60, keywords)
     print('parser')
     # print(sentences_matched)
     return sentences_matched
