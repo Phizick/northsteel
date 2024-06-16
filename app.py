@@ -8,6 +8,7 @@ from fastapi.encoders import jsonable_encoder
 from typing import List
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo.errors import PyMongoError
+from typing import Optional
 import asyncio
 import json
 import uvicorn
@@ -22,7 +23,7 @@ app.add_middleware(
 )
 
 # client = MongoClient('mongodb://mongo:27017/')
-client = AsyncIOMotorClient('mongodb://localhost:27017')
+client = AsyncIOMotorClient('mongodb://mongo:27017')
 
 db = client['myappsdb']
 user_collection = db['users']
@@ -394,9 +395,12 @@ async def update_specific_report(request: Request, report_id, owner_id):
 
 
 @app.delete("/reports/{report_id}")
-async def delete_report(report_id, owner_id):
+async def delete_report(report_id: int, owner_id):
     if not owner_id:
         raise HTTPException(status_code=400, detail="Missing owner ID")
+
+    res = await reports_collection.find_one({"id": report_id, "owner_id": owner_id})
+    print(res)
 
     result = await reports_collection.delete_one({"id": report_id, "owner_id": owner_id})
     if result.deleted_count == 0:
