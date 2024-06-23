@@ -21,6 +21,7 @@ services:
 
   frontend:
     build: ./frontend
+    image: phizickdocker/northsteel-frontend:latest
     ports:
       - "5173:5173"
     volumes:

@@ -9,7 +9,7 @@ from aiogram.filters import Command
 from Algorithms.Core.send_message_to_neural_deep_tech import send_message_to_neural_deep_tech
 from Algorithms.Bot.states import Gen
 from asyncio.exceptions import TimeoutError
-from Algorithms.Core.filter_array import key_for_bot
+from Algorithms.Core.filter_array import key_for_comp
 import html
 from Algorithms.Bot import kb
 from Algorithms.Bot import text
@@ -63,7 +63,7 @@ async def process_search_query(message: types.Message, state: FSMContext):
         del active_requests[user_id]
         return
 
-    search_data = await search(search_query, key_for_bot, 5000)
+    search_data = await search(search_query, key_for_comp, 7000)
     try:
         search_result = await asyncio.wait_for(send_message_to_neural_deep_tech(search_data), timeout=30)
         await message.reply(

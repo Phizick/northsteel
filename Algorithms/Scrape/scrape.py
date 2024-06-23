@@ -1,8 +1,11 @@
 import aiohttp
 from bs4 import BeautifulSoup
 from nltk.tokenize import sent_tokenize
+import asyncio
 
 # функция более глубокого анализа доверенных источников. позволяет погружаться на несколько уровней
+
+
 async def scrape_crawler(keywords):
     start_url = "https://www.rbc.ru/industries/regions"
     base_url = "https://www.rbc.ru"
@@ -16,27 +19,39 @@ async def scrape_crawler(keywords):
                 response.raise_for_status()
                 html_content = await response.text()
         except aiohttp.ClientError as e:
-            return f"Ошибка при загрузке страницы {start_url}: {e}"
+            print(f"Ошибка при загрузке страницы {start_url}: {e}")
+            return []
 
         soup = BeautifulSoup(html_content, 'html.parser')
         links = soup.find_all('a', class_=class_name)
-        urls = [base_url + link.get('href') if not link.get('href').startswith("http") else link.get('href') for link in links if any(keyword.lower() in link.text.strip().lower() for keyword in keywords)]
 
-        for url in urls[:2]:
-            try:
-                async with session.get(url) as response:
-                    response.raise_for_status()
-                    page_content = await response.text()
-            except aiohttp.ClientError as e:
-                final_results.append(f"Ошибка при загрузке страницы {url}: {e}")
-                continue
+        for keyword in keywords:
+            print(f"Search results for: {keyword}")
+            keyword_results = []
+            urls = [base_url + link.get('href') if not link.get('href').startswith("http") else link.get('href')
+                    for link in links if keyword.lower() in link.text.strip().lower()]
 
-            page_soup = BeautifulSoup(page_content, 'html.parser')
-            paragraphs = page_soup.find_all('p')
-            content_for_page = " ".join(paragraph.text.strip() for paragraph in paragraphs if paragraph.text.strip())
+            for url in urls:
+                try:
+                    async with session.get(url) as response:
+                        response.raise_for_status()
+                        page_content = await response.text()
+                except aiohttp.ClientError as e:
+                    keyword_results.append(f"Ошибка при загрузке страницы {url}: {e}")
+                    continue
 
-            sentences = sent_tokenize(content_for_page, language='russian')
-            limited_content = " ".join(sentences[:6])
-            final_results.append(limited_content)
+                page_soup = BeautifulSoup(page_content, 'html.parser')
+                paragraphs = page_soup.find_all('p')
+                content_for_page = " ".join(paragraph.text.strip() for paragraph in paragraphs if paragraph.text.strip())
+
+                sentences = sent_tokenize(content_for_page, language='russian')
+                limited_content = " ".join(sentences[:6])
+                keyword_results.append(limited_content)
+
+            final_results.append({keyword: keyword_results})
+            print({keyword: keyword_results})
 
     return final_results
+
+test = ['Сибур', 'Русал', 'Евраз']
+asyncio.run(scrape_crawler(test))

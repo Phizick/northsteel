@@ -7,7 +7,7 @@ from Algorithms.Core import config
 # функция обработки запросов llm. содержит специфические промпты
 
 
-async def llm_text_parser(data):
+async def llm_inn(message):
     url = config.DAISY_URL
     token = config.DAISY_TOKEN
     headers = {
@@ -19,9 +19,12 @@ async def llm_text_parser(data):
         "messages": [
             {
                 "role": "user",
-                "content": f"Пожалуйста расскажи подробно на русском языке о компании {data} на 2023 год. "
-                           f"ответ верни в виде обьекта JSON Следи за тем, что бы не было вложенных обьектов/массивов "
-                           f"и формат данных сохранялся четко"
+                "content": f"заполни обьект с инн указанных компаний {message}"
+                "{{"
+                    "название компании из {message}: инн,"
+                    "название компании из {message}: инн,"
+                    "название компании из {message}: инн"
+                "}}"
 
             }
         ],

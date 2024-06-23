@@ -1,4 +1,6 @@
 from typing import Dict, Any
+
+from Algorithms.Bot.main_loop import run_bot
 from Algorithms.Core.algorithm_hub import algorithm_hub_search
 from Algorithms.Core.algorithm_nub_competitor import algorithm_hub_competitor
 from fastapi.middleware.cors import CORSMiddleware
@@ -22,8 +24,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# client = MongoClient('mongodb://mongo:27017/')
-client = AsyncIOMotorClient('mongodb://mongo:27017')
+
+client = AsyncIOMotorClient('mongodb://localhost:27017')
 
 db = client['myappsdb']
 user_collection = db['users']
@@ -81,8 +83,8 @@ async def initialize_database():
             },
             {
                 "user_id": 2,
-                "username": "Bob",
-                "password": "125",
+                "username": "Bobs",
+                "password": "127",
                 "verification": False,
                 "trusted_sources": [],
                 "thematics": []
@@ -287,12 +289,11 @@ async def update_report(request: Request, report_id: int):
         for block in updated_blocks:
             for i, existing_block in enumerate(existing_report['blocks']):
                 if existing_block['id'] == block['id']:
-                    existing_report['blocks'][i] = block  # Обновляем существующий блок
+                    existing_report['blocks'][i] = block
                     break
             else:
-                existing_report['blocks'].append(block)  # Добавляем новый блок
+                existing_report['blocks'].append(block)
 
-    # Обновление других полей отчета, если необходимо
     for key, value in result.items():
         if key != 'blocks':
             existing_report[key] = value
@@ -466,18 +467,6 @@ async def get_templates():
     return templates
 
 
-@app.get("/reset")
-async def reset_database():
-    try:
-        await reports_collection.delete_many({})
-        await templates_collection.delete_many({})
-        return {"success": True, "message": "Database has been reset successfully"}
-    except PyMongoError as e:
-        return JSONResponse({"success": False, "message": f"Database error: {str(e)}"}, status_code=500)
-    except Exception as ex:
-        return JSONResponse({"success": False, "message": f"An unexpected error occurred: {str(ex)}"}, status_code=500)
-
-
 @app.get("/init_db")
 async def init_db_route():
     message = await initialize_database()
@@ -485,11 +474,10 @@ async def init_db_route():
 
 
 async def main():
-    # в вашей версии кода ап бота отключен, так как он работает на сервере
     # bot_loop = asyncio.create_task(run_bot())
     uvicorn_server = uvicorn.Server(uvicorn.Config("app:app", host="0.0.0.0", port=5000, log_level="debug"))
     api_loop = asyncio.create_task(uvicorn_server.serve())
-    await asyncio.gather( api_loop)
+    await asyncio.gather(api_loop)
 
 
 if __name__ == '__main__':
