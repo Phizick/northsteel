@@ -11,6 +11,7 @@ from Algorithms.Core.inn import search_inns
 from datetime import datetime
 from typing import Dict, List, Any
 
+from Algorithms.llm_client.llm_markets_customers import llm_markets_customers
 from Algorithms.llm_client.llm_search_by_dates import llm_search_by_dates
 from Algorithms.llm_client.llm_tech_info import llm_tech_info
 
@@ -126,7 +127,7 @@ async def algorithm_hub_search(data):
             if block['type'] == 'text':
                 # print(groups_res)
                 search_results = await asyncio.gather(
-                    *[search(text, key_for_comp, 12000) for text in groups_res]
+                    *[search(text, key_for_comp, 6000) for text in groups_res]
                 )
 
                 combined_text = ' '.join([result['text'] for result in search_results])
@@ -153,6 +154,20 @@ async def algorithm_hub_search(data):
                     'links': unique_links
                 }
 
+                if block.get('title') == 'Финансовая отчетность':
+                    groups_arr = block.get('groups', [])
+                    companies = groups_res
+                    data_result = []
+                    for company in companies:
+                        print(company)
+                        res = await search_finance_report(company, '2023')
+                        print(res)
+                        result = {
+                            'компания': company,
+                            'ссылка на отчет': res
+                        }
+                        data_result.append(result)
+
             elif block['type'] == 'table':
                 if block.get('by') == "Регион РФ":
                     # data_result = await scrape_crawler(regions_query)
@@ -162,32 +177,23 @@ async def algorithm_hub_search(data):
                     indicators = block.get('indicators', [])
                     if indicators:
                         indicators_str = ", ".join(indicators)
-                        # if block.get('title') == "Финансовые показатели":
-                        #     groups_arr = block.get('groups', [])
-                        #     block['indicators'] = ['Баланс', 'Выручка', 'Валовая прибыль (убыток)', 'Прибыль (убыток) от продаж', 'Чистая прибыль (убыток)']
-                        #     data_result = await process_company_data(company_info)
-                        #     periods_block = await create_periods_block(data_result)
-                        #
-                        #     # data_result = json.loads(data_result_markets)
+                        if block.get('title') == "Финансовые показатели":
+                            groups_arr = block.get('groups', [])
+                            block['indicators'] = ['Баланс', 'Выручка', 'Валовая прибыль (убыток)', 'Прибыль (убыток) от продаж', 'Чистая прибыль (убыток)']
+                            data_result = await process_company_data(company_info)
+                            periods_block = await create_periods_block(data_result)
 
-                        if block.get('title') == 'Финансовая отчетность':
-                            groups_arr = block.get('groups', [])
-                            companies = groups_res
-                            data_result = []
-                            for company in companies:
-                                print(company)
-                                res = await search_finance_report(company, '2023')
-                                print(res)
-                                result = {
-                                    'компания': company,
-                                    'ссылка на отчет': res
-                                }
-                                data_result.append(result)
-                        elif block.get('indicators') == "Технология":
-                            groups_arr = block.get('groups', [])
-                            data_result_tech = await llm_tech_info(indicators_str, groups_arr)
-                            data_result = json.loads(data_result_tech)
-                            print(data_result)
+                        # elif block.get('title') == "Объемы рынка":
+                        #
+                        #     data_result_markets = await llm_markets_customers(dates_arr, groups_res)
+                        #     data_result = json.loads(data_result_markets)
+                        #     print(data_result_markets)
+                        #
+                        # elif block.get('title') == "Технологии":
+                        #
+                        #     data_result_tech = await llm_tech_info(indicators_str, groups_res)
+                        #     data_result = json.loads(data_result_tech)
+                        #     print(data_result)
 
         except json.JSONDecodeError:
             print("JSON decode error while processing data, returning raw response")

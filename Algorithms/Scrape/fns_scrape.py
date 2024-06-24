@@ -12,8 +12,8 @@ import time
 def fns_scrape(query):
     query = str(query)
     print(query)
-    s = Service('Algorithms/chromedriver/chromedriver.exe')
-    # s = Service(executable_path='/usr/local/bin/chromedriver')
+    # s = Service('Algorithms/chromedriver/chromedriver.exe')
+    s = Service(executable_path='/usr/local/bin/chromedriver')
     options = Options()
     options.headless = True
     options.add_argument("--headless")

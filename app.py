@@ -25,7 +25,7 @@ app.add_middleware(
 )
 
 
-client = AsyncIOMotorClient('mongodb://localhost:27017')
+client = AsyncIOMotorClient('mongodb://mongo:27017')
 
 db = client['myappsdb']
 user_collection = db['users']
@@ -248,7 +248,10 @@ async def post_reports(request: Request, owner_id: str):
     last_document = await reports_collection.find_one({}, sort=[("id", -1)])
     next_id = 1 if not last_document else last_document['id'] + 1
 
-    result['id'] = next_id
+    if next_id is not None:
+        result['id'] = next_id
+    else:
+        result['id'] = 0
 
     await reports_collection.insert_one(result)
     result.pop('_id', None)

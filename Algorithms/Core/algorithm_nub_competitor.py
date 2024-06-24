@@ -1,9 +1,13 @@
 import json
 
+from Algorithms.Core.search_finance_report import search_finance_report
+from Algorithms.Core.search_func import search
 from Algorithms.Core.process_company_data import reshape_company_data
+from Algorithms.Core.split_into_paragraphs import create_paragraphs_object
 from Algorithms.Scrape.find_one_inn import search_inn
-from fns_for_one_scrape import fns_for_one_scrape
+from Algorithms.Scrape.fns_for_one_scrape import fns_for_one_scrape
 from Algorithms.Scrape.search_company_descriptions import search_company_descriptions
+from Algorithms.Core.filter_array import key_for_comp
 from typing import Dict, Any
 
 
@@ -42,21 +46,21 @@ async def algorithm_hub_competitor(data):
     block_id = 1
 
     try:
-        # search_result = await search(main_query, key_for_comp, 12000)
-        # print(search_result)
-        # data_paragraphs = await create_paragraphs_object(search_result['text'])
-        # blocks.append({
-        #     "id": block_id,
-        #     "type": "text",
-        #     "title": f"Общая информация о компании {main_query}",
-        #     "charts": [],
-        #     "groups": [],
-        #     "data": {
-        #         "text": data_paragraphs,
-        #         "links": search_result['links']
-        #     }
-        # })
-        # block_id += 1
+        search_result = await search(main_query, key_for_comp, 12000)
+        print(search_result)
+        data_paragraphs = await create_paragraphs_object(search_result['text'])
+        blocks.append({
+            "id": block_id,
+            "type": "text",
+            "title": f"Общая информация о компании {main_query}",
+            "charts": [],
+            "groups": [],
+            "data": {
+                "text": data_paragraphs,
+                "links": search_result['links']
+            }
+        })
+        block_id += 1
 
         data_result_company_info = await search_company_descriptions(main_query)
         print(data_result_company_info)
@@ -85,7 +89,7 @@ async def algorithm_hub_competitor(data):
         blocks.append({
             "id": block_id,
             "type": "table",
-            "title": main_query,
+            "title": f"Финансовые показатели компании {main_query}",
             "charts": [],
             "groups": [main_query],
             "indicators": ['Баланс', 'Выручка', 'Валовая прибыль (убыток)', 'Прибыль (убыток) от продаж',
@@ -96,20 +100,20 @@ async def algorithm_hub_competitor(data):
         })
         block_id += 1
 
-        # data_finance_report = await search_finance_report(main_query, "2023")
-        # blocks.append({
-        #     "id": block_id,
-        #     "type": "text",
-        #     "title": f"Финансовая отчетность компании {main_query}",
-        #     "charts": [],
-        #     "groups": [],
-        #     "data": {
-        #         "link": data_finance_report
-        #     }
-        # })
-        #
-        # block_id += 1
-        # print(1)
+        data_finance_report = await search_finance_report(main_query, "2023")
+        blocks.append({
+            "id": block_id,
+            "type": "text",
+            "title": f"Финансовая отчетность компании {main_query}",
+            "charts": [],
+            "groups": [],
+            "data": {
+                "link": data_finance_report
+            }
+        })
+
+        block_id += 1
+        print(1)
 
         # data_result_about = await llm_table_about(main_query)
         # print(data_result_about)
