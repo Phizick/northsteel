@@ -1,5 +1,6 @@
 import json
 
+from Algorithms.Core.algorithm_hub import create_periods_block
 from Algorithms.Core.search_finance_report import search_finance_report
 from Algorithms.Core.search_func import search
 from Algorithms.Core.process_company_data import reshape_company_data
@@ -38,6 +39,15 @@ def transform_json_to_object(json_input: Dict[str, Any]) -> Dict[str, Dict[str, 
 
     return text_object
 
+def extract_total_fields(data):
+    total_fields = set()
+
+    for item in data:
+        for key in item.keys():
+            if key.startswith("Итого"):
+                total_fields.add(key)
+
+    return sorted(total_fields)
 
 async def algorithm_hub_competitor(data):
     data_set = data
@@ -85,6 +95,7 @@ async def algorithm_hub_competitor(data):
         data_fin_info = fns_for_one_scrape(company_get_inn)
         print(data_fin_info)
         data_result = await reshape_company_data(main_query, data_fin_info)
+        periods_result = extract_total_fields(data_result)
 
         blocks.append({
             "id": block_id,
@@ -92,7 +103,8 @@ async def algorithm_hub_competitor(data):
             "title": f"Финансовые показатели компании {main_query}",
             "charts": [],
             "groups": [main_query],
-            'by': [main_query],
+            'by': 'Компания',
+            'periods': periods_result,
             "indicators": ['Баланс', 'Выручка', 'Валовая прибыль (убыток)', 'Прибыль (убыток) от продаж',
                             'Чистая прибыль (убыток)', 'Заемные средства', 'Совокупный финансовый результат периода'],
             "data": data_result,
