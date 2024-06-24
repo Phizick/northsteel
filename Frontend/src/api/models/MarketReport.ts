@@ -16,7 +16,7 @@ export interface MarketReport {
     to: string;
   };
   autoupdate: AutoupdateStatus;
-  blocks: Array<TableResponse | TextResponse>;
+  blocks: Array<TableResponse | TextResponse | LinksResponse>;
 }
 
 export interface MarketReportRequest {
@@ -51,7 +51,7 @@ export enum AutoupdateStatus {
 export interface Data {
   id: string; // служебная для реакта
   isDefault: boolean; // служебная для разделения на редактируемые и нередактируемые блоки в интерфейсе
-  type: "table" | "text";
+  type: "table" | "text" | "links";
   title: string;
   split: boolean; // если false - ищем в целом по рынку/нише, если true - разделеям по:
   by?: string; // указанному здесь параметру (Компания - по компаниям, Регион - по регионам и т.д., что укажет юзер)
@@ -65,6 +65,7 @@ export interface TableResponse extends Data {
   groups: string[];
   periods: string[];
   columnsKeysOrder?: string[];
+  links?: string[];
 }
 
 export interface TextResponse extends Data {
@@ -79,5 +80,13 @@ export interface TextResponse extends Data {
       };
     };
   };
+  columnsKeysOrder?: string[];
+}
+
+export interface LinksResponse extends Data {
+  data: {
+    компания: string;
+    "ссылка на отчет": string;
+  }[];
   columnsKeysOrder?: string[];
 }

@@ -1,6 +1,7 @@
 /// <reference types="vite-plugin-svgr/client" />
 import styles from "./ReportBlock.module.scss";
 import {
+  LinksResponse,
   MarketReport,
   TableResponse,
   TextResponse,
@@ -22,9 +23,10 @@ import NewChartModal from "./TableView/NewChartModal/NewChartModal.tsx";
 import { ChartOptions, ChartType } from "./TableView/ReportChart/types";
 import { isDataInvalid } from "./utils";
 import { useNavigate } from "react-router-dom";
+import LinksView from "./LinksView/LinksView.tsx";
 
 interface ReportBlockProps {
-  block: TableResponse | TextResponse;
+  block: TableResponse | TextResponse | LinksResponse;
 }
 
 const ReportBlock = ({ block }: ReportBlockProps) => {
@@ -70,6 +72,10 @@ const ReportBlock = ({ block }: ReportBlockProps) => {
 
     if (block.type === "text") {
       return <TextView block={block as TextResponse} />;
+    }
+
+    if (block.type === "links") {
+      return <LinksView block={block as LinksResponse} />;
     }
 
     if (isDataInvalid(block)) {

@@ -1,0 +1,13 @@
+.block {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  padding: 8px 0;
+  width: 100%;
+  border-bottom: 1px solid var(--border-color);
+}

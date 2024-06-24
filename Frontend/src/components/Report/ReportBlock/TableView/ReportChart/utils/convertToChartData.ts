@@ -71,5 +71,14 @@ export const convertToChartData = (
 };
 
 const executeNumber = (str: string) => {
-  return +/\d+/.exec(str)!;
+  if (!str) {
+    return 0;
+  }
+  let number = +/\d+/.exec(str.split(" ").join(""))!;
+
+  if (str.startsWith("(")) {
+    number *= -1;
+  }
+
+  return number;
 };

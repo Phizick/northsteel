@@ -1,9 +1,12 @@
 import {
+  LinksResponse,
   TableResponse,
   TextResponse,
 } from "../../../../api/models/MarketReport.ts";
 
-export const isDataInvalid = (block: TableResponse | TextResponse) => {
+export const isDataInvalid = (
+  block: TableResponse | TextResponse | LinksResponse,
+) => {
   if (!Array.isArray(block.data)) {
     return true;
   }

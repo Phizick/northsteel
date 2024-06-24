@@ -20,9 +20,30 @@ const ReportTable = ({ block }: ReportTableProps) => {
   const columns = useMemo<MRT_ColumnDef<typeof block.data>[]>(
     //column definitions...
     () => {
-      const keys = block.columnsKeysOrder
-        ? block.columnsKeysOrder
-        : Object.keys(block.data[0]);
+      let keys = [];
+
+      if (block.columnsKeysOrder) {
+        keys = block.columnsKeysOrder;
+      } else {
+        const keysFromObjects: string[] = [];
+        for (let object of block.data) {
+          for (let key of Object.keys(object)) {
+            if (!keysFromObjects.includes(key)) {
+              keysFromObjects.push(key);
+            }
+          }
+        }
+
+        keysFromObjects.sort((a, b) => {
+          if (a.includes("Итого") && b.includes("Итого")) {
+            return a.localeCompare(b);
+          } else {
+            return 0;
+          }
+        });
+
+        keys = keysFromObjects;
+      }
 
       return keys.map((key) => ({
         header: key,
