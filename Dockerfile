@@ -1,20 +1,18 @@
 
-FROM python:3.9-slim
+FROM joyzoursky/python-chromedriver:3.8
+
+RUN export PATH=$PATH:/usr/local/bin/chromedriver
 
 
+RUN python -m pip install --upgrade pip
 RUN pip install nltk
+RUN pip install webdriver-manager
 RUN python -m nltk.downloader stopwords
 RUN python -m nltk.downloader punkt
 
 
-RUN python -m pip install --upgrade pip
-
-
 WORKDIR /app
-
-
 COPY . /app
-
 
 RUN pip install -r requirements.txt
 

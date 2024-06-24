@@ -19,16 +19,5 @@ services:
     volumes:
       - mongodb_data:/data/db
 
-  frontend:
-    build: ./frontend
-    image: phizickdocker/northsteel-frontend:latest
-    ports:
-      - "5173:5173"
-    volumes:
-    - ./frontend:/app
-    - /app/node_modules
-    depends_on:
-      - backend
-
 volumes:
   mongodb_data:

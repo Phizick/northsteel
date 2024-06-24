@@ -21,6 +21,8 @@ async def reshape_company_data(company_name, that_company_data):
                     for date, amount in value.items():
                         cleaned_amount = re.sub(r's+', '', amount)
                         cleaned_amount = re.sub(r',.*', '', cleaned_amount)
+                        cleaned_amount = re.sub(r'-(.*)', '', cleaned_amount)
+                        cleaned_amount = cleaned_amount[:13]
 
                         year_match = re.search(r'(202[0-4]|201[9])', date)
                         if year_match:

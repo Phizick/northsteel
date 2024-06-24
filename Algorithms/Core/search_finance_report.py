@@ -13,22 +13,25 @@ from urllib.parse import urljoin
 
 
 async def find_pdf_link(session, url, year):
-    async with session.get(url) as response:
-        text = await response.text()
-        soup = BeautifulSoup(text, 'html.parser')
-        containers = soup.find_all(['a', 'div'])
+    try:
+        async with session.get(url) as response:
+            text = await response.text()
+            soup = BeautifulSoup(text, 'html.parser')
+            containers = soup.find_all(['a', 'div'])
 
-        for container in containers:
-            links = container.find_all('a') if container.name == 'div' else [container]
-            for link in links:
-                link_text = link.text + ''.join(span.text for span in link.find_all('span'))
+            for container in containers:
+                links = container.find_all('a') if container.name == 'div' else [container]
+                for link in links:
+                    link_text = link.text + ''.join(span.text for span in link.find_all('span'))
 
-                if str(year) in link_text:
-                    href = link.get('href')
-                    if href and href.lower().endswith('.pdf'):
-                        if not href.lower().startswith('http'):
-                            href = urljoin(url, href)
-                        return href
+                    if str(year) in link_text:
+                        href = link.get('href')
+                        if href and href.lower().endswith('.pdf'):
+                            if not href.lower().startswith('http'):
+                                href = urljoin(url, href)
+                            return href
+    except UnicodeDecodeError as e:
+        return None
     return None
 
 
@@ -68,13 +71,6 @@ async def search_finance_report(query, year):
                     if pdf_link:
                         return pdf_link
 
-            return {'error': 'No PDF link found'}
+            return
 
 
-# async def main():
-#     query = 'сибур'
-#     result = await search_finance_report(query, "2023")
-#     print(result)
-#
-#
-# asyncio.run(main())

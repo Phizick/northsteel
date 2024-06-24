@@ -2,6 +2,7 @@ import json
 import asyncio
 import re
 from Algorithms.Core.process_company_data import process_company_data
+from Algorithms.Core.search_finance_report import search_finance_report
 from Algorithms.Core.search_func import search
 from Algorithms.Core.split_into_paragraphs import create_paragraphs_object
 from Algorithms.llm_client.llm_groups import llm_groups
@@ -94,8 +95,8 @@ async def algorithm_hub_search(data):
     to_date = data_set['datesOfReview']['to']
     dates_arr = extract_years(from_date, to_date)
 
-    if data_set['market'] == "металлургия":
-        groups_res = ['Сибур', 'Русал', 'Евраз']
+    if data_set['market'] == "Металлургия":
+        groups_res = ['Сибур холдинг', 'Русал', 'Евраз']
     elif data_set['market'] == 'Полезные ископаемые':
         groups_res = ['Газпром', 'Новатэк', 'Лукоил']
     else:
@@ -161,20 +162,27 @@ async def algorithm_hub_search(data):
                     indicators = block.get('indicators', [])
                     if indicators:
                         indicators_str = ", ".join(indicators)
-                        if block.get('title') == "Объемы рынка":
-                            groups_arr = block.get('groups', [])
-                            data_result = await process_company_data(company_info)
-                            periods_block = await create_periods_block(data_result)
-
-                            # data_result = json.loads(data_result_markets)
-
-                        # elif block.get('splitByDates'):
+                        # if block.get('title') == "Финансовые показатели":
                         #     groups_arr = block.get('groups', [])
-                        #     date_array = prepend_total_to_years(dates_arr)
-                        #     data_result_raw = await llm_search_by_dates(date_array, indicators_str, groups_arr)
-                        #     print(data_result_raw)
-                        #     raw_response = data_result_raw
-                        #     data_result = json.loads(data_result_raw)
+                        #     block['indicators'] = ['Баланс', 'Выручка', 'Валовая прибыль (убыток)', 'Прибыль (убыток) от продаж', 'Чистая прибыль (убыток)']
+                        #     data_result = await process_company_data(company_info)
+                        #     periods_block = await create_periods_block(data_result)
+                        #
+                        #     # data_result = json.loads(data_result_markets)
+
+                        if block.get('title') == 'Финансовая отчетность':
+                            groups_arr = block.get('groups', [])
+                            companies = groups_res
+                            data_result = []
+                            for company in companies:
+                                print(company)
+                                res = await search_finance_report(company, '2023')
+                                print(res)
+                                result = {
+                                    'компания': company,
+                                    'ссылка на отчет': res
+                                }
+                                data_result.append(result)
                         elif block.get('indicators') == "Технология":
                             groups_arr = block.get('groups', [])
                             data_result_tech = await llm_tech_info(indicators_str, groups_arr)

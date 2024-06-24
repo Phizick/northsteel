@@ -13,10 +13,23 @@ def fns_scrape(query):
     query = str(query)
     print(query)
     s = Service('Algorithms/chromedriver/chromedriver.exe')
+    # s = Service(executable_path='/usr/local/bin/chromedriver')
     options = Options()
+    options.headless = True
     options.add_argument("--headless")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--window-size=1920x1080")
+    options.add_argument("--no-sandbox")
+    # options.add_argument("--disable-dev-shm-usage")
+    # options.add_argument("--disable-gpu")
+    # options.add_argument("--window-size=1920x1080")
+    # options.add_argument("--remote-debugging-port=9222")
+    # options.add_argument("--disable-extensions")
+    # options.add_argument("--disable-software-rasterizer")
+    # options.add_argument("--disable-setuid-sandbox")
+    # options.add_argument("--disable-dev-shm-usage")
+    # options.add_argument("--no-first-run")
+    # options.add_argument("--no-default-browser-check")
+    # options.add_argument("--disable-background-networking")
+    # options.add_argument("--disable-sync")
 
     driver = webdriver.Chrome(service=s, options=options)
     print("WebDriver успешно инициализирован.")
@@ -59,44 +72,9 @@ def fns_scrape(query):
     print("Класс 'is-open' добавлен к элементу.")
 
     time.sleep(2)
-
-    # try:
-    #     html = driver.page_source
-    #     soup = BeautifulSoup(html, 'html.parser')
-    #
-    #     titles = soup.find_all('div', class_='sticker__title')
-    #     contents = soup.find_all('div', class_='sticker__content')
-    #     column_titles = [div.text.strip() for div in soup.find_all('div', class_='tabulator-col-title')]
-    #
-    #     results = []
-    #     for title, content in zip(titles, contents):
-    #         results.append({title.text.strip(): content.text.strip()})
-    #
-    #     spans = soup.find_all('div', class_='tabulator-cell tabulator-frozen tabulator-frozen-left')
-    #     first_pass = True
-    #     year_keys = []
-    #     for span in spans:
-    #         key = span.text.strip()
-    #         try:
-    #             next_cells = span.find_next_siblings('div', class_='tabulator-cell', limit=4)
-    #             if len(next_cells) == 4:
-    #                 if first_pass:
-    #                     year_keys = [column_titles[2], column_titles[3], column_titles[4]]
-    #                     first_pass = False
-    #                 results.append({
-    #                     key: {
-    #                         year_keys[0]: next_cells[1].text.strip(),
-    #                         year_keys[1]: next_cells[2].text.strip(),
-    #                         year_keys[2]: next_cells[3].text.strip()
-    #                     }
-    #                 })
-    #         except:
-    #             print(f"Не удалось найти данные за 2023 и 2022 год для {key}")
     try:
         html = driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
-
-        # Извлекаем заголовки и содержание стикеров
         titles = soup.find_all('div', class_='sticker__title')
         contents = soup.find_all('div', class_='sticker__content')
         column_titles = [div.text.strip() for div in soup.find_all('div', class_='tabulator-col-title')]
@@ -105,7 +83,6 @@ def fns_scrape(query):
         for title, content in zip(titles, contents):
             results.append({title.text.strip(): content.text.strip()})
 
-        # Формируем результат из ячеек таблицы
         spans = soup.find_all('div', class_='tabulator-cell tabulator-frozen tabulator-frozen-left')
         first_pass = True
         year_keys = []
@@ -113,7 +90,6 @@ def fns_scrape(query):
         for span in spans:
             key = span.text.strip()
 
-            # Получаем следующий набор siblings элементов в колонках
             next_cells = span.find_next_siblings('div', class_='tabulator-cell')
             cell_count = len(next_cells)
 
@@ -144,7 +120,7 @@ def fns_scrape(query):
                 print(f"Недостаточно данных для {key}")
         print("Результаты: ")
 
-        keys_to_keep = ["Наименование", "Чистая прибыль (убыток)", "Валовая прибыь (убыток)", 'Баланс', 'Выручка']
+        keys_to_keep = ['Баланс', 'Выручка', 'Валовая прибыль (убыток)', 'Прибыль (убыток) от продаж', 'Чистая прибыль (убыток)']
         filtered_data = [item for item in results if any(key in keys_to_keep for key in item.keys())]
 
         print(link_url)
@@ -157,8 +133,6 @@ def fns_scrape(query):
     finally:
         driver.quit()
         print("Браузер закрыт.")
-
-
 
 
 # scrap_fns_div_text("7812014560")

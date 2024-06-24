@@ -1,13 +1,9 @@
 import json
-from Algorithms.Core.search_func import search
-from Algorithms.Core.split_into_paragraphs import create_paragraphs_object
+
+from Algorithms.Core.process_company_data import reshape_company_data
+from Algorithms.Scrape.find_one_inn import search_inn
+from fns_for_one_scrape import fns_for_one_scrape
 from Algorithms.Scrape.search_company_descriptions import search_company_descriptions
-from Algorithms.llm_client.llm_company_about import llm_company_about
-from Algorithms.llm_client.llm_table_about import llm_table_about
-from Algorithms.llm_client.llm_text_parser import llm_text_parser
-from Algorithms.Core.filter_array import key_for_comp
-from Algorithms.llm_client.llm_search import llm_search
-from Algorithms.Core.search_finance_report import search_finance_report
 from typing import Dict, Any
 
 
@@ -23,6 +19,11 @@ def transform_json_to_text(json_input: Dict[str, str]) -> Dict[str, Dict[str, st
 
     return text_object
 
+def extract_first_value(data_dicts):
+    for data in data_dicts:
+        for key, value in data.items():
+            return value
+    return None
 
 def transform_json_to_object(json_input: Dict[str, Any]) -> Dict[str, Dict[str, str]]:
     text_object = {"text": {}}
@@ -41,23 +42,24 @@ async def algorithm_hub_competitor(data):
     block_id = 1
 
     try:
-        search_result = await search(main_query, key_for_comp, 12000)
-        print(search_result)
-        data_paragraphs = await create_paragraphs_object(search_result['text'])
-        blocks.append({
-            "id": block_id,
-            "type": "text",
-            "title": f"Общая информация о компании {main_query}",
-            "charts": [],
-            "groups": [],
-            "data": {
-                "text": data_paragraphs,
-                "links": search_result['links']
-            }
-        })
-        block_id += 1
+        # search_result = await search(main_query, key_for_comp, 12000)
+        # print(search_result)
+        # data_paragraphs = await create_paragraphs_object(search_result['text'])
+        # blocks.append({
+        #     "id": block_id,
+        #     "type": "text",
+        #     "title": f"Общая информация о компании {main_query}",
+        #     "charts": [],
+        #     "groups": [],
+        #     "data": {
+        #         "text": data_paragraphs,
+        #         "links": search_result['links']
+        #     }
+        # })
+        # block_id += 1
 
         data_result_company_info = await search_company_descriptions(main_query)
+        print(data_result_company_info)
         # data_paragraphs_company = await create_paragraphs_object(data_result_company_info)
 
         blocks.append({
@@ -67,43 +69,47 @@ async def algorithm_hub_competitor(data):
             "charts": [],
             "groups": [],
             "data": {
-                "text": data_result_company_info
+                "text": {'text': {'p1': data_result_company_info['p1']}},
+                "links": data_result_company_info['links']
             }
         })
         block_id += 1
 
-        # data_result_tech = await llm_text_parser(main_query)
-        # print(data_result_tech)
-        # data_tech = json.loads(data_result_tech)
-        # data_tech_ans = transform_json_to_text(data_tech)
-        #
+        company_get_inn = await search_inn([main_query])
+        print(company_get_inn)
+
+        data_fin_info = fns_for_one_scrape(company_get_inn)
+        print(data_fin_info)
+        data_result = await reshape_company_data(main_query, data_fin_info)
+
+        blocks.append({
+            "id": block_id,
+            "type": "table",
+            "title": main_query,
+            "charts": [],
+            "groups": [main_query],
+            "indicators": ['Баланс', 'Выручка', 'Валовая прибыль (убыток)', 'Прибыль (убыток) от продаж',
+                            'Чистая прибыль (убыток)', 'Заемные средства', 'Совокупный финансовый результат периода'],
+            "data": data_result,
+            "links": [data_fin_info[1]]
+
+        })
+        block_id += 1
+
+        # data_finance_report = await search_finance_report(main_query, "2023")
         # blocks.append({
         #     "id": block_id,
         #     "type": "text",
-        #     "title": main_query,
+        #     "title": f"Финансовая отчетность компании {main_query}",
         #     "charts": [],
         #     "groups": [],
         #     "data": {
-        #         "text": data_tech_ans
+        #         "link": data_finance_report
         #     }
         # })
+        #
         # block_id += 1
-
-        data_finance_report = await search_finance_report(main_query, "2023")
-        blocks.append({
-            "id": block_id,
-            "type": "text",
-            "title": f"Финансовая отчетность компании {main_query}",
-            "charts": [],
-            "groups": [],
-            "data": {
-                "link": data_finance_report
-            }
-        })
-
-        block_id += 1
-        print(1)
-
+        # print(1)
 
         # data_result_about = await llm_table_about(main_query)
         # print(data_result_about)
