@@ -103,15 +103,18 @@ async def algorithm_hub_competitor(data):
         data_finance_report = await search_finance_report(main_query, "2023")
         blocks.append({
             "id": block_id,
-            "type": "text",
+            "type": "links",
             "title": f"Финансовая отчетность компании {main_query}",
             "charts": [],
             "groups": [],
-            "data": {
-                "link": data_finance_report
-            }
-        })
+            "data": [
+                {
+                    'компания': main_query,
+                    'ссылка на отчет': data_finance_report
+                }
+            ]
 
+        })
         block_id += 1
         print(1)
 

@@ -157,6 +157,7 @@ async def algorithm_hub_search(data):
                 if block.get('title') == 'Финансовая отчетность':
                     groups_arr = block.get('groups', [])
                     companies = groups_res
+                    block['type'] = 'links'
                     data_result = []
                     for company in companies:
                         print(company)

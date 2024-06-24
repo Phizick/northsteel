@@ -469,6 +469,16 @@ async def get_templates():
 
     return templates
 
+@app.get("/reset")
+async def reset_database():
+    try:
+        await reports_collection.delete_many({})
+        await templates_collection.delete_many({})
+        return {"success": True, "message": "Database has been reset successfully"}
+    except PyMongoError as e:
+        return JSONResponse({"success": False, "message": f"Database error: {str(e)}"}, status_code=500)
+    except Exception as ex:
+        return JSONResponse({"success": False, "message": f"An unexpected error occurred: {str(ex)}"}, status_code=500)
 
 @app.get("/init_db")
 async def init_db_route():
