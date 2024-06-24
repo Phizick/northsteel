@@ -92,6 +92,7 @@ async def algorithm_hub_competitor(data):
             "title": f"Финансовые показатели компании {main_query}",
             "charts": [],
             "groups": [main_query],
+            'by': [main_query],
             "indicators": ['Баланс', 'Выручка', 'Валовая прибыль (убыток)', 'Прибыль (убыток) от продаж',
                             'Чистая прибыль (убыток)', 'Заемные средства', 'Совокупный финансовый результат периода'],
             "data": data_result,
